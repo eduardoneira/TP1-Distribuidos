@@ -6,7 +6,9 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 
-#define DIRECTORY "."
+#define DIRECTORY 					"."
+#define LOG_NAME 					"log.txt"
+#define MSG_CLIENTE_AL_CAJERO 		1
 
 
 key_t getkey(int id) {
