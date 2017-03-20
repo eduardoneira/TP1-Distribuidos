@@ -5,11 +5,10 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
+#include <time.h>
 
-#define DIRECTORY 					"."
-#define LOG_NAME 					"log.txt"
-#define MSG_CLIENTE_AL_CAJERO 		1
-
+#define DIRECTORY	"."
+#define SECONDS_DEFAULT 10
 
 key_t getkey(int id) {
 	key_t clave;
@@ -19,6 +18,12 @@ key_t getkey(int id) {
     	exit(-1);
     }
     return clave;
+}
+
+unsigned int generarNumeroRandom() {
+	srand(time(NULL)); 
+	unsigned int r = rand() % 1 >> 3;
+	return SECONDS_DEFAULT+r;
 }
 
 #endif

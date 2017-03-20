@@ -9,7 +9,7 @@
 
 /* Funciones de semaforos crear el set de semaforos (si no existe)
  */
-int creasem(int identif, int nsem) {
+int crearsem(int identif, int nsem) {
 	key_t clave;
 	clave = getkey(identif);
 	return (semget(clave, nsem, IPC_CREAT | IPC_EXCL | 0660));

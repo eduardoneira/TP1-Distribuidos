@@ -13,7 +13,7 @@ void* map(int);
 int   unmap(void*);
 int   elishm(int);
 
-int   creashm(int id, int size){
+int   crearshm(int id, int size){
     key_t clave;
     clave = getkey(id);
     return (shmget(clave, size, IPC_CREAT | IPC_EXCL | 0660));
