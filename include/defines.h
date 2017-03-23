@@ -17,10 +17,26 @@
 
 #define MSG_CLIENTE_AL_CAJERO 		1
 
+
+// Definiciones de constantes del problema
+
+#define CANTIDAD_GUSTOS 			10
+#define TAMANIO_COLA 				20
+#define TAMANIO_HELADERIA 			30
+#define ABIERTO						1
+#define CERRADO						0
+
 /**
 * Archivo de log
 */
 
 #define LOG_NAME 					"log.txt"
+
+/*
+*  ERRORES
+*/
+
+#define ERROR_CREAR_IPC 			-1
+
 
 #endif
