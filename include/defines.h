@@ -8,7 +8,7 @@
 */
 
 #define ID_SHM_ESTADO_HELADERIA		1
-#define SEMID_ESTADO_HELADERIA 		2
+#define SEMID_ESTADO_HELADERIA 		1>>8
 
 
 /**
@@ -19,6 +19,11 @@
 #define MSGQ_CAJERO_A_HELADEROS		2
 #define MSGQ_HELADEROS_A_CLIENTES	3
 
+/**
+* SEMAFOROS HELADERIA
+*/
+
+#define PRIMER_ID_GUSTO_HELADO		1
 
 // Definiciones de constantes del problema
 

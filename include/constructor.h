@@ -54,6 +54,23 @@ void crearColasDeMsgs() {
 }
 
 void crearHelados() {
+	int i;
+
+	for (i = PRIMER_ID_GUSTO_HELADO; i < PRIMER_ID_GUSTO_HELADO + CANTIDAD_GUSTOS;i++) {
+		//Creo semaforo
+
+		int semid = crearsem(i,1);
+
+		if (semid == -1) {
+			perror("Error al crear semaforo");
+			exit(ERROR_CREAR_IPC);
+		}
+
+		if (inisem(semid,0,1) == -1){
+			perror("Error al inicializar semaforo");
+			exit(ERROR_CREAR_IPC);
+		}
+	}
 
 }
 

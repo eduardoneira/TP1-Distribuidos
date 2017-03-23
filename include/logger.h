@@ -56,5 +56,9 @@ void cerrarLogger(Logger* log) {
 	cerrarLock(log->fd);
 }
 
+void eliminarLogger() {
+	eliminarLock(LOG_NAME);	
+}
+
 
 #endif
