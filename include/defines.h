@@ -15,7 +15,9 @@
 * MSGS de MSG QUEUE
 */
 
-#define MSG_CLIENTE_AL_CAJERO 		1
+#define MSGQ_CLIENTES_AL_CAJERO 	1
+#define MSGQ_CAJERO_A_HELADEROS		2
+#define MSGQ_HELADEROS_A_CLIENTES	3
 
 
 // Definiciones de constantes del problema

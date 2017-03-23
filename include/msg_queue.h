@@ -7,7 +7,7 @@
 
 #include "util.h"
 
-int creamsgq(int id){
+int crearmsgq(int id){
     key_t clave;
     clave = getkey(id);
     return (msgget(clave,  IPC_CREAT | IPC_EXCL | 0660));

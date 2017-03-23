@@ -1,10 +1,13 @@
 #ifndef CONSTRUCTOR_H
 #define CONSTRUCTOR_H
 
+#define CONSTRUCTOR "CONSTRUCTOR"
+
 #include "semaforo.h"
 #include "memoria_compartida.h"
 #include "estado_heladeria.h"
 #include "defines.h"
+#include "logger.h"
 #include "msg_queue.h"
 
 void crearEstadoHeladeria() {
@@ -43,12 +46,32 @@ void crearEstadoHeladeria() {
 	}
 }
 
-void crearMsgQueue() {
-	
+void crearColasDeMsgs() {
+	if (crearmsgq(MSGQ_CLIENTES_AL_CAJERO) == -1 || crearmsgq(MSGQ_CAJERO_A_HELADEROS) == -1 || crearmsgq(MSGQ_HELADEROS_A_CLIENTES) == -1) {
+		perror("Error al crear colas de mensajes");
+		exit(ERROR_CREAR_IPC);
+	}	
+}
+
+void crearHelados() {
+
 }
 
 void crearIPC() {
+	pid_t pid = getpid();
+	
+	Logger log = crearLogger();
+	initLogger(&log);
+	char msg_log[BUFFER_SIZE];
+	
 	crearEstadoHeladeria();
+	escribir(&log,DEBUG,pid,CONSTRUCTOR,"Se creo el estado de heladeria");
+	
+	crearColasDeMsgs();
+	escribir(&log,DEBUG,pid,CONSTRUCTOR,"Se crearon las colas de msgs para comunicación");
+
+	crearHelados();
+	escribir(&log,DEBUG,pid,CONSTRUCTOR,"Se crearon los gustos de helado");
 
 }
 
