@@ -4,11 +4,8 @@
 #include <sys/wait.h>
 #include <time.h>
 
-#include "../include/msg_queue.h"
-#include "../include/lockfile.h"
-#include "../include/fifo_lectura.h"
-#include "../include/fifo_escritura.h"
 #include "../include/constructor.h"
+#include "../include/destructor.h"
 
 int main (int argc, char ** argv){
 	
@@ -23,6 +20,8 @@ int main (int argc, char ** argv){
 	}
 
 	sleep(generarNumeroRandom());
+
+	destruirIPC();
 
 	return 0;
 } 	

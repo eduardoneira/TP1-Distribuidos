@@ -4,7 +4,7 @@
 #define DEBUG "DEBUG"
 #define ERROR "ERROR"
 #define BUFFER_SIZE 255
-#define TIME_SIZE	30
+#define TIME_SIZE	28
 
 #include <stdio.h>
 #include <string.h>
@@ -26,7 +26,7 @@ Logger crearLogger(){
 void initLogger(Logger* log){
 	char buffer[BUFFER_SIZE];
 
-	strcpy(buffer,"-----------------------------------COMIENZA EL LOG-----------------------------------");
+	strcpy(buffer,"--------------------------------------COMIENZA EL LOG--------------------------------------\n");
 
 	tomarLock(log->fd);
 
@@ -35,13 +35,13 @@ void initLogger(Logger* log){
 	liberarLock(log->fd);	
 }
 
-void escribir(Logger* log, const char* modo, int pid,const char* nombre_proceso , const char* message) {
+void escribirLog(Logger* log, const char* modo, int pid,const char* nombre_proceso , const char* message) {
 
 	char buffer[BUFFER_SIZE];
 
 	char time[TIME_SIZE];
 
-	get_timestamp(time);
+	get_timestamp(time,TIME_SIZE);
 
 	sprintf(buffer,"%s \t %s \t %d \t %s \t %s \n",modo,time,pid,nombre_proceso,message);
 	

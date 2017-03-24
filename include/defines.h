@@ -44,6 +44,6 @@
 */
 
 #define ERROR_CREAR_IPC 			-1
-
+#define ERROR_DESTRUIR_IPC			-2
 
 #endif

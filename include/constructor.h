@@ -82,14 +82,15 @@ void crearIPC() {
 	char msg_log[BUFFER_SIZE];
 	
 	crearEstadoHeladeria();
-	escribir(&log,DEBUG,pid,CONSTRUCTOR,"Se creo el estado de heladeria");
+	escribirLog(&log,DEBUG,pid,CONSTRUCTOR,"Se creo el estado de heladeria");
 	
 	crearColasDeMsgs();
-	escribir(&log,DEBUG,pid,CONSTRUCTOR,"Se crearon las colas de msgs para comunicación");
+	escribirLog(&log,DEBUG,pid,CONSTRUCTOR,"Se crearon las colas de msgs para comunicación");
 
 	crearHelados();
-	escribir(&log,DEBUG,pid,CONSTRUCTOR,"Se crearon los gustos de helado");
+	escribirLog(&log,DEBUG,pid,CONSTRUCTOR,"Se crearon los gustos de helado");
 
+	cerrarLogger(&log);
 }
 
 #endif

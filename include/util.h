@@ -35,17 +35,17 @@ ssize_t format_timeval(struct timeval *tv, char *buf, size_t sz)
 
   if (gm)
   {
-    written = (ssize_t)strftime(buf, sz, "%Y-%m-%dT%H:%M:%S", gm);
+    written = (ssize_t)strftime(buf, sz, "%Y-%m-%d %H:%M:%S", gm);
     if ((written > 0) && ((size_t)written < sz))
     {
-      int w = snprintf(buf+written, sz-(size_t)written, ".%06dZ",(int) tv->tv_usec);
+      int w = snprintf(buf+written, sz-(size_t)written, ".%06d",(int) tv->tv_usec);
       written = (w > 0) ? written + w : -1;
     }
   }
   return written;
 }
 
-int get_timestamp(char* buf) {
+int get_timestamp(char* buf, size_t size) {
   struct timeval tv;
 
   if (gettimeofday(&tv, NULL) != 0) {
@@ -53,8 +53,9 @@ int get_timestamp(char* buf) {
     return 1;
   }
 
-  if (format_timeval(&tv, buf, sizeof(buf)) > 0) {
-    strcat(buf,"\n");
+  if (format_timeval(&tv, buf, size) < 0) {
+    perror("format error");
+    return 1;
   }
   return 0;
 }
