@@ -22,10 +22,14 @@ key_t getkey(int id) {
     return clave;
 }
 
-unsigned int generarNumeroRandom(int max) {
-	srand(time(NULL)); 
-	unsigned int r = rand() % max;
-	return r;
+unsigned int generarNumeroRandom(int max) { 
+    unsigned int r = rand() % max;
+    return r;
+}
+
+unsigned int generarNumeroRandom(int max, int seed) {
+    srand(seed);
+    return generarNumeroRandom(max);
 }
 
 unsigned int generarNumeroRandomConMin(int min, int max){
