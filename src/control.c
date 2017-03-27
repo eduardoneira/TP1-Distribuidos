@@ -9,7 +9,7 @@
 #include "../include/memoria_compartida.h"
 #include "../include/estado_heladeria.h"
 
-#define MANAGER "MANAGER"
+#define MANAGER "MANAGER\t"
 
 int main(int argc, char** argv) {
 	pid_t pid = getpid();
@@ -23,8 +23,10 @@ int main(int argc, char** argv) {
 		p(semid,0);
 		EstadoHeladeria* estado = (EstadoHeladeria*) map(shmid);
 		if(estado->abierto == CERRADO){
+			estado->abierto = ABIERTO;
 			escribirLog(&log,DEBUG,pid,MANAGER,"Se vuelve a abrir la heladeria");
 		} else {
+			estado->abierto = CERRADO;
 			escribirLog(&log,DEBUG,pid,MANAGER,"Se cierra la heladeria");
 		}
 		unmap(estado);

@@ -24,12 +24,17 @@ Logger crearLogger(){
 }
 
 void initLogger(Logger* log){
-	char buffer[BUFFER_SIZE];
-
-	strcpy(buffer,"-------------------------------------------------------------------------------------------\n--------------------------------------COMIENZA EL LOG--------------------------------------\n-------------------------------------------------------------------------------------------\n");
+	char buffer[BUFFER_SIZE];	
 
 	tomarLock(log->fd);
+	
+	strcpy(buffer,"-------------------------------------------------------------------------------------------\n");
+	escribir(log->fd,buffer,sizeof(char)*strlen(buffer));
 
+	strcpy(buffer,"--------------------------------------COMIENZA EL LOG--------------------------------------\n");
+	escribir(log->fd,buffer,sizeof(char)*strlen(buffer));
+
+	strcpy(buffer,"-------------------------------------------------------------------------------------------\n");
 	escribir(log->fd,buffer,sizeof(char)*strlen(buffer));
 
 	liberarLock(log->fd);	

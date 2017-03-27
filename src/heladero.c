@@ -9,7 +9,7 @@
 #include "../include/mensaje_ticket.h"
 #include "../include/msg_queue.h"
 
-#define HELADERO "HELADERO"
+#define HELADERO "HELADERO\t"
 
 int main(int argc, char** argv) {
 	

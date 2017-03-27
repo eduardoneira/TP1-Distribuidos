@@ -10,7 +10,7 @@
 #include "../include/mensaje_ticket.h"
 #include "../include/msg_queue.h"
 
-#define CAJERO "CAJERO" 
+#define CAJERO "CAJERO\t\t" 
 
 int main(int argc, char** argv) {
 	

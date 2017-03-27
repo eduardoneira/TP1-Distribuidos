@@ -13,7 +13,7 @@
 #include "../include/estado_heladeria.h"
 
 
-#define CLIENTE 				"CLIENTE"
+#define CLIENTE 				"CLIENTE\t"
 #define TIEMPO_COMER_HELADO		5
 
 bool hayLugarEnLaHeladeria(Logger* log, pid_t pid, EstadoHeladeria* estado,int semid, bool* paraLlevar) {
