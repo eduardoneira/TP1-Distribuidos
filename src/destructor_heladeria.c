@@ -8,6 +8,6 @@
 
 int main(int argc, char** argv) {
 
-	return destruirIPC();
+	return destruirIPC(argc);
 
 }

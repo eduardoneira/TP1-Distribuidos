@@ -57,7 +57,7 @@ void avisarQueSeCierra(int idmsq) {
 	crearMsgIrse(&msg);
 	enviarmsgq(idmsq,&msg,sizeof(Mensaje_gustos));
 
-	recibirmsgq(idmsq,&msg,sizeof(Mensaje_gustos),MENSAJE_A_CAJERO);
+	recibirmsgq(idmsq,&msg,sizeof(Mensaje_gustos),MENSAJE_A_MANAGER);
 
 }
 
@@ -82,6 +82,9 @@ void destruirMsgQueues() {
 		perror("Error al conseguir cola 2");
 		exit(ERROR_DESTRUIR_IPC);
 	}
+
+	avisarQueSeCierra(idmsq);
+	avisarQueSeCierra(idmsq);
 
 	if (elimsgq(idmsq) == -1) {
 		perror("Error al destruir cola 2");
@@ -123,12 +126,12 @@ void destruirGustosHelados() {
 }
 
 
-int destruirIPC() {
+int destruirIPC(int params) {
 	pid_t pid = getpid();
 	
 	Logger log = crearLogger();
 	
-	if (destruirEstadoHeladeria() != 0) {
+	if (destruirEstadoHeladeria() != 0 && params == 1) {
 		escribirLog(&log,ERROR,pid,DESTRUCTOR,"La tienda tiene que estar cerrada y no debe haber clientes");
 		cerrarLogger(&log);
 		return 1;

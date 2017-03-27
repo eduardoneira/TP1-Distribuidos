@@ -38,6 +38,7 @@ int main(int argc, char** argv) {
 		escribirLog(&log,DEBUG,pid,CAJERO,buffer);
 
 		if (esMsgDeIrse(&msg_gustos)) {
+			msg_gustos.mtype = MENSAJE_A_MANAGER;
 			enviarmsgq(msgq_id_CC,&msg_gustos,sizeof(Mensaje_gustos));
 			escribirLog(&log,DEBUG,pid,CAJERO,"Voy a irme, nos vemos");
 			meVoy = true;

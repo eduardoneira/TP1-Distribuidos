@@ -53,6 +53,7 @@ int main(int argc, char** argv) {
 		escribirLog(&log,DEBUG,pid,HELADERO,buffer);
 
 		if (esMsgDeIrse(&msg_gustos)) {
+			msg_gustos.mtype = MENSAJE_A_MANAGER;
 			enviarmsgq(msgq_id_CH,&msg_gustos,sizeof(Mensaje_gustos));
 			escribirLog(&log,DEBUG,pid,HELADERO,"Voy a irme, nos vemos");
 			meVoy = true;
@@ -61,7 +62,7 @@ int main(int argc, char** argv) {
 			char aux[BUFFER_SIZE];
 			sprintf(buffer,"Helado de");
 			
-			for (i = 0; i < CANTIDAD_GUSTOS; i++) {
+			for (i = 0; i < GUSTOS_POR_PERSONA; i++) {
 				p(semids.at(msg_gustos.gustos_helado[i]),0);
 				sprintf(aux," %d",msg_gustos.gustos_helado[i]);
 				strcat(buffer,aux);
