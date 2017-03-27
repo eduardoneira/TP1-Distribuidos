@@ -95,6 +95,8 @@ int main(int argc, char** argv) {
 			p(semid,0);
 			estado->tamanio_heladeria = estado->tamanio_heladeria + 1;
 			v(semid,0);
+		} else {
+			escribirLog(&log,DEBUG,pid,CLIENTE,"Listo, recibi mi helado gracias");
 		}
 
 
