@@ -9,9 +9,21 @@
 #include "defines.h"
 #include "logger.h"
 #include "msg_queue.h"
+#include "mensaje_gustos.h"
 
-void destruirEstadoHeladeria() {
+int destruirEstadoHeladeria() {
 	int shmid = getshm(ID_SHM_ESTADO_HELADERIA);
+	int semid = getsem(SEMID_ESTADO_HELADERIA,1);
+
+	p(semid,0);
+	EstadoHeladeria* estado = (EstadoHeladeria*) map(shmid);
+	if(estado->tamanio_cola != TAMANIO_COLA || estado->tamanio_heladeria != TAMANIO_HELADERIA || estado->abierto != CERRADO){
+		unmap(estado);
+		v(semid,0);
+		return -1;
+	}
+	unmap(estado);
+	v(semid,0);
 
 	if (shmid == -1) {
 		perror("Error al conseguir la memoria compartida");
@@ -23,7 +35,7 @@ void destruirEstadoHeladeria() {
 		exit(ERROR_DESTRUIR_IPC);
 	}
 
-	int semid = getsem(SEMID_ESTADO_HELADERIA,1);
+	
 
 	if (semid == -1) {
 		perror("Error al conseguir semaforo de estado");
@@ -35,6 +47,18 @@ void destruirEstadoHeladeria() {
 		exit(ERROR_DESTRUIR_IPC);
 	}
 
+	return 0;
+
+}
+
+void avisarQueSeCierra(int idmsq) {
+	//Time to TCP
+	Mensaje_gustos msg;
+	crearMsgIrse(&msg);
+	enviarmsgq(idmsq,&msg,sizeof(Mensaje_gustos));
+
+	recibirmsgq(idmsq,&msg,sizeof(Mensaje_gustos),MENSAJE_A_CAJERO);
+
 }
 
 void destruirMsgQueues() {
@@ -44,6 +68,8 @@ void destruirMsgQueues() {
 		perror("Error al conseguir cola 1");
 		exit(ERROR_DESTRUIR_IPC);
 	}
+
+	avisarQueSeCierra(idmsq);
 
 	if (elimsgq(idmsq) == -1) {
 		perror("Error al destruir cola 1");
@@ -97,13 +123,16 @@ void destruirGustosHelados() {
 }
 
 
-void destruirIPC() {
+int destruirIPC() {
 	pid_t pid = getpid();
 	
 	Logger log = crearLogger();
-	char msg_log[BUFFER_SIZE];
 	
-	destruirEstadoHeladeria();
+	if (destruirEstadoHeladeria() != 0) {
+		escribirLog(&log,ERROR,pid,DESTRUCTOR,"La tienda tiene que estar cerrada y no debe haber clientes");
+		cerrarLogger(&log);
+		return 1;
+	}
 	escribirLog(&log,DEBUG,pid,DESTRUCTOR,"Se destruyo el estado de heladeria");
 	
 	destruirMsgQueues();
@@ -113,6 +142,8 @@ void destruirIPC() {
 	escribirLog(&log,DEBUG,pid,DESTRUCTOR,"Se destruyo los gustos de helado");
 
 	cerrarLogger(&log);
+
+	return 0;
 }
 
 #endif

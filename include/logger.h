@@ -26,7 +26,7 @@ Logger crearLogger(){
 void initLogger(Logger* log){
 	char buffer[BUFFER_SIZE];
 
-	strcpy(buffer,"--------------------------------------COMIENZA EL LOG--------------------------------------\n");
+	strcpy(buffer,"-------------------------------------------------------------------------------------------\n--------------------------------------COMIENZA EL LOG--------------------------------------\n-------------------------------------------------------------------------------------------\n");
 
 	tomarLock(log->fd);
 
@@ -41,11 +41,11 @@ void escribirLog(Logger* log, const char* modo, int pid,const char* nombre_proce
 
 	char time[TIME_SIZE];
 
+	tomarLock(log->fd);
+
 	get_timestamp(time,TIME_SIZE);
 
-	sprintf(buffer,"%s \t %s \t %d \t %s \t %s \n",modo,time,pid,nombre_proceso,message);
-	
-	tomarLock(log->fd);
+	sprintf(buffer,"%s \t %s \t %d \t %s \t %s \n",modo,time,pid,nombre_proceso,message);	
 
 	escribir(log->fd,buffer,sizeof(char)*strlen(buffer));
 

@@ -22,10 +22,14 @@ key_t getkey(int id) {
     return clave;
 }
 
-unsigned int generarNumeroRandom() {
+unsigned int generarNumeroRandom(int max) {
 	srand(time(NULL)); 
-	unsigned int r = rand() % 1 >> 3;
-	return SECONDS_DEFAULT+r;
+	unsigned int r = rand() % max;
+	return r;
+}
+
+unsigned int generarNumeroRandomConMin(int min, int max){
+  return generarNumeroRandom(max) + min;
 }
 
 ssize_t format_timeval(struct timeval *tv, char *buf, size_t sz)
@@ -38,7 +42,7 @@ ssize_t format_timeval(struct timeval *tv, char *buf, size_t sz)
     written = (ssize_t)strftime(buf, sz, "%Y-%m-%d %H:%M:%S", gm);
     if ((written > 0) && ((size_t)written < sz))
     {
-      int w = snprintf(buf+written, sz-(size_t)written, ".%06d",(int) tv->tv_usec);
+      int w = snprintf(buf+written, sz-(size_t)written, ".%06d",((int) tv->tv_usec) / 1000);
       written = (w > 0) ? written + w : -1;
     }
   }

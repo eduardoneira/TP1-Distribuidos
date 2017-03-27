@@ -79,7 +79,6 @@ void crearIPC() {
 	
 	Logger log = crearLogger();
 	initLogger(&log);
-	char msg_log[BUFFER_SIZE];
 	
 	crearEstadoHeladeria();
 	escribirLog(&log,DEBUG,pid,CONSTRUCTOR,"Se creo el estado de heladeria");
