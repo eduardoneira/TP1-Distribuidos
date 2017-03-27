@@ -47,7 +47,9 @@ int main(int argc, char** argv) {
 			escribirLog(&log,DEBUG,pid,CAJERO,"Le voy a pasar al cliente su ticket");
 			enviarmsgq(msgq_id_CC,&msg_ticket,sizeof(Mensaje_ticket));
 
-			//TODO : Falta mandarle al heladero
+			msg_gustos.id = ticket;
+			escribirLog(&log,DEBUG,pid,CAJERO,"Le paso a los heladeros el pedido");
+			enviarmsgq(msgq_id_CH,&msg_gustos,sizeof(Mensaje_gustos));
 
 			ticket = (ticket + 1) % INT_MAX;
 		}

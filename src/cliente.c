@@ -11,6 +11,7 @@
 #include "../include/semaforo.h"
 #include "../include/mensaje_gustos.h"
 #include "../include/mensaje_ticket.h"
+#include "../include/mensaje_helado.h"
 #include "../include/estado_heladeria.h"
 
 
@@ -66,6 +67,7 @@ int main(int argc, char** argv) {
 		int msgq_id_HC = getmsgq(MSGQ_HELADEROS_A_CLIENTES);
 		Mensaje_gustos msg_gustos;
 		Mensaje_ticket msg_ticket;
+		Mensaje_helado msg_helado;
 
 		crear(&msg_gustos,MENSAJE_A_CAJERO,pid,generarNumeroRandom(CANTIDAD_GUSTOS,pid),generarNumeroRandom(CANTIDAD_GUSTOS),generarNumeroRandom(CANTIDAD_GUSTOS));
 		char buffer[BUFFER_SIZE];
@@ -85,7 +87,9 @@ int main(int argc, char** argv) {
 		estado->tamanio_cola = estado->tamanio_cola + 1;
 		v(semid,0);
 
-		//TODO: Espero mi pedido
+		recibirmsgq(msgq_id_HC,&msg_helado,sizeof(Mensaje_helado),msg_ticket.ticket);
+		sprintf(buffer,"Me dieron el helado %s",msg_helado.helado);
+		escribirLog(&log,DEBUG,pid,CLIENTE,buffer);		
 
 		//Como mi helado me voy
 		if (!paraLlevar) {
