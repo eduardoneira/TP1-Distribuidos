@@ -91,11 +91,14 @@ int main(int argc, char** argv) {
 		sprintf(buffer,"Me dieron el helado %s",msg_helado.helado);
 		escribirLog(&log,DEBUG,pid,CLIENTE,buffer);		
 
-		//Como mi helado me voy
+		//Como mi helado o me voy
 		if (!paraLlevar) {
-			escribirLog(&log,DEBUG,pid,CLIENTE,"Voy a comer mi helado");
-			sleep(generarNumeroRandomConMin(TIEMPO_COMER_HELADO,TIEMPO_COMER_HELADO));
+			int random = generarNumeroRandom(TIEMPO_COMER_HELADO);
+			sprintf(buffer,"Voy a comer mi helado por %d",random);
+			escribirLog(&log,DEBUG,pid,CLIENTE,buffer);
+			sleep(random);
 			escribirLog(&log,DEBUG,pid,CLIENTE,"Ya lo morfe, me voy");
+			
 			p(semid,0);
 			estado->tamanio_heladeria = estado->tamanio_heladeria + 1;
 			v(semid,0);
