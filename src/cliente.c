@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
 		Mensaje_gustos msg_gustos;
 		Mensaje_ticket msg_ticket;
 
-		crear(&msg_gustos,MENSAJE_A_CAJERO,pid,generarNumeroRandom(CANTIDAD_GUSTOS,time(NULL)),generarNumeroRandom(CANTIDAD_GUSTOS),generarNumeroRandom(CANTIDAD_GUSTOS));
+		crear(&msg_gustos,MENSAJE_A_CAJERO,pid,generarNumeroRandom(CANTIDAD_GUSTOS,pid),generarNumeroRandom(CANTIDAD_GUSTOS),generarNumeroRandom(CANTIDAD_GUSTOS));
 		char buffer[BUFFER_SIZE];
 
 		//Hago el pedido
