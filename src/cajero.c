@@ -11,8 +11,7 @@
 #include "../include/msg_queue.h"
 
 #define CAJERO 		"CAJERO\t\t" 
-#define MIN_TIME	2
-
+#define MIN_TIME	3
 
 int main(int argc, char** argv) {
 	
