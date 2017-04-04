@@ -10,7 +10,9 @@
 #include "../include/mensaje_ticket.h"
 #include "../include/msg_queue.h"
 
-#define CAJERO "CAJERO\t\t" 
+#define CAJERO 		"CAJERO\t\t" 
+#define MIN_TIME	2
+
 
 int main(int argc, char** argv) {
 	
@@ -31,6 +33,9 @@ int main(int argc, char** argv) {
 	Mensaje_gustos msg_gustos;
 	Mensaje_ticket msg_ticket;
 
+	//init de random
+	generarNumeroRandom(pid,pid);
+
 	while (!meVoy) {
 
 		recibirmsgq(msgq_id_CC,&msg_gustos,sizeof(Mensaje_gustos),MENSAJE_A_CAJERO);
@@ -45,7 +50,8 @@ int main(int argc, char** argv) {
 		} else {
 			crearMsgTicket(&msg_ticket,msg_gustos.id,ticket);
 
-			escribirLog(&log,DEBUG,pid,CAJERO,"Le voy a pasar al cliente su ticket");
+			escribirLog(&log,DEBUG,pid,CAJERO,"Le voy a pasar al cliente su ticket pero primero voy a tardar");
+			sleep(generarNumeroRandom(MIN_TIME,MIN_TIME));
 			enviarmsgq(msgq_id_CC,&msg_ticket,sizeof(Mensaje_ticket));
 
 			msg_gustos.id = ticket;

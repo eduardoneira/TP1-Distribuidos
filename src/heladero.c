@@ -14,7 +14,8 @@
 #include "../include/mensaje_helado.h"
 #include "../include/msg_queue.h"
 
-#define HELADERO "HELADERO\t"
+#define HELADERO 	"HELADERO\t"
+#define MIN_TIME 	2
 
 std::vector<int> crearAccesoGustosHelado() {
 	std::vector<int> semids;
@@ -46,6 +47,9 @@ int main(int argc, char** argv) {
 	// Para saber si tengo que eliminar todo
 	bool meVoy = false;
 
+	//init de random
+	generarNumeroRandom(pid,pid);
+
 	while (!meVoy) {
 
 		recibirmsgq(msgq_id_CH,&msg_gustos,sizeof(Mensaje_gustos),MENSAJE_A_HELADERO);
@@ -66,6 +70,8 @@ int main(int argc, char** argv) {
 				p(semids.at(msg_gustos.gustos_helado[i]),0);
 				sprintf(aux," %d",msg_gustos.gustos_helado[i]);
 				strcat(buffer,aux);
+				//Simulo que me lleva tiempo armar el helado, podria logearlo
+				sleep(generarNumeroRandom(MIN_TIME,MIN_TIME));
 				v(semids.at(msg_gustos.gustos_helado[i]),0);
 			}
 
