@@ -5,3 +5,5 @@ cajero
 destructor_heladeria
 constructor_heladeria
 control
+.idea/
+cmake-build-debug/
