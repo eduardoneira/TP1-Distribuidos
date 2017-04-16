@@ -27,7 +27,7 @@ unsigned int generarNumeroRandom(int max) {
     return r;
 }
 
-unsigned int generarNumeroRandom(int max, int seed) {
+unsigned int generarNumeroRandomConSeed(int max, int seed) {
     srand(seed);
     return generarNumeroRandom(max);
 }

@@ -8,7 +8,7 @@ typedef struct Mensaje_helado {
 	char helado[HELADO_SIZE];
 }	Mensaje_helado;
 
-void crear(Mensaje_helado* msg, long id, char* helado){
+void crearMensajeHelado(Mensaje_helado* msg, long id, char* helado){
 	msg->mtype = id;
 	strcpy(msg->helado,helado);
 }

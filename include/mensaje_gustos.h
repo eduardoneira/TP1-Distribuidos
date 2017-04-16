@@ -31,7 +31,7 @@ void crearMsgIrse(Mensaje_gustos* msg){
 	msg->mtype = MENSAJE_A_CAJERO;
 }
 
-void crear(Mensaje_gustos* msg, long id, int pid, int gusto1, int gusto2, int gusto3) {
+void crearMsgGustos(Mensaje_gustos* msg, long id, int pid, int gusto1, int gusto2, int gusto3) {
 	msg->mtype = id;
 	msg->id = pid;
 	msg->gustos_helado[0] = gusto1;

@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 	bool meVoy = false;
 
 	//init de random
-	generarNumeroRandom(pid,pid);
+	generarNumeroRandomConSeed(pid,pid);
 
 	while (!meVoy) {
 
@@ -71,13 +71,13 @@ int main(int argc, char** argv) {
 				sprintf(aux," %d",msg_gustos.gustos_helado[i]);
 				strcat(buffer,aux);
 				//Simulo que me lleva tiempo armar el helado, podria logearlo
-				sleep(generarNumeroRandom(MIN_TIME,MIN_TIME));
+				sleep(generarNumeroRandomConMin(MIN_TIME,MIN_TIME));
 				v(semids.at(msg_gustos.gustos_helado[i]),0);
 			}
 
 			strcpy(aux,buffer);
 
-			crear(&msg_helado,msg_gustos.id,aux);
+			crearMensajeHelado(&msg_helado,msg_gustos.id,aux);
 			sprintf(buffer,"Voy a enviar un %s",aux);
 			escribirLog(&log,DEBUG,pid,HELADERO,buffer);
 			
