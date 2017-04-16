@@ -1,5 +1,5 @@
-# TP1-Distribuidos
-TP 1 de Distribuidos : Repaso de Concu
+# TP2-Distribuidos
+TP 2 de Distribuidos : Middleware Concurrente
 
 # Consigna
 
