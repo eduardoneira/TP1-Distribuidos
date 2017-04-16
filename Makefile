@@ -1,3 +1,5 @@
+# deprecated, should use cmake to compile
+
 all:
 	g++ -g src/constructor_heladeria.c -o constructor_heladeria
 	g++ -g src/destructor_heladeria.c -o destructor_heladeria
