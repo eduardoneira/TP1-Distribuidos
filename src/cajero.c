@@ -12,7 +12,6 @@
 #define MIN_TIME	3
 
 int main(int argc, char** argv) {
-	
 	Logger log = crearLogger();
 	pid_t pid = getpid();
 	char buffer[BUFFER_SIZE];
@@ -55,6 +54,7 @@ int main(int argc, char** argv) {
 		}
 	}
 
+	cerrarCajero(&handler);
 	cerrarLogger(&log);
 
 	return 0;

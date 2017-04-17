@@ -35,4 +35,9 @@ void enviarMsgQueMeVoy(Cajero_handler* handler) {
     enviarmsgq(handler->_msgq_id_CC,&msg,sizeof(Mensaje_gustos));
 }
 
+void cerrarCajero(Cajero_handler* handler) {
+    handler->_msgq_id_CC = -1;
+    handler->_msgq_id_CH = -1;
+}
+
 #endif //TPS_DISTRIBUIDOS_ICAJEROCONCLIENTEMON_H

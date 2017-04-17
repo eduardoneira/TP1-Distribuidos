@@ -29,6 +29,9 @@ int esMsgDeIrse(Mensaje_gustos* msg){
 void crearMsgIrse(Mensaje_gustos* msg){
 	msg->id = MENSAJE_IRSE;
 	msg->mtype = MENSAJE_A_CAJERO;
+	msg->gustos_helado[0] = -1;
+	msg->gustos_helado[1] = -1;
+	msg->gustos_helado[2] = -1;
 }
 
 void crearMsgGustos(Mensaje_gustos* msg, long id, int pid, int gusto1, int gusto2, int gusto3) {
