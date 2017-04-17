@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
 				sprintf(aux," %d",msg_gustos.gustos_helado[i]);
 				strcat(buffer,aux);
 				//Simulo que me lleva tiempo armar el helado, podria logearlo
-				sleep(generarNumeroRandom(MIN_TIME,MIN_TIME));
+				sleep(generarNumeroRandomConMin(MIN_TIME,MIN_TIME));
 				v(semids.at(msg_gustos.gustos_helado[i]),0);
 			}
 

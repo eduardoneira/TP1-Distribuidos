@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
 			crearMsgTicket(&msg_ticket,msg_gustos.id,ticket);
 
 			escribirLog(&log,DEBUG,pid,CAJERO,"Le voy a pasar al cliente su ticket pero primero voy a tardar");
-			sleep(generarNumeroRandom(MIN_TIME,MIN_TIME));
+			sleep(generarNumeroRandomConMin(MIN_TIME,MIN_TIME));
 			enviarmsgq(msgq_id_CC,&msg_ticket,sizeof(Mensaje_ticket));
 
 			msg_gustos.id = ticket;
