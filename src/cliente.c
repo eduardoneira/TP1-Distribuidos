@@ -94,7 +94,7 @@ int main(int argc, char** argv) {
 		//Como mi helado o me voy
 		if (!paraLlevar) {
 			int random = generarNumeroRandom(TIEMPO_COMER_HELADO);
-			sprintf(buffer,"Voy a comer mi helado por %d",random);
+			sprintf(buffer,"Voy a comer mi helado por %d segundos",random);
 			escribirLog(&log,DEBUG,pid,CLIENTE,buffer);
 			sleep(random);
 			escribirLog(&log,DEBUG,pid,CLIENTE,"Ya lo morfe, me voy");
