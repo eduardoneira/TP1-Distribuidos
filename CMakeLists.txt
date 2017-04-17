@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.6)
-project(TP1_Distribuidos)
+project(TPS_Distribuidos)
 
 SET(CMAKE_C_COMPILER /usr/bin/g++)
 SET(CMAKE_CXX_COMPILER /usr/bin/g++)
