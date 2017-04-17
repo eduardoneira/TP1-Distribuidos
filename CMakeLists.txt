@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.6)
 project(TPS_Distribuidos)
 
+#SETEO COMPILADORES A G++
 SET(CMAKE_C_COMPILER /usr/bin/g++)
 SET(CMAKE_CXX_COMPILER /usr/bin/g++)
 
+#COMMON HEADERS
 set(HEADER_FILES
         include/constructor.h
         include/defines.h
@@ -23,9 +25,15 @@ set(HEADER_FILES
         include/util.h
 )
 
+#CAJERO
+set(CAJERO_FILES
+        src/cajero.c
+        include/ICajeroMON.h
+        include/cajero_handler.h)
+
 add_executable(constructor_heladeria ${HEADER_FILES} src/constructor_heladeria.c)
 add_executable(destructor_heladeria ${HEADER_FILES} src/destructor_heladeria.c)
 add_executable(control ${HEADER_FILES} src/control.c)
 add_executable(heladero ${HEADER_FILES} src/heladero.c)
 add_executable(cliente ${HEADER_FILES} src/cliente.c)
-add_executable(cajero ${HEADER_FILES} src/cajero.c)
+add_executable(cajero ${HEADER_FILES} ${CAJERO_FILES})
