@@ -6,8 +6,6 @@
 #include "mensaje_ticket.h"
 #include "msg_queue.h"
 
-#define MIN_TIME	3
-
 Cajero_handler registrarCajero() {
     Cajero_handler handler;
     handler._msgq_id_CC = getmsgq(MSGQ_CLIENTES_AL_CAJERO);
@@ -20,7 +18,6 @@ void recibirPedido(Cajero_handler* handler, Mensaje_gustos* msg) {
 }
 
 void enviarTicketACliente(Cajero_handler* handler, Mensaje_ticket* msg) {
-    sleep(generarNumeroRandomConMin(MIN_TIME,MIN_TIME));
     enviarmsgq(handler->_msgq_id_CC,msg,sizeof(Mensaje_ticket));
 }
 

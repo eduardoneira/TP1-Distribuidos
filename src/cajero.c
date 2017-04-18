@@ -6,7 +6,7 @@
 #include "../include/logger.h"
 #include "../include/mensaje_gustos.h"
 #include "../include/mensaje_ticket.h"
-#include "../include/ICajeroMON.h"
+#include "../include/ICajeroMOM.h"
 
 #define CAJERO 		"CAJERO\t\t" 
 #define MIN_TIME	3
@@ -45,6 +45,7 @@ int main(int argc, char** argv) {
 			crearMsgTicket(&msg_ticket,msg_gustos.id,ticket);
 
 			escribirLog(&log,DEBUG,pid,CAJERO,"Le voy a pasar al cliente su ticket pero primero voy a tardar");
+            sleep(generarNumeroRandomConMin(MIN_TIME,MIN_TIME));
             enviarTicketACliente(&handler,&msg_ticket);
 
 			escribirLog(&log,DEBUG,pid,CAJERO,"Le paso a los heladeros el pedido");

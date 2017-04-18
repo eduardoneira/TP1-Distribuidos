@@ -28,12 +28,18 @@ set(HEADER_FILES
 #CAJERO
 set(CAJERO_FILES
         src/cajero.c
-        include/ICajeroMON.h
+        include/ICajeroMOM.h
         include/cajero_handler.h)
+
+#HELADERO
+set(HELADERO_FILES
+        src/heladero.c
+        include/IHeladeroMOM.h
+        include/heladero_handler.h)
 
 add_executable(constructor_heladeria ${HEADER_FILES} src/constructor_heladeria.c)
 add_executable(destructor_heladeria ${HEADER_FILES} src/destructor_heladeria.c)
 add_executable(control ${HEADER_FILES} src/control.c)
-add_executable(heladero ${HEADER_FILES} src/heladero.c)
+add_executable(heladero ${HEADER_FILES} ${HELADERO_FILES})
 add_executable(cliente ${HEADER_FILES} src/cliente.c)
 add_executable(cajero ${HEADER_FILES} ${CAJERO_FILES})

@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
 #include <unistd.h>
-#include <limits.h>
 #include <string.h>
 #include <stdbool.h>
 #include <vector>
@@ -10,7 +8,6 @@
 #include "../include/logger.h"
 #include "../include/semaforo.h"
 #include "../include/mensaje_gustos.h"
-#include "../include/mensaje_ticket.h"
 #include "../include/mensaje_helado.h"
 #include "../include/msg_queue.h"
 
