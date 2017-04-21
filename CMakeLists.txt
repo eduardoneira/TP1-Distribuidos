@@ -23,7 +23,13 @@ set(HEADER_FILES
         include/msg_queue.h
         include/semaforo.h
         include/util.h
+        include/
 )
+
+#COMMON SOURCE FILES
+set(SOURCE_FILES
+		src/SignalHandler.c
+		src/SIG_Trap.c)
 
 #CAJERO
 set(CAJERO_FILES
@@ -43,3 +49,5 @@ add_executable(control ${HEADER_FILES} src/control.c)
 add_executable(heladero ${HEADER_FILES} ${HELADERO_FILES})
 add_executable(cliente ${HEADER_FILES} src/cliente.c)
 add_executable(cajero ${HEADER_FILES} ${CAJERO_FILES})
+
+add_executable(signalHandlerTest ${HEADER_FILES} ${SOURCE_FILES} src/SignalHandler.cpp)
