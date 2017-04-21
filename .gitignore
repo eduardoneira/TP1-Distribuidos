@@ -7,3 +7,5 @@ constructor_heladeria
 control
 .idea/
 cmake-build-debug/
+CMakeCache.txt
+CMakeFiles/
