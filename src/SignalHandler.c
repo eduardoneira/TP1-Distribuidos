@@ -1,4 +1,4 @@
-#include "SignalHandler.h"
+#include "../include/SignalHandler.h"
 
 typedef struct SignalHandler {
 

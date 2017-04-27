@@ -1,4 +1,4 @@
-#include "SIG_Trap.h"
+#include "../include/SIG_Trap.h"
 
 void SIG_TrapInit(SIG_Trap* sigtrap, int mysignal)
 {

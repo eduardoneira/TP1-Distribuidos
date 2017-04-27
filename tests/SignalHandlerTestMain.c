@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "SignalHandler.h"
-#include "SIG_Trap.h"
+#include "../include/SignalHandler.h"
+#include "../include/SIG_Trap.h"
 
 int main()
 {

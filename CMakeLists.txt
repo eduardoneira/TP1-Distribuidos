@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.2)
 project(TPS_Distribuidos)
 
 #SETEO COMPILADORES A G++
@@ -50,4 +50,4 @@ add_executable(heladero ${HEADER_FILES} ${HELADERO_FILES})
 add_executable(cliente ${HEADER_FILES} src/cliente.c)
 add_executable(cajero ${HEADER_FILES} ${CAJERO_FILES})
 
-add_executable(signalHandlerTest ${HEADER_FILES} ${SOURCE_FILES} src/SignalHandler.cpp)
+add_executable(signalHandlerTest ${HEADER_FILES} ${SOURCE_FILES} tests/SignalHandlerTestMain.c)
