@@ -43,6 +43,12 @@ set(HELADERO_FILES
         include/IHeladeroMOM.h
         include/heladero_handler.h)
 
+#CLIENTE
+set(CLIENTE_FILES
+        src/cliente.c
+        include/IClienteMOM.h
+        include/cliente_handler.h)
+
 add_executable(constructor_heladeria ${HEADER_FILES} src/constructor_heladeria.c)
 add_executable(destructor_heladeria ${HEADER_FILES} src/destructor_heladeria.c)
 add_executable(control ${HEADER_FILES} src/control.c)
