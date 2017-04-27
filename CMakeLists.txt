@@ -43,11 +43,18 @@ set(HELADERO_FILES
         include/IHeladeroMOM.h
         include/heladero_handler.h)
 
+#MOM_CAJERO_HELADERO
+set(MOM_CAJERO_HELADERO
+        src/MOM_cajero_heladero.c
+        include/MOM_cajero_heladero.h)
+
+
 add_executable(constructor_heladeria ${HEADER_FILES} src/constructor_heladeria.c)
 add_executable(destructor_heladeria ${HEADER_FILES} src/destructor_heladeria.c)
 add_executable(control ${HEADER_FILES} src/control.c)
 add_executable(heladero ${HEADER_FILES} ${HELADERO_FILES})
 add_executable(cliente ${HEADER_FILES} src/cliente.c)
 add_executable(cajero ${HEADER_FILES} ${CAJERO_FILES})
+add_executable(MOM_cajero_heladero ${HEADER_FILES} ${SOURCE_FILES} ${MOM_CAJERO_HELADERO})
 
 add_executable(signalHandlerTest ${HEADER_FILES} ${SOURCE_FILES} tests/SignalHandlerTestMain.c)
