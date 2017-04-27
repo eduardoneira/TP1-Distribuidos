@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
 		escribirLog(&log,DEBUG,pid,HELADERO,buffer);
 
 		if (esMsgDeIrse(&msg_gustos)) {
-			enviarAManegerQueMeVoy(&handler);
+			enviarAManagerQueMeVoy(&handler);
 			escribirLog(&log,DEBUG,pid,HELADERO,"Voy a irme, nos vemos");
 			meVoy = true;
 		} else {

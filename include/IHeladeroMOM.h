@@ -37,11 +37,11 @@ void recibirPedidoDeCajero(Heladero_handler* handler, Mensaje_gustos* msg) {
     recibirmsgq(handler->_msgq_id_CH,msg,sizeof(Mensaje_gustos),MENSAJE_A_HELADERO);
 }
 
-void enviarAManegerQueMeVoy(Heladero_handler* handler) {
+void enviarAManagerQueMeVoy(Heladero_handler* handler) {
     Mensaje_gustos msg;
     crearMsgIrse(&msg);
     msg.mtype = MENSAJE_A_MANAGER;
-    enviarmsgq(handler->_msgq_id_HC,&msg,sizeof(Mensaje_gustos));
+    enviarmsgq(handler->_msgq_id_CH,&msg,sizeof(Mensaje_gustos));
 }
 
 void enviarPedidoACliente(Heladero_handler* handler, Mensaje_helado* msg) {
