@@ -11,9 +11,6 @@ set(HEADER_FILES
         include/defines.h
         include/destructor.h
         include/estado_heladeria.h
-        include/fifo.h
-        include/fifo_escritura.h
-        include/fifo_lectura.h
         include/lockfile.h
         include/logger.h
         include/memoria_compartida.h
@@ -23,8 +20,7 @@ set(HEADER_FILES
         include/msg_queue.h
         include/semaforo.h
         include/util.h
-        include/
-)
+		include/mensaje_registro.h)
 
 #COMMON SOURCE FILES
 set(SOURCE_FILES
@@ -49,17 +45,21 @@ set(CLIENTE_FILES
         include/IClienteMOM.h
         include/cliente_handler.h)
 
-#MOM_CAJERO_HELADERO
-set(MOM_CAJERO_HELADERO
-        src/MOM_cajero_heladero.c
-        include/MOM_cajero_heladero.h)
+#MOM_SERVER
+set(MOM_SERVER
+        src/MOM_server.c
+        include/MOM_server.h)
+
+#MOM_REGISTER
+set(MOM_REGISTER
+		src/MOM_register.c)
 
 add_executable(constructor_heladeria ${HEADER_FILES} src/constructor_heladeria.c)
 add_executable(destructor_heladeria ${HEADER_FILES} src/destructor_heladeria.c)
 add_executable(control ${HEADER_FILES} src/control.c)
 add_executable(heladero ${HEADER_FILES} ${HELADERO_FILES})
-add_executable(cliente ${HEADER_FILES} src/cliente.c)
+add_executable(cliente ${HEADER_FILES} ${CLIENTE_FILES})
 add_executable(cajero ${HEADER_FILES} ${CAJERO_FILES})
-add_executable(MOM_cajero_heladero ${HEADER_FILES} ${SOURCE_FILES} ${MOM_CAJERO_HELADERO})
-
+add_executable(MOM_server ${HEADER_FILES} ${SOURCE_FILES} ${MOM_SERVER})
+add_executable(MOM_register ${HEADER_FILES} ${SOURCE_FILES} ${MOM_REGISTER})
 add_executable(signalHandlerTest ${HEADER_FILES} ${SOURCE_FILES} tests/SignalHandlerTestMain.c)

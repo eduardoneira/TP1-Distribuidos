@@ -1,7 +1,7 @@
 #ifndef CONSTRUCTOR_H
 #define CONSTRUCTOR_H
 
-#define CONSTRUCTOR "CONSTRUCTOR"
+
 
 #include "semaforo.h"
 #include "memoria_compartida.h"
@@ -46,11 +46,37 @@ void crearEstadoHeladeria() {
 	}
 }
 
-void crearColasDeMsgs() {
-	if (crearmsgq(MSGQ_CLIENTES_AL_CAJERO) == -1 || crearmsgq(MSGQ_CAJERO_A_HELADEROS) == -1 || crearmsgq(MSGQ_HELADEROS_A_CLIENTES) == -1) {
-		perror("Error al crear colas de mensajes");
+void crearColasDeMsgs(char* modo) {
+
+	if (strcmp(modo,ALL) == 0 || strcmp(modo,CLIENTE) == 0){
+		if (crearmsgq(MSGQ_PASAMANOS_CLIENTE_MOM_PEDIDO) == -1 || crearmsgq(MSGQ_PASAMANOS_MOM_CLIENTE_TICKET) == -1 || crearmsgq(MSGQ_PASAMANOS_MOM_CLIENTE_HELADO) == -1) {
+			perror("Error al crear colas de mensajes de cliente");
+			exit(ERROR_CREAR_IPC);
+		}
+	}
+	if (strcmp(modo,ALL) == 0 || strcmp(modo,HELADERO) == 0){
+		if (crearmsgq(MSGQ_PASAMANOS_MOM_HELADERO_PEDIDO) == -1 || crearmsgq(MSGQ_PASAMANOS_HELADERO_MOM_HELADO) == -1) {
+			perror("Error al crear colas de mensajes de heladero");
+			exit(ERROR_CREAR_IPC);
+		}
+	}
+
+	if (strcmp(modo,ALL) == 0 || strcmp(modo,CAJERO) == 0) {
+		if (crearmsgq(MSGQ_PASAMANOS_CAJERO_MOM_PEDIDO) == -1 || crearmsgq(MSGQ_PASAMANOS_MOM_CAJERO_PEDIDO) == -1 || crearmsgq(MSGQ_PASAMANOS_CAJERO_MOM_TICKET) == -1) {
+			perror("Error al crear colas de mensajes de cliente");
+			exit(ERROR_CREAR_IPC);
+		}
+	}
+
+	if (crearmsgq(MSGQ_REGISTER_MOM) == -1) {
+		perror("Error al crear colas de mensajes para registro");
 		exit(ERROR_CREAR_IPC);
-	}	
+	}
+
+	if (crearmsgq(MSGQ_DESTRUCTOR) == -1) {
+		perror("Error al crear colas de mensajes para destruir");
+		exit(ERROR_CREAR_IPC);
+	}
 }
 
 void crearHelados() {
@@ -74,20 +100,24 @@ void crearHelados() {
 
 }
 
-void crearIPC() {
+void crearIPC(char* modo) {
 	pid_t pid = getpid();
 	
 	Logger log = crearLogger();
 	initLogger(&log);
-	
-	crearEstadoHeladeria();
-	escribirLog(&log,DEBUG,pid,CONSTRUCTOR,"Se creo el estado de heladeria");
-	
-	crearColasDeMsgs();
+
+	if (strcmp(modo,ALL) == 0 || strcmp(modo,CLIENTE) == 0) {
+		crearEstadoHeladeria();
+		escribirLog(&log,DEBUG,pid,CONSTRUCTOR,"Se creo el estado de heladeria");
+	}
+
+	crearColasDeMsgs(modo);
 	escribirLog(&log,DEBUG,pid,CONSTRUCTOR,"Se crearon las colas de msgs para comunicación");
 
-	crearHelados();
-	escribirLog(&log,DEBUG,pid,CONSTRUCTOR,"Se crearon los gustos de helado");
+	if (strcmp(modo,ALL) == 0 || strcmp(modo,HELADERO) == 0) {
+		crearHelados();
+		escribirLog(&log,DEBUG,pid,CONSTRUCTOR,"Se crearon los gustos de helado");
+	}
 
 	cerrarLogger(&log);
 }

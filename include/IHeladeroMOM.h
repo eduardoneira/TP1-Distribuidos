@@ -6,6 +6,7 @@
 #include "mensaje_gustos.h"
 #include "mensaje_helado.h"
 #include "msg_queue.h"
+#include "mensaje_registro.h"
 
 std::vector<int> _crearAccesoGustosHelado() {
     std::vector<int> semids;
@@ -20,8 +21,9 @@ std::vector<int> _crearAccesoGustosHelado() {
 Heladero_handler registrarHeladero() {
     Heladero_handler handler;
     handler._helados = _crearAccesoGustosHelado();
-    handler._msgq_id_CH = getmsgq(MSGQ_CAJERO_A_HELADEROS);
-    handler._msgq_id_HC = getmsgq(MSGQ_HELADEROS_A_CLIENTES);
+    handler._msgq_id_recibir_pedido = getmsgq(MSGQ_PASAMANOS_MOM_HELADERO_PEDIDO);
+    handler._msgq_id_enviar_pedido = getmsgq(MSGQ_PASAMANOS_HELADERO_MOM_HELADO);
+    handler.id = registrarse();
     return handler;
 }
 
@@ -34,26 +36,23 @@ void liberarHelado(Heladero_handler* handler, int gusto) {
 }
 
 void recibirPedidoDeCajero(Heladero_handler* handler, Mensaje_gustos* msg) {
-    recibirmsgq(handler->_msgq_id_CH,msg,sizeof(Mensaje_gustos),MENSAJE_A_HELADERO);
+    recibirmsgq(handler->_msgq_id_recibir_pedido,msg,sizeof(Mensaje_gustos),MENSAJE_A_HELADERO);
 }
 
-void enviarAManagerQueMeVoy(Heladero_handler* handler) {
+void enviarAManagerQueMeVoy() {
     Mensaje_gustos msg;
     crearMsgIrse(&msg);
-    msg.mtype = MENSAJE_A_MANAGER;
-    enviarmsgq(handler->_msgq_id_CH,&msg,sizeof(Mensaje_gustos));
+    enviarmsgq(getmsgq(MSGQ_DESTRUCTOR),&msg,sizeof(Mensaje_gustos));
 }
 
 void enviarPedidoACliente(Heladero_handler* handler, Mensaje_helado* msg) {
-    enviarmsgq(handler->_msgq_id_HC,msg,sizeof(Mensaje_helado));
+    enviarmsgq(handler->_msgq_id_enviar_pedido,msg,sizeof(Mensaje_helado));
 }
 
 void cerrarHeladero(Heladero_handler* handler){
     handler->_helados.clear();
-    handler->_msgq_id_CH = -1;
-    handler->_msgq_id_HC = -1;
+    handler->_msgq_id_recibir_pedido = -1;
+    handler->_msgq_id_enviar_pedido = -1;
 }
-
-
 
 #endif //TPS_DISTRIBUIDOS_IHELADEROMOM_H

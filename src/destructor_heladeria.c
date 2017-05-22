@@ -1,13 +1,17 @@
 #include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <time.h>
 
 #include "../include/destructor.h"
 
 int main(int argc, char** argv) {
 
-	return destruirIPC(argc);
+	if (argc == 1) {
+		printf("Se debe especificar que crear, se pueden usar:\n heladero\n cajero\n cliente\n all\n");
+		return 1;
+	}
+
+	//TODO : cambiar para la siguiente entrega
+	argv[1] = ALL;
+
+	return destruirIPC(argv[1]);
 
 }

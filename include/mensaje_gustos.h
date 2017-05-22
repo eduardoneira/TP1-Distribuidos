@@ -8,7 +8,6 @@
 #define GUSTOS_POR_PERSONA 	3
 #define MENSAJE_A_CAJERO	1
 #define MENSAJE_A_HELADERO	1
-#define MENSAJE_A_MANAGER	2
 #define MENSAJE_IRSE		-1
 
 typedef struct Mensaje_gustos {

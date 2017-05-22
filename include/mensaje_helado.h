@@ -1,7 +1,7 @@
 #ifndef MENSAJE_HELADO
 #define MENSAJE_HELADO
 
-#define HELADO_SIZE 255
+#define HELADO_SIZE 32
 
 typedef struct Mensaje_helado {
 	long mtype;

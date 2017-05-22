@@ -8,7 +8,7 @@
 #include "../include/mensaje_ticket.h"
 #include "../include/ICajeroMOM.h"
 
-#define CAJERO 		"CAJERO\t\t" 
+
 #define MIN_TIME	3
 
 int main(int argc, char** argv) {
@@ -16,11 +16,11 @@ int main(int argc, char** argv) {
 	pid_t pid = getpid();
 	char buffer[BUFFER_SIZE];
 		
-	escribirLog(&log,DEBUG,pid,CAJERO,"Hola soy el cajero, voy a empezar a escuchar clientes");
+	escribirLog(&log,DEBUG,pid,CAJERO_NAME,"Hola soy el cajero, voy a empezar a escuchar clientes");
 
 	int ticket = 1;
 
-	// Para saber si tengo que eliminar IPC
+	// Para saber si tengo que dejar de escuchar IPC
 	bool meVoy = false;
 
     //Cajero Handler
@@ -35,20 +35,22 @@ int main(int argc, char** argv) {
 
         recibirPedido(&handler,&msg_gustos);
 		sprintf(buffer,"Recibi un mensaje de %d :O",msg_gustos.id);
-		escribirLog(&log,DEBUG,pid,CAJERO,buffer);
+		escribirLog(&log,DEBUG,pid,CAJERO_NAME,buffer);
 
 		if (esMsgDeIrse(&msg_gustos)) {
-            enviarMsgQueMeVoy(&handler);
-			escribirLog(&log,DEBUG,pid,CAJERO,"Voy a irme, nos vemos");
+            enviarMsgQueMeVoy();
+			escribirLog(&log,DEBUG,pid,CAJERO_NAME,"Voy a irme, nos vemos");
 			meVoy = true;
 		} else {
 			crearMsgTicket(&msg_ticket,msg_gustos.id,ticket);
+			int random = generarNumeroRandomConMin(MIN_TIME,MIN_TIME);
+			sprintf(buffer,"Le voy a pasar al cliente su ticket pero primero voy a tardar %d",random);
+			escribirLog(&log,DEBUG,pid,CAJERO_NAME,buffer);
 
-			escribirLog(&log,DEBUG,pid,CAJERO,"Le voy a pasar al cliente su ticket pero primero voy a tardar");
-            sleep(generarNumeroRandomConMin(MIN_TIME,MIN_TIME));
+			sleep(random);
             enviarTicketACliente(&handler,&msg_ticket);
 
-			escribirLog(&log,DEBUG,pid,CAJERO,"Le paso a los heladeros el pedido");
+			escribirLog(&log,DEBUG,pid,CAJERO_NAME,"Le paso a los heladeros el pedido");
             enviarPedidoAHeladero(&handler,&msg_gustos,ticket);
 
 			ticket = (ticket + 1) % INT_MAX;

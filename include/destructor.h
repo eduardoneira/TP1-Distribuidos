@@ -1,8 +1,7 @@
 #ifndef DESTRUCTOR_H
 #define DESTRUCTOR_H
 
-#define DESTRUCTOR "DESTRUCTOR"
-
+#include <stdbool.h>
 #include "semaforo.h"
 #include "memoria_compartida.h"
 #include "estado_heladeria.h"
@@ -23,7 +22,7 @@ int destruirEstadoHeladeria() {
 		return -1;
 	}
 	unmap(estado);
-	v(semid,0);
+
 
 	if (shmid == -1) {
 		perror("Error al conseguir la memoria compartida");
@@ -35,7 +34,7 @@ int destruirEstadoHeladeria() {
 		exit(ERROR_DESTRUIR_IPC);
 	}
 
-	
+	v(semid,0);
 
 	if (semid == -1) {
 		perror("Error al conseguir semaforo de estado");
@@ -57,52 +56,50 @@ void avisarQueSeCierra(int idmsq) {
 	crearMsgIrse(&msg);
 	enviarmsgq(idmsq,&msg,sizeof(Mensaje_gustos));
 
-	recibirmsgq(idmsq,&msg,sizeof(Mensaje_gustos),MENSAJE_A_MANAGER);
+	int elim_id = getmsgq(MSGQ_DESTRUCTOR);
+	recibirmsgq(elim_id,&msg,sizeof(Mensaje_gustos),0);
 
 }
 
-void destruirMsgQueues() {
-	int idmsq = getmsgq(MSGQ_CLIENTES_AL_CAJERO);
+void destruirCola(int id, char* error, int cant_avisar) {
+	int idmsq = getmsgq(id);
 
-	if (idmsq == -1) {
-		perror("Error al conseguir cola 1");
-		exit(ERROR_DESTRUIR_IPC);
-	}
-
-	avisarQueSeCierra(idmsq);
-
-	if (elimsgq(idmsq) == -1) {
-		perror("Error al destruir cola 1");
-		exit(ERROR_DESTRUIR_IPC);
-	}
-
-	idmsq = getmsgq(MSGQ_CAJERO_A_HELADEROS);
-
-	if (idmsq == -1) {
-		perror("Error al conseguir cola 2");
-		exit(ERROR_DESTRUIR_IPC);
-	}
-
-	avisarQueSeCierra(idmsq);
-	avisarQueSeCierra(idmsq);
-
-	if (elimsgq(idmsq) == -1) {
-		perror("Error al destruir cola 2");
-		exit(ERROR_DESTRUIR_IPC);
-	}
-
-	idmsq = getmsgq(MSGQ_HELADEROS_A_CLIENTES);
-
-
-	if (idmsq == -1) {
-		perror("Error al conseguir cola 3");
-		exit(ERROR_DESTRUIR_IPC);
+	for (int i = 0; i < cant_avisar; i++) {
+		avisarQueSeCierra(idmsq);
 	}
 
 	if (elimsgq(idmsq) == -1) {
-		perror("Error al destruir cola 3");
+		sprintf(error,"Error al destruir cola con id %d",id);
+		perror(error);
 		exit(ERROR_DESTRUIR_IPC);
 	}
+
+}
+
+void destruirMsgQueues(char* modo) {
+
+	char error[64];
+
+	if (strcmp(modo,ALL) == 0 || strcmp(modo,CAJERO) == 0) {
+		destruirCola(MSGQ_PASAMANOS_CAJERO_MOM_PEDIDO,error,0);
+		destruirCola(MSGQ_PASAMANOS_MOM_CAJERO_PEDIDO,error,CANT_CAJEROS);
+		destruirCola(MSGQ_PASAMANOS_CAJERO_MOM_TICKET,error,0);
+	}
+
+	if (strcmp(modo,ALL) == 0 || strcmp(modo,HELADERO) == 0) {
+		destruirCola(MSGQ_PASAMANOS_MOM_HELADERO_PEDIDO,error,CANT_HELADEROS);
+		destruirCola(MSGQ_PASAMANOS_HELADERO_MOM_HELADO,error,0);
+	}
+
+	if (strcmp(modo,ALL) == 0 || strcmp(modo,CLIENTE) == 0) {
+		destruirCola(MSGQ_PASAMANOS_CLIENTE_MOM_PEDIDO,error,0);
+		destruirCola(MSGQ_PASAMANOS_MOM_CLIENTE_TICKET,error,0);
+		destruirCola(MSGQ_PASAMANOS_MOM_CLIENTE_HELADO,error,0);
+	}
+
+	destruirCola(MSGQ_REGISTER_MOM,error,0);
+	destruirCola(MSGQ_DESTRUCTOR,error,0);
+
 
 }
 
@@ -126,23 +123,25 @@ void destruirGustosHelados() {
 }
 
 
-int destruirIPC(int params) {
+int destruirIPC(char* modo) {
 	pid_t pid = getpid();
 	
 	Logger log = crearLogger();
 	
-	if (destruirEstadoHeladeria() != 0 && params == 1) {
+	if ((strcmp(modo,CLIENTE) == 0 || strcmp(modo,ALL) == 0) && destruirEstadoHeladeria() != 0) {
 		escribirLog(&log,ERROR,pid,DESTRUCTOR,"La tienda tiene que estar cerrada y no debe haber clientes");
 		cerrarLogger(&log);
 		return 1;
 	}
 	escribirLog(&log,DEBUG,pid,DESTRUCTOR,"Se destruyo el estado de heladeria");
 	
-	destruirMsgQueues();
+	destruirMsgQueues(modo);
 	escribirLog(&log,DEBUG,pid,DESTRUCTOR,"Se destruyo las colas de msgs para comunicación");
 
-	destruirGustosHelados();
-	escribirLog(&log,DEBUG,pid,DESTRUCTOR,"Se destruyo los gustos de helado");
+	if (strcmp(modo,HELADERO) == 0 || strcmp(modo,ALL) == 0) {
+		destruirGustosHelados();
+		escribirLog(&log,DEBUG,pid,DESTRUCTOR,"Se destruyo los gustos de helado");
+	}
 
 	cerrarLogger(&log);
 

@@ -8,6 +8,7 @@
 #include "mensaje_gustos.h"
 #include "mensaje_ticket.h"
 #include "mensaje_helado.h"
+#include "mensaje_registro.h"
 #include "estado_heladeria.h"
 
 Cliente_handler registrarCliente() {
@@ -17,8 +18,11 @@ Cliente_handler registrarCliente() {
 	handler._estadoHeladeria = (EstadoHeladeria*) map(getshm(ID_SHM_ESTADO_HELADERIA));
 	handler._semidEstadoHeladeria = getsem(SEMID_ESTADO_HELADERIA,1);
 	
-	handler._msgq_id_CC = -1;
-	handler._msgq_id_HC = -1;
+	handler._msgq_id_enviar_pedido = getmsgq(MSGQ_PASAMANOS_CLIENTE_MOM_PEDIDO);
+	handler._msgq_id_recibir_ticket = getmsgq(MSGQ_PASAMANOS_MOM_CLIENTE_TICKET);
+	handler._msgq_id_recibir_helado = getmsgq(MSGQ_PASAMANOS_MOM_CLIENTE_HELADO);
+
+	handler.id = registrarse();
 
 	return handler;
 }
@@ -33,11 +37,6 @@ bool clienteEntrarEnLaHeladeria(Cliente_handler* handler) {
 	p(handler->_semidEstadoHeladeria,0);
 	bool abierta = handler->_estadoHeladeria->abierto == ABIERTO;
 	v(handler->_semidEstadoHeladeria,0);
-
-	if (abierta) {
-		handler->_msgq_id_CC = getmsgq(MSGQ_CLIENTES_AL_CAJERO);
-		handler->_msgq_id_HC = getmsgq(MSGQ_HELADEROS_A_CLIENTES);
-	}
 
 	return abierta;
 }
@@ -84,15 +83,15 @@ void clienteLiberarLugarParaSentarse(Cliente_handler* handler) {
 }
 
 void clienteHacerPedido(Cliente_handler* handler, Mensaje_gustos* mensaje) {
-	enviarmsgq(handler->_msgq_id_CC,mensaje,sizeof(Mensaje_gustos));
+	enviarmsgq(handler->_msgq_id_enviar_pedido,mensaje,sizeof(Mensaje_gustos));
 }
 
-void clienteRecibirTicket(Cliente_handler* handler, Mensaje_ticket* mensaje, int nroCliente) {
-	recibirmsgq(handler->_msgq_id_CC,mensaje,sizeof(Mensaje_ticket),nroCliente);
+void clienteRecibirTicket(Cliente_handler* handler, Mensaje_ticket* mensaje) {
+	recibirmsgq(handler->_msgq_id_recibir_ticket,mensaje,sizeof(Mensaje_ticket),handler->id);
 }
 
 void clienteRecibirHelado(Cliente_handler* handler, Mensaje_helado* mensaje, int ticket) {
-	recibirmsgq(handler->_msgq_id_HC,mensaje,sizeof(Mensaje_helado),ticket);
+	recibirmsgq(handler->_msgq_id_recibir_helado,mensaje,sizeof(Mensaje_helado),ticket);
 }
 
 #endif //TPS_DISTRIBUIDOS_ICLIENTEMOM_H

@@ -1,0 +1,5 @@
+program RPCPROG {
+        version RPCVERSION {
+                int getId() = 1;
+        } = 1;
+} = 0x20000099;

@@ -3,6 +3,7 @@
 
 #define DEBUG "DEBUG"
 #define ERROR "ERROR"
+#define TRACE "TRACE"
 #define BUFFER_SIZE 255
 #define TIME_SIZE	28
 

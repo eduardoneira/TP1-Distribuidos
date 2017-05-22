@@ -3,16 +3,12 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdbool.h>
-#include <vector>
 
 #include "../include/logger.h"
-#include "../include/semaforo.h"
 #include "../include/mensaje_gustos.h"
 #include "../include/mensaje_helado.h"
-#include "../include/msg_queue.h"
 #include "../include/IHeladeroMOM.h"
 
-#define HELADERO 	"HELADERO\t"
 #define MIN_TIME 	2
 
 int main(int argc, char** argv) {
@@ -21,7 +17,7 @@ int main(int argc, char** argv) {
 	pid_t pid = getpid();
 	char buffer[BUFFER_SIZE];
 
-	escribirLog(&log,DEBUG,pid,HELADERO,"Hola soy un heladero, voy a esperar a que el cajero me gire pedidos");
+	escribirLog(&log,DEBUG,pid,HELADERO_NAME,"Hola soy un heladero, voy a esperar a que el cajero me gire pedidos");
 	Heladero_handler handler = registrarHeladero();
 	Mensaje_gustos msg_gustos;
 	Mensaje_helado msg_helado;
@@ -36,11 +32,11 @@ int main(int argc, char** argv) {
 
 		recibirPedidoDeCajero(&handler,&msg_gustos);
 		sprintf(buffer,"Recibi un mensaje del cajero con ticket %d",msg_gustos.id);
-		escribirLog(&log,DEBUG,pid,HELADERO,buffer);
+		escribirLog(&log,DEBUG,pid,HELADERO_NAME,buffer);
 
 		if (esMsgDeIrse(&msg_gustos)) {
-			enviarAManagerQueMeVoy(&handler);
-			escribirLog(&log,DEBUG,pid,HELADERO,"Voy a irme, nos vemos");
+			enviarAManagerQueMeVoy();
+			escribirLog(&log,DEBUG,pid,HELADERO_NAME,"Voy a irme, nos vemos");
 			meVoy = true;
 		} else {
 			int i;
@@ -60,7 +56,7 @@ int main(int argc, char** argv) {
 
 			crearMensajeHelado(&msg_helado,msg_gustos.id,aux);
 			sprintf(buffer,"Voy a enviar un %s",aux);
-			escribirLog(&log,DEBUG,pid,HELADERO,buffer);
+			escribirLog(&log,DEBUG,pid,HELADERO_NAME,buffer);
 			
 			enviarPedidoACliente(&handler,&msg_helado);
 
