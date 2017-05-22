@@ -1,8 +1,6 @@
 #ifndef CONSTRUCTOR_H
 #define CONSTRUCTOR_H
 
-
-
 #include "semaforo.h"
 #include "memoria_compartida.h"
 #include "estado_heladeria.h"
@@ -24,7 +22,7 @@ void crearEstadoHeladeria() {
 
 	estadoInicial->tamanio_cola = TAMANIO_COLA;
 	estadoInicial->tamanio_heladeria = TAMANIO_HELADERIA;
-	estadoInicial->abierto = ABIERTO;
+	estadoInicial->abierto = CERRADO;
 
 	if (unmap((void *)estadoInicial) == -1) {
 		perror("Error al hacer el detach de la memeria");
