@@ -1,5 +1,5 @@
 # TP2-Distribuidos
-TP 2 de Distribuidos : Middleware Concurrente
+TP 2 de Distribuidos : Middleware Distribuido
 
 # Consigna
 
@@ -32,8 +32,8 @@ sudo ./server_rpc		// Importante que sea con permisos de root
 ```
 cmake .			  	// Crea el make para
 make                      	// compila el codigo y genera los ejecutables
-./constructor_heladeria all	// lanza un proceso cajero y dos procesos heladeros con forks, tambien lanza los MOMS
+./constructor_heladeria [modo]	// lanza un proceso cajero y dos procesos heladeros con forks, tambien lanza los MOMS. El modo puede ser "cliente", "cajero", "heladero" o "all"
 ./control 5               	// lanza 5 (o el numero ingresado) procesos cliente que actuan segun la consigna
 ./control                 	// si no recibe un numero de clientes como argumento, control cambia el estado de la heladeria a cerrada (pero no destruye ningun mecanismo de IPC)
-./destructor_heladeria all   	// envia mensajes a los procesos que se bloquean escuchando mensajes para que se cierren, y tambien destruye las estructuras de IPC creadas. No hace nada si la heladeria no esta cerrada o todavia hay clientes comiendo
+./destructor_heladeria [modo]  	// envia mensajes a los procesos que se bloquean escuchando mensajes para que se cierren, y tambien destruye las estructuras de IPC creadas. No hace nada si la heladeria no esta cerrada o todavia hay clientes comiendo. El modo puede ser "cliente", "cajero", "heladero" o "all"
 ```
