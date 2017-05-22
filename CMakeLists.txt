@@ -20,7 +20,7 @@ set(HEADER_FILES
         include/msg_queue.h
         include/semaforo.h
         include/util.h
-		include/mensaje_registro.h)
+		include/mensaje_registro.h include/socket.h)
 
 #COMMON SOURCE FILES
 set(SOURCE_FILES

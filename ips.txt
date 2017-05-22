@@ -1,0 +1,4 @@
+cliente 127.0.0.1
+heladero 127.0.0.1
+cajero 127.0.0.1
+rpc 127.0.0.1

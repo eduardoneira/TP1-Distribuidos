@@ -5,10 +5,15 @@
 #include "mensaje_gustos.h"
 #include "mensaje_helado.h"
 #include "mensaje_ticket.h"
+#include "socket.h"
+#include <map>
+#include <stdbool.h>
 
 typedef struct MOM_handler {
 	int _id_recibir_mensaje;
 	int _id_enviar_mensaje;
+	std::map<int,char*> hosts;
+	bool _socket_leer; 				// true si leo de un socket, sino soy escritor
 } MOM_handler;
 
 int _get_id_receptor(char* emisor, char* receptor) {
@@ -39,25 +44,91 @@ int _get_id_emisor(char* emisor, char* receptor) {
 	}
 }
 
-MOM_handler abrirMOM(char* emisor, char* receptor) {
+int _getNumHost(char* host){
+	if (strcmp(host,CAJERO) == 0) {
+		return 1;
+	} else if (strcmp(host,HELADERO) == 0) {
+		return 2;
+	} else if (strcmp(host,CLIENTE) == 0) {
+		return 3;
+	} else if (strcmp(host,RPC) == 0) {
+		return 4;
+	} else {
+		return -1;
+	}
+}
+
+std::map<int,char*> _getHosts(){
+	std::map<int,char*> hosts;
+	char nombre[20];
+	char ip[20];
+	FILE* fd = fopen(IPS,"r");
+
+	while (feof(fd)) {
+		fscanf(fd,"%s %s\n",nombre,ip);
+		hosts[_getNumHost(nombre)] = ip;
+	}
+
+	fclose(fd);
+
+	return hosts;
+};
+
+MOM_handler abrirMOM(char* emisor, char* receptor,char* quien_soy, int puerto) {
 	MOM_handler handler;
-	handler._id_recibir_mensaje = getmsgq(_get_id_receptor(emisor,receptor));
-	handler._id_enviar_mensaje = getmsgq(_get_id_emisor(emisor,receptor));
+	handler.hosts = _getHosts();
+
+	if (strcmp(quien_soy,emisor) == 0) {
+		handler._socket_leer = false;
+		handler._id_recibir_mensaje = getmsgq(_get_id_receptor(emisor,receptor));
+		handler._id_enviar_mensaje = abrir_socket_activo(handler.hosts[_getNumHost(receptor)],puerto);
+		if (handler._id_enviar_mensaje == -1) {
+			exit(-1);
+		}
+	} else {
+		handler._socket_leer = true;
+		handler._id_recibir_mensaje = abrir_socket_pasivo(handler.hosts[_getNumHost(emisor)],puerto);
+		if (handler._id_recibir_mensaje == -1) {
+			exit(-1);
+		}
+		handler._id_enviar_mensaje = getmsgq(_get_id_emisor(emisor,receptor));
+	};
+
 	return handler;
 }
 
 int recibirMsg(MOM_handler* handler, void* msg,size_t size) {
-	return recibirmsgqSinCheckeo(handler->_id_recibir_mensaje,msg,size,0);
+	if (handler->_socket_leer){
+		return leer_socket(handler->_id_recibir_mensaje,msg,size);
+	} else {
+		return recibirmsgqSinCheckeo(handler->_id_recibir_mensaje,msg,size,0);
+	}
+
 }
 
 void enviarMsg(MOM_handler* handler,void* msg, size_t size) {
-	enviarmsgq(handler->_id_enviar_mensaje,msg,size);
+	if (handler->_socket_leer){
+		enviarmsgq(handler->_id_enviar_mensaje,msg,size);
+	} else {
+		escribir_socket(handler->_id_recibir_mensaje,msg,size);
+	}
+
 }
 
 
 void cerrarMOM(MOM_handler* handler) {
+	if (handler->_socket_leer){
+		cerrar_socket(handler->_id_enviar_mensaje);
+	} else {
+		cerrar_socket(handler->_id_recibir_mensaje);
+	}
+
 	handler->_id_recibir_mensaje = -1;
 	handler->_id_enviar_mensaje = -1;
 }
+
+
+
+
 
 #endif

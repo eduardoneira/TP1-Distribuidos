@@ -49,10 +49,11 @@
 #define CERRADO						0
 
 /**
-* Archivo de log
+* Archivos
 */
 
 #define LOG_NAME 					"log.txt"
+#define IPS                         "ips.txt"
 
 /**
  * NOMBRES PARA LOGGEAR
@@ -74,6 +75,7 @@
 #define CAJERO 		"cajero"
 #define HELADERO	"heladero"
 #define CLIENTE		"cliente"
+#define RPC         "rpc"
 #define ALL			"all"
 
 /**
@@ -95,4 +97,9 @@
  * */
 #define LOCALHOST "127.0.0.1"
 
+
+/**
+ * SOCKET
+ * */
+#define MAX_READ_SOCKET    1>>14
 #endif
