@@ -23,8 +23,9 @@ key_t getkey(int id) {
 }
 
 unsigned int generarNumeroRandom(int max) { 
-    unsigned int r = rand() % max;
-    return r;
+    unsigned int r = rand();
+    srand(r);
+    return r % max;
 }
 
 unsigned int generarNumeroRandomConSeed(int max, int seed) {

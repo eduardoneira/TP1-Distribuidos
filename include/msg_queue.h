@@ -34,6 +34,10 @@ void recibirmsgq(int id, void *msgp, size_t msgsz, long type){
     }
 }
 
+int recibirmsgqSinCheckeo(int id, void *msgp, size_t msgsz, long type){
+    return msgrcv(id,msgp,msgsz-sizeof(long),type,0);
+}
+
 int elimsgq(int id){
     return (msgctl(id, IPC_RMID, NULL));
 }

@@ -46,8 +46,8 @@ MOM_handler abrirMOM(char* emisor, char* receptor) {
 	return handler;
 }
 
-void recibirMsg(MOM_handler* handler, void* msg,size_t size) {
-	recibirmsgq(handler->_id_recibir_mensaje,msg,size,0);
+int recibirMsg(MOM_handler* handler, void* msg,size_t size) {
+	return recibirmsgqSinCheckeo(handler->_id_recibir_mensaje,msg,size,0);
 }
 
 void enviarMsg(MOM_handler* handler,void* msg, size_t size) {

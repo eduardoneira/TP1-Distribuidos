@@ -125,7 +125,7 @@ int main (int argc, char ** argv){
 	}
 
     //TODO : cambiar para la siguiente entrega
-    argv[1] = ALL;
+    strcpy(argv[1],ALL);
 	crearIPC(argv[1]);
 
 	execMOM(argv[1]);

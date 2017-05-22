@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
 	}
 
 	//TODO : cambiar para la siguiente entrega
-	argv[1] = ALL;
+	strcpy(argv[1],ALL);
 
 	return destruirIPC(argv[1]);
 

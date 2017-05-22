@@ -1,5 +1,5 @@
+#include <stdbool.h>
 #include "../include/MOM_server.h"
-#include "../include/SignalHandler.h"
 
 /**
  * Argumentos esperados:
@@ -16,20 +16,20 @@ int main(int argc, char** argv){
 	sprintf(buffer,"Hola soy el MOM %s-%s con size %s", argv[1],argv[2],argv[3]);
 	escribirLog(&log,TRACE,pid,MOM,buffer);
 
-	SIG_Trap SIGINT_trap;
-	SIG_TrapInit(&SIGINT_trap, SIGINT);
-
 	MOM_handler handler = abrirMOM(argv[1],argv[2]);
 
 	size_t size = atoi(argv[3]);
 	void* msg = malloc(size);
 
-	SignalHandlerRegisterHandler(SIGINT, &SIGINT_trap);
+	bool termine = false;
 
-	while(SIG_TrapSignalWasReceived(&SIGINT_trap) == 0){
-		recibirMsg(&handler,msg,size);
-		escribirLog(&log,TRACE,pid,MOM,"Recibi un msg :p");
-		enviarMsg(&handler,msg,size);
+	while(!termine){
+		if (recibirMsg(&handler,msg,size) == -1) {
+			termine = true;
+		} else {
+			escribirLog(&log,TRACE,pid,MOM,"Recibi un msg :p");
+			enviarMsg(&handler,msg,size);
+		}
 	}
 
 	free(msg);
