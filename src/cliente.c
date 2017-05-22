@@ -28,7 +28,11 @@ int main(int argc, char** argv) {
 			Mensaje_ticket msg_ticket;
 			Mensaje_helado msg_helado;
 
-			crearMsgGustos(&msg_gustos,MENSAJE_A_CAJERO,handler.id,generarNumeroRandomConSeed(CANTIDAD_GUSTOS,pid),generarNumeroRandom(CANTIDAD_GUSTOS),generarNumeroRandom(CANTIDAD_GUSTOS));
+			int gustos[CANTIDAD_GUSTOS];
+			gustos[0] = generarNumeroRandomConSeed(CANTIDAD_GUSTOS,pid);
+			gustos[1] = generarNumeroRandomConSeed(CANTIDAD_GUSTOS,pid+gustos[0]);
+			gustos[2] = generarNumeroRandomConSeed(CANTIDAD_GUSTOS,pid+gustos[1]);
+			crearMsgGustos(&msg_gustos,MENSAJE_A_CAJERO,handler.id,gustos[0],gustos[1],gustos[2]);
 			char buffer[BUFFER_SIZE];
 
 			//Hago el pedido

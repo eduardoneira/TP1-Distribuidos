@@ -90,4 +90,9 @@
 #define ERROR_CREAR_IPC 			-1
 #define ERROR_DESTRUIR_IPC			-2
 
+/**
+ * HOSTS
+ * */
+#define LOCALHOST "127.0.0.1"
+
 #endif

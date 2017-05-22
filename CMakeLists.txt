@@ -33,6 +33,12 @@ set(CAJERO_FILES
         include/ICajeroMOM.h
         include/cajero_handler.h)
 
+#RPC
+set(RPC_FILES
+		rpc/rpc_clnt.c
+		rpc/rpc.h
+		include/rpc_wrapper.h)
+
 #HELADERO
 set(HELADERO_FILES
         src/heladero.c
@@ -59,7 +65,7 @@ add_executable(destructor_heladeria ${HEADER_FILES} src/destructor_heladeria.c)
 add_executable(control ${HEADER_FILES} src/control.c)
 add_executable(heladero ${HEADER_FILES} ${HELADERO_FILES})
 add_executable(cliente ${HEADER_FILES} ${CLIENTE_FILES})
-add_executable(cajero ${HEADER_FILES} ${CAJERO_FILES})
+add_executable(cajero ${HEADER_FILES} ${CAJERO_FILES} ${RPC_FILES})
 add_executable(MOM_server ${HEADER_FILES} ${SOURCE_FILES} ${MOM_SERVER})
-add_executable(MOM_register ${HEADER_FILES} ${SOURCE_FILES} ${MOM_REGISTER})
+add_executable(MOM_register ${HEADER_FILES} ${SOURCE_FILES} ${RPC_FILES} ${MOM_REGISTER})
 add_executable(signalHandlerTest ${HEADER_FILES} ${SOURCE_FILES} tests/SignalHandlerTestMain.c)

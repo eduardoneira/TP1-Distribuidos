@@ -2,9 +2,8 @@
 #include "../include/logger.h"
 #include "../include/msg_queue.h"
 #include "../include/mensaje_registro.h"
+#include "../include/rpc_wrapper.h"
 
-
-//TODO: RPC
 int main(int argc, char** argv){
     Logger log = crearLogger();
     pid_t pid = getpid();
@@ -12,7 +11,7 @@ int main(int argc, char** argv){
 
     Mensaje_registro msg;
     int msq_id = getmsgq(MSGQ_REGISTER_MOM);
-    int id = 1;
+    CLIENT* clientRPC = initRPC(LOCALHOST);
 
     bool termine = false;
 
@@ -21,12 +20,12 @@ int main(int argc, char** argv){
             termine = true;
         } else {
             msg.mtype = msg.id;
-            msg.id = id;
+            msg.id = getIdRPC(clientRPC);
             enviarmsgq(msq_id,&msg,sizeof(Mensaje_registro));
-            id++;
         }
     }
 
+    destruirRPC(clientRPC);
     cerrarLogger(&log);
 
     return 0;

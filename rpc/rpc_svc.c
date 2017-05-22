@@ -31,10 +31,16 @@ rpcprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		(void) svc_sendreply (transp, (xdrproc_t) xdr_void, (char *)NULL);
 		return;
 
-	case getId:
+	case getNumeroId:
 		_xdr_argument = (xdrproc_t) xdr_void;
 		_xdr_result = (xdrproc_t) xdr_int;
-		local = (char *(*)(char *, struct svc_req *)) getid_1_svc;
+		local = (char *(*)(char *, struct svc_req *)) getnumeroid_1_svc;
+		break;
+
+	case getTicket:
+		_xdr_argument = (xdrproc_t) xdr_void;
+		_xdr_result = (xdrproc_t) xdr_int;
+		local = (char *(*)(char *, struct svc_req *)) getticket_1_svc;
 		break;
 
 	default:

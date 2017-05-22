@@ -6,6 +6,7 @@
 #include "mensaje_ticket.h"
 #include "mensaje_registro.h"
 #include "msg_queue.h"
+#include "rpc_wrapper.h"
 
 Cajero_handler registrarCajero() {
     Cajero_handler handler;
@@ -13,7 +14,12 @@ Cajero_handler registrarCajero() {
     handler._msgq_id_pasar_pedido_heladero = getmsgq(MSGQ_PASAMANOS_CAJERO_MOM_PEDIDO);
     handler._msgq_id_recibir_pedido = getmsgq(MSGQ_PASAMANOS_MOM_CAJERO_PEDIDO);
     handler.id = registrarse();
+    handler._rpc_ticket = initRPC(LOCALHOST);
     return handler;
+}
+
+int generarTicket(Cajero_handler* handler) {
+    return getTicketRPC(handler->_rpc_ticket);
 }
 
 void recibirPedido(Cajero_handler* handler, Mensaje_gustos* msg) {
@@ -39,6 +45,7 @@ void cerrarCajero(Cajero_handler* handler) {
     handler->_msgq_id_recibir_pedido = -1;
     handler->_msgq_id_enviar_ticket = -1;
     handler->_msgq_id_pasar_pedido_heladero = -1;
+    destruirRPC(handler->_rpc_ticket);
 }
 
 #endif //TPS_DISTRIBUIDOS_ICAJEROCONCLIENTEMON_H
