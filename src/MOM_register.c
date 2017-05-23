@@ -33,6 +33,7 @@ int main(int argc, char** argv){
     Logger log = crearLogger();
     pid_t pid = getpid();
     char buffer[128];
+    char host[20];
     sprintf(buffer,"Hola soy el MOM para registrarse de %s",argv[1]);
 
     escribirLog(&log,TRACE,pid,MOM_REGISTER,buffer);
@@ -41,13 +42,14 @@ int main(int argc, char** argv){
     int msq_id = getmsgq(MSGQ_REGISTER_MOM);
 
     if (strcmp(argv[1],ALL) == 0) {
-        strcpy(buffer,LOCALHOST);
+        strcpy(host,LOCALHOST);
     } else {
-        getHostRPC(buffer,argv[1]);
+        getHostRPC(host,argv[1]);
     }
 
-
-    CLIENT* clientRPC = initRPC(buffer);
+    sprintf(buffer,"Conectando a servidor RPC en %s",host);
+    escribirLog(&log,TRACE,pid,MOM_REGISTER,buffer);
+    CLIENT* clientRPC = initRPC(host);
 
     bool termine = false;
 
