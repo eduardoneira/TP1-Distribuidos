@@ -17,7 +17,7 @@ int abrir_socket_activo(char* ip, int port){
 
     int fd = socket(AF_INET, SOCK_STREAM, 0);
     if (fd == -1){
-        perror("Fallo llamada a socket");
+        perror("Fallo llamada a socket\n");
         return -1;
     }
 
@@ -26,7 +26,7 @@ int abrir_socket_activo(char* ip, int port){
     serv_addr.sin_port = htons(port);
 
     if (connect(fd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) == -1){
-        perror("Fallo el connect del socket");
+        perror("Fallo el connect del socket\n");
         return -1;
     }
 
@@ -48,13 +48,13 @@ int abrir_socket_pasivo(char* ip, int port){
 
     if (bind(listenfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) == -1){
         close(listenfd);
-        perror("Error al bindear");
+        printf("Error al bindear a %s:%d\n",ip,port);
         return -1;
     }
 
     if (listen(listenfd, 10) == -1){
         close(listenfd);
-        perror("Error al hacer listen");
+        perror("Error al hacer listen\n");
         return -1;
     }
 
@@ -62,7 +62,7 @@ int abrir_socket_pasivo(char* ip, int port){
 
     if (nfd == -1) {
         close(listenfd);
-        perror("Error al hacer accept");
+        perror("Error al hacer accept\n");
         return -1;
     }
 
