@@ -1,6 +1,7 @@
 #ifndef CONSTRUCTOR_H
 #define CONSTRUCTOR_H
 
+#include <errno.h>
 #include "semaforo.h"
 #include "memoria_compartida.h"
 #include "estado_heladeria.h"
@@ -66,12 +67,13 @@ void crearColasDeMsgs(char* modo) {
 		}
 	}
 
-	if (crearmsgq(MSGQ_REGISTER_MOM) == -1) {
+	//TODO: Despues cambiar constructor para que tome mas de un parametro, esto es para cuando quiero lanzar 2 mom en la misma compu
+	if (crearmsgq(MSGQ_REGISTER_MOM) == -1 && errno != EEXIST) {
 		perror("Error al crear colas de mensajes para registro");
 		exit(ERROR_CREAR_IPC);
 	}
 
-	if (crearmsgq(MSGQ_DESTRUCTOR) == -1) {
+	if (crearmsgq(MSGQ_DESTRUCTOR) == -1 && errno != EEXIST) {
 		perror("Error al crear colas de mensajes para destruir");
 		exit(ERROR_CREAR_IPC);
 	}
