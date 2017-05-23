@@ -47,11 +47,13 @@ int abrir_socket_pasivo(char* ip, int port){
     serv_addr.sin_port = htons(port);
 
     if (bind(listenfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) == -1){
+        close(listenfd);
         perror("Error al bindear");
         return -1;
     }
 
     if (listen(listenfd, 10) == -1){
+        close(listenfd);
         perror("Error al hacer listen");
         return -1;
     }
@@ -59,6 +61,7 @@ int abrir_socket_pasivo(char* ip, int port){
     int nfd = accept(listenfd,(struct sockaddr*) NULL,NULL);
 
     if (nfd == -1) {
+        close(listenfd);
         perror("Error al hacer accept");
         return -1;
     }
@@ -74,24 +77,22 @@ int escribir_socket(int fd, void* data, int size_data){
 int leer_socket(int fd, void* data, int size_data){
     int leido = 0;
     int leidoActual = 0;
-    char buffer[MAX_READ_SOCKET];
+    char buffer[1024];
 
     while (leido != size_data){
         leidoActual = read(fd, buffer, size_data - leido);
 
         if (leidoActual == -1){
-            perror("Error al leer");
+            perror("Error al leer\n");
             return -1;
         }
 
         if (leidoActual == 0){
             printf("Se cerro la conexion por alguna razon\n");
-            return 0;
+            return -1;
         }
 
         memcpy((unsigned char*)data+leido,buffer,leidoActual);
-        memset(buffer,0,leidoActual);
-
         leido+=leidoActual;
     }
 

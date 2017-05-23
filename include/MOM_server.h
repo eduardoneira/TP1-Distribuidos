@@ -7,7 +7,6 @@
 #include "mensaje_ticket.h"
 #include "socket.h"
 #include <stdbool.h>
-#include <vector>
 
 typedef struct MOM_handler {
 	int _id_recibir_mensaje;
@@ -58,7 +57,17 @@ int _getNumHost(char* host){
 	}
 }
 
-MOM_handler abrirMOM(char* emisor, char* receptor,char* quien_soy, int puerto) {
+int abrirSocket(char* ip, int puerto, char* socket) {
+	if (strcmp(socket,SOCKET_ACTIVO) == 0) {
+		return abrir_socket_activo(ip,puerto);
+	} else if (strcmp(socket,SOCKET_PASIVO) == 0) {
+		return abrir_socket_pasivo(ip,puerto);
+	} else {
+		return -1;
+	}
+}
+
+MOM_handler abrirMOM(char* emisor, char* receptor,char* quien_soy,char* socket, int puerto) {
 	MOM_handler handler;
     //TODO:DESPUES SACAR ESTOS
     FILE* fd = fopen(IPS,"r");
@@ -74,14 +83,16 @@ MOM_handler abrirMOM(char* emisor, char* receptor,char* quien_soy, int puerto) {
 	if (strcmp(quien_soy,emisor) == 0) {
 		handler._socket_leer = false;
 		handler._id_recibir_mensaje = getmsgq(_get_id_receptor(emisor,receptor));
-		handler._id_enviar_mensaje = abrir_socket_activo(handler.hosts[_getNumHost(receptor)],puerto);
+		handler._id_enviar_mensaje = abrirSocket(handler.hosts[_getNumHost(receptor)],puerto,socket);
 		if (handler._id_enviar_mensaje == -1) {
+			perror("Acordarse que hay que abrir primero el cajero, despues el heladero y por ultimo el cliente");
 			exit(-1);
 		}
 	} else {
 		handler._socket_leer = true;
-		handler._id_recibir_mensaje = abrir_socket_pasivo(handler.hosts[_getNumHost(emisor)],puerto);
+		handler._id_recibir_mensaje = abrirSocket(handler.hosts[_getNumHost(emisor)],puerto,socket);
 		if (handler._id_recibir_mensaje == -1) {
+			perror("Acordarse que hay que abrir primero el cajero, despues el heladero y por ultimo el cliente");
 			exit(-1);
 		}
 		handler._id_enviar_mensaje = getmsgq(_get_id_emisor(emisor,receptor));
@@ -103,7 +114,7 @@ void enviarMsg(MOM_handler* handler,void* msg, size_t size) {
 	if (handler->_socket_leer){
 		enviarmsgq(handler->_id_enviar_mensaje,msg,size);
 	} else {
-		escribir_socket(handler->_id_recibir_mensaje,msg,size);
+		escribir_socket(handler->_id_enviar_mensaje,msg,size);
 	}
 
 }

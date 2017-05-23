@@ -22,7 +22,7 @@ void execMOM(char* modo) {
 		//Lanzo al MOM CAJERO-HELADERO
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_gustos));
-			execl("./MOM_server","./MOM_server",CAJERO,HELADERO,size,CAJERO,"16000",(char*) NULL);
+			execl("./MOM_server","./MOM_server",CAJERO,HELADERO,size,CAJERO,SOCKET_PASIVO,"16000",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
 		}
@@ -30,7 +30,7 @@ void execMOM(char* modo) {
 		//Lanzo al MOM CLIENTE-CAJERO
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_gustos));
-			execl("./MOM_server","./MOM_server",CLIENTE,CAJERO,size,CAJERO,"16001",(char*) NULL);
+			execl("./MOM_server","./MOM_server",CLIENTE,CAJERO,size,CAJERO,SOCKET_PASIVO,"16001",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
 		}
@@ -38,9 +38,14 @@ void execMOM(char* modo) {
 		//Lanzo al MOM CAJERO-CLIENTE
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_ticket));
-			execl("./MOM_server","./MOM_server",CAJERO,CLIENTE,size,CAJERO,"16002",(char*) NULL);
+			execl("./MOM_server","./MOM_server",CAJERO,CLIENTE,size,CAJERO,SOCKET_PASIVO,"16002",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
+		}
+
+		//Si quiero lanzar all proceses, tengo q respetar la jerarquia y por temas de scheduler, espero un cachito. Preguntar
+		if (strcmp(modo,ALL) == 0) {
+			sleep(1);
 		}
 	}
 
@@ -48,7 +53,7 @@ void execMOM(char* modo) {
 		//Lanzo al MOM CAJERO-HELADERO
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_gustos));
-			execl("./MOM_server","./MOM_server",CAJERO,HELADERO,size,HELADERO,"18000",(char*) NULL);
+			execl("./MOM_server","./MOM_server",CAJERO,HELADERO,size,HELADERO,SOCKET_ACTIVO,"16000",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
 		}
@@ -56,9 +61,13 @@ void execMOM(char* modo) {
 		//Lanzo al MOM HELADERO-CLIENTE
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_helado));
-			execl("./MOM_server","./MOM_server",HELADERO,CLIENTE,size,HELADERO,"18001",(char*) NULL);
+			execl("./MOM_server","./MOM_server",HELADERO,CLIENTE,size,HELADERO,SOCKET_PASIVO,"16003",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
+		}
+		//Si quiero lanzar all proceses, tengo q respetar la jerarquia y por temas de scheduler, espero un cachito. Preguntar
+		if (strcmp(modo,ALL) == 0) {
+			sleep(1);
 		}
 	}
 
@@ -66,7 +75,7 @@ void execMOM(char* modo) {
 		//Lanzo al MOM CLIENTE-CAJERO
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_gustos));
-			execl("./MOM_server","./MOM_server",CLIENTE,CAJERO,size,CLIENTE,"20001",(char*) NULL);
+			execl("./MOM_server","./MOM_server",CLIENTE,CAJERO,size,CLIENTE,SOCKET_ACTIVO,"16001",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
 		}
@@ -74,7 +83,7 @@ void execMOM(char* modo) {
 		//Lanzo al MOM CAJERO-CLIENTE
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_ticket));
-			execl("./MOM_server","./MOM_server",CAJERO,CLIENTE,size,CLIENTE,"20002",(char*) NULL);
+			execl("./MOM_server","./MOM_server",CAJERO,CLIENTE,size,CLIENTE,SOCKET_ACTIVO,"16002",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
 		}
@@ -82,9 +91,13 @@ void execMOM(char* modo) {
 		//Lanzo al MOM HELADERO-CLIENTE
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_helado));
-			execl("./MOM_server","./MOM_server",HELADERO,CLIENTE,size,CLIENTE,"20003",(char*) NULL);
+			execl("./MOM_server","./MOM_server",HELADERO,CLIENTE,size,CLIENTE,SOCKET_ACTIVO,"16003",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
+		}
+		//Si quiero lanzar all proceses, tengo q respetar la jerarquia y por temas de scheduler, espero un cachito. Preguntar
+		if (strcmp(modo,ALL) == 0) {
+			sleep(1);
 		}
 	}
 

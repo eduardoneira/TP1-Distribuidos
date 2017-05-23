@@ -7,6 +7,7 @@
  * char* 	quien_recibe
  * size_t	tamanio_mensaje
  * char*    quien_soy
+ * char*    si soy socket activo o pasivo
  * int      puerto
  * */
 
@@ -15,10 +16,10 @@ int main(int argc, char** argv){
 	pid_t pid = getpid();
 	char buffer[64];
 
-	sprintf(buffer,"Hola soy el MOM %s-%s con size %s siendo %s con puerto %s", argv[1],argv[2],argv[3],argv[4],argv[5]);
+	sprintf(buffer,"Hola soy el MOM %s-%s con size %s siendo %s con un socket %s con puerto %s", argv[1],argv[2],argv[3],argv[4],argv[5],argv[6]);
 	escribirLog(&log,TRACE,pid,MOM,buffer);
 
-	MOM_handler handler = abrirMOM(argv[1],argv[2],argv[4],atoi(argv[5]));
+	MOM_handler handler = abrirMOM(argv[1],argv[2],argv[4],argv[5],atoi(argv[6]));
 
 	size_t size = atoi(argv[3]);
 	void* msg = malloc(size);
@@ -31,6 +32,7 @@ int main(int argc, char** argv){
 		} else {
 			escribirLog(&log,TRACE,pid,MOM,"Recibi un msg :p");
 			enviarMsg(&handler,msg,size);
+			escribirLog(&log,TRACE,pid,MOM,"Envie un msg :p");
 		}
 	}
 

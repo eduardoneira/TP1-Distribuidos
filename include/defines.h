@@ -102,5 +102,7 @@
 /**
  * SOCKET
  * */
-#define MAX_READ_SOCKET    1>>14
+#define MAX_READ_SOCKET     1>>10
+#define SOCKET_ACTIVO       "activo"
+#define SOCKET_PASIVO       "pasivo"
 #endif
