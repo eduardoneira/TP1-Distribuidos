@@ -16,6 +16,8 @@ getnumeroid_1_svc(void *argp, struct svc_req *rqstp)
 	 */
     result = (result+1) % INT_MAX;
 
+	printf("Enviando id %d\n",result);
+
 	return &result;
 }
 
@@ -28,6 +30,8 @@ getticket_1_svc(void *argp, struct svc_req *rqstp)
 	 * insert server code here
 	 */
     result = (result+1) % INT_MAX;
+
+	printf("Enviando ticket %d\n",result);
 
 	return &result;
 }
