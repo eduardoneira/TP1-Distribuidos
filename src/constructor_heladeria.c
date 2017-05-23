@@ -22,7 +22,7 @@ void execMOM(char* modo) {
 		//Lanzo al MOM CAJERO-HELADERO
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_gustos));
-			execl("./MOM_server","./MOM_server",CAJERO,HELADERO,size,CAJERO,SOCKET_PASIVO,"16500",(char*) NULL);
+			execl("./MOM_server","./MOM_server",CAJERO,HELADERO,size,CAJERO,SOCKET_PASIVO,"20500",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
 		}
@@ -30,7 +30,7 @@ void execMOM(char* modo) {
 		//Lanzo al MOM CLIENTE-CAJERO
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_gustos));
-			execl("./MOM_server","./MOM_server",CLIENTE,CAJERO,size,CAJERO,SOCKET_PASIVO,"16501",(char*) NULL);
+			execl("./MOM_server","./MOM_server",CLIENTE,CAJERO,size,CAJERO,SOCKET_PASIVO,"20501",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
 		}
@@ -38,7 +38,7 @@ void execMOM(char* modo) {
 		//Lanzo al MOM CAJERO-CLIENTE
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_ticket));
-			execl("./MOM_server","./MOM_server",CAJERO,CLIENTE,size,CAJERO,SOCKET_PASIVO,"16502",(char*) NULL);
+			execl("./MOM_server","./MOM_server",CAJERO,CLIENTE,size,CAJERO,SOCKET_PASIVO,"20502",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
 		}
@@ -53,7 +53,7 @@ void execMOM(char* modo) {
 		//Lanzo al MOM CAJERO-HELADERO
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_gustos));
-			execl("./MOM_server","./MOM_server",CAJERO,HELADERO,size,HELADERO,SOCKET_ACTIVO,"16500",(char*) NULL);
+			execl("./MOM_server","./MOM_server",CAJERO,HELADERO,size,HELADERO,SOCKET_ACTIVO,"20500",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
 		}
@@ -61,7 +61,7 @@ void execMOM(char* modo) {
 		//Lanzo al MOM HELADERO-CLIENTE
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_helado));
-			execl("./MOM_server","./MOM_server",HELADERO,CLIENTE,size,HELADERO,SOCKET_PASIVO,"16503",(char*) NULL);
+			execl("./MOM_server","./MOM_server",HELADERO,CLIENTE,size,HELADERO,SOCKET_PASIVO,"20503",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
 		}
@@ -75,7 +75,7 @@ void execMOM(char* modo) {
 		//Lanzo al MOM CLIENTE-CAJERO
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_gustos));
-			execl("./MOM_server","./MOM_server",CLIENTE,CAJERO,size,CLIENTE,SOCKET_ACTIVO,"16501",(char*) NULL);
+			execl("./MOM_server","./MOM_server",CLIENTE,CAJERO,size,CLIENTE,SOCKET_ACTIVO,"20501",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
 		}
@@ -83,7 +83,7 @@ void execMOM(char* modo) {
 		//Lanzo al MOM CAJERO-CLIENTE
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_ticket));
-			execl("./MOM_server","./MOM_server",CAJERO,CLIENTE,size,CLIENTE,SOCKET_ACTIVO,"16502",(char*) NULL);
+			execl("./MOM_server","./MOM_server",CAJERO,CLIENTE,size,CLIENTE,SOCKET_ACTIVO,"20502",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
 		}
@@ -91,7 +91,7 @@ void execMOM(char* modo) {
 		//Lanzo al MOM HELADERO-CLIENTE
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_helado));
-			execl("./MOM_server","./MOM_server",HELADERO,CLIENTE,size,CLIENTE,SOCKET_ACTIVO,"16503",(char*) NULL);
+			execl("./MOM_server","./MOM_server",HELADERO,CLIENTE,size,CLIENTE,SOCKET_ACTIVO,"20503",(char*) NULL);
 			perror("Exec fallo");
 			exit(-1);
 		}
