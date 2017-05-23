@@ -20,7 +20,8 @@ set(HEADER_FILES
         include/msg_queue.h
         include/semaforo.h
         include/util.h
-		include/mensaje_registro.h include/socket.h)
+		include/mensaje_registro.h
+		include/socket.h)
 
 #COMMON SOURCE FILES
 set(SOURCE_FILES
@@ -60,8 +61,8 @@ set(MOM_SERVER
 set(MOM_REGISTER
 		src/MOM_register.c)
 
-add_executable(constructor_heladeria ${HEADER_FILES} src/constructor_heladeria.c)
-add_executable(destructor_heladeria ${HEADER_FILES} src/destructor_heladeria.c)
+add_executable(constructor ${HEADER_FILES} src/constructor_heladeria.c)
+add_executable(destructor ${HEADER_FILES} src/destructor_heladeria.c)
 add_executable(control ${HEADER_FILES} src/control.c)
 add_executable(heladero ${HEADER_FILES} ${HELADERO_FILES})
 add_executable(cliente ${HEADER_FILES} ${CLIENTE_FILES})

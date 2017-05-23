@@ -6,13 +6,13 @@
 #include "mensaje_helado.h"
 #include "mensaje_ticket.h"
 #include "socket.h"
-#include <map>
 #include <stdbool.h>
+#include <vector>
 
 typedef struct MOM_handler {
 	int _id_recibir_mensaje;
 	int _id_enviar_mensaje;
-	std::map<int,char*> hosts;
+	char hosts[CANT_TIPOS_PROCESOS][20];
 	bool _socket_leer; 				// true si leo de un socket, sino soy escritor
 } MOM_handler;
 
@@ -46,37 +46,30 @@ int _get_id_emisor(char* emisor, char* receptor) {
 
 int _getNumHost(char* host){
 	if (strcmp(host,CAJERO) == 0) {
-		return 1;
+		return 0;
 	} else if (strcmp(host,HELADERO) == 0) {
-		return 2;
+		return 1;
 	} else if (strcmp(host,CLIENTE) == 0) {
-		return 3;
+		return 2;
 	} else if (strcmp(host,RPC) == 0) {
-		return 4;
+		return 3;
 	} else {
 		return -1;
 	}
 }
 
-std::map<int,char*> _getHosts(){
-	std::map<int,char*> hosts;
-	char nombre[20];
-	char ip[20];
-	FILE* fd = fopen(IPS,"r");
-
-	while (feof(fd)) {
-		fscanf(fd,"%s %s\n",nombre,ip);
-		hosts[_getNumHost(nombre)] = ip;
-	}
-
-	fclose(fd);
-
-	return hosts;
-};
-
 MOM_handler abrirMOM(char* emisor, char* receptor,char* quien_soy, int puerto) {
 	MOM_handler handler;
-	handler.hosts = _getHosts();
+    //TODO:DESPUES SACAR ESTOS
+    FILE* fd = fopen(IPS,"r");
+    char nombre[20];
+    char ip[20];
+
+    for(int i = 0; i < CANT_TIPOS_PROCESOS; i++){
+        fscanf(fd,"%s %s\n",nombre,ip);
+        strcpy(handler.hosts[_getNumHost(nombre)],ip);
+    }
+    fclose(fd);
 
 	if (strcmp(quien_soy,emisor) == 0) {
 		handler._socket_leer = false;

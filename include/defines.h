@@ -82,8 +82,9 @@
  * CANTIDAD PROCESOS
  */
 
-#define CANT_HELADEROS  2
-#define CANT_CAJEROS    1
+#define CANT_HELADEROS              2
+#define CANT_CAJEROS                1
+#define CANT_TIPOS_PROCESOS  4
 
 /**
 *  ERRORES

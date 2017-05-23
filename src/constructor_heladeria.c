@@ -42,7 +42,9 @@ void execMOM(char* modo) {
 			perror("Exec fallo");
 			exit(-1);
 		}
-	} else if (strcmp(modo,ALL) == 0 || strcmp(modo,HELADERO) == 0){
+	}
+
+    if (strcmp(modo,ALL) == 0 || strcmp(modo,HELADERO) == 0){
 		//Lanzo al MOM CAJERO-HELADERO
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_gustos));
@@ -58,7 +60,9 @@ void execMOM(char* modo) {
 			perror("Exec fallo");
 			exit(-1);
 		}
-	} else if (strcmp(modo,ALL) == 0 || strcmp(modo,CLIENTE) == 0) {
+	}
+
+    if (strcmp(modo,ALL) == 0 || strcmp(modo,CLIENTE) == 0) {
 		//Lanzo al MOM CLIENTE-CAJERO
 		if (fork() == 0) {
 			sprintf(size,"%zu",sizeof(Mensaje_gustos));
