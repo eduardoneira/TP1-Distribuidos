@@ -5,6 +5,10 @@ project(TPS_Distribuidos)
 SET(CMAKE_C_COMPILER /usr/bin/g++)
 SET(CMAKE_CXX_COMPILER /usr/bin/g++)
 
+#SETEO FLAG
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+
 #COMMON HEADERS
 set(HEADER_FILES
         include/constructor.h
