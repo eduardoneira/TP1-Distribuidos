@@ -19,12 +19,11 @@ int main(int argc, char** argv){
 	sprintf(buffer,"Hola soy el MOM %s-%s con size %s siendo %s con un socket %s con puerto %s", argv[1],argv[2],argv[3],argv[4],argv[5],argv[6]);
 	escribirLog(&log,TRACE,pid,MOM,buffer);
 
-	MOM_handler handler = abrirMOM(argv[1],argv[2],argv[4],argv[5],atoi(argv[6]));
+	MOM_handler handler;
+	bool termine = abrirMOM(&handler, argv[1],argv[2],argv[4],argv[5],atoi(argv[6]));
 
 	size_t size = atoi(argv[3]);
 	void* msg = malloc(size);
-
-	bool termine = false;
 
 	while(!termine){
 		if (recibirMsg(&handler,msg,size) == -1) {

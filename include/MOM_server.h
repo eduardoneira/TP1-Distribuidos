@@ -67,38 +67,37 @@ int abrirSocket(char* ip, int puerto, char* socket) {
 	}
 }
 
-MOM_handler abrirMOM(char* emisor, char* receptor,char* quien_soy,char* socket, int puerto) {
-	MOM_handler handler;
-    //TODO:DESPUES SACAR ESTOS
+bool abrirMOM(MOM_handler* handler,char* emisor, char* receptor,char* quien_soy,char* socket, int puerto) {
+    //TODO:DESPUES SACAR ESTO TAL VEZ
     FILE* fd = fopen(IPS,"r");
     char nombre[20];
     char ip[20];
 
     for(int i = 0; i < CANT_TIPOS_PROCESOS; i++){
         fscanf(fd,"%s %s\n",nombre,ip);
-        strcpy(handler.hosts[_getNumHost(nombre)],ip);
+        strcpy(handler->hosts[_getNumHost(nombre)],ip);
     }
     fclose(fd);
 
 	if (strcmp(quien_soy,emisor) == 0) {
-		handler._socket_leer = false;
-		handler._id_recibir_mensaje = getmsgq(_get_id_receptor(emisor,receptor));
-		handler._id_enviar_mensaje = abrirSocket(handler.hosts[_getNumHost(receptor)],puerto,socket);
-		if (handler._id_enviar_mensaje == -1) {
-			perror("Acordarse que hay que abrir primero el cajero, despues el heladero y por ultimo el cliente");
-			exit(-1);
+		handler->_socket_leer = false;
+		handler->_id_recibir_mensaje = getmsgq(_get_id_receptor(emisor,receptor));
+		handler->_id_enviar_mensaje = abrirSocket(handler->hosts[_getNumHost(receptor)],puerto,socket);
+		if (handler->_id_enviar_mensaje == -1) {
+			perror("Acordarse que hay que abrir primero el cajero, despues el heladero y por ultimo el cliente\n");
+            return true;
 		}
 	} else {
-		handler._socket_leer = true;
-		handler._id_recibir_mensaje = abrirSocket(handler.hosts[_getNumHost(emisor)],puerto,socket);
-		if (handler._id_recibir_mensaje == -1) {
-			perror("Acordarse que hay que abrir primero el cajero, despues el heladero y por ultimo el cliente");
-			exit(-1);
+		handler->_socket_leer = true;
+		handler->_id_recibir_mensaje = abrirSocket(handler->hosts[_getNumHost(emisor)],puerto,socket);
+		if (handler->_id_recibir_mensaje == -1) {
+			perror("Acordarse que hay que abrir primero el cajero, despues el heladero y por ultimo el cliente\n");
+			return true;
 		}
-		handler._id_enviar_mensaje = getmsgq(_get_id_emisor(emisor,receptor));
+		handler->_id_enviar_mensaje = getmsgq(_get_id_emisor(emisor,receptor));
 	};
 
-	return handler;
+	return false;
 }
 
 int recibirMsg(MOM_handler* handler, void* msg,size_t size) {

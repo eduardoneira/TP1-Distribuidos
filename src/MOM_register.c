@@ -11,7 +11,7 @@ void getHostRPC(char* ipRPC, char* pname){
 
     FILE* fd = fopen(IPS,"r");
 
-    while (feof(fd)) {
+    while (!feof(fd)) {
         fscanf(fd,"%s %s\n",nombre,ip);
         if (strcmp(pname,nombre) == 0){
             strcpy(ipHost,ip);
