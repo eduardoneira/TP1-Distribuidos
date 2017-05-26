@@ -43,7 +43,7 @@ int abrir_socket_pasivo(char* ip, int port){
     }
 
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr(ip);
+    serv_addr.sin_addr.s_addr = inet_addr("0.0.0.0");
     serv_addr.sin_port = htons(port);
 
     if (bind(listenfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) == -1){
