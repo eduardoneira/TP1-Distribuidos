@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <string.h>
 #include <limits.h>
+#include <stdbool.h>
 
 int abrir_socket_activo(char* ip, int port){
     struct sockaddr_in serv_addr;
@@ -58,15 +59,21 @@ int abrir_socket_pasivo(char* ip, int port){
         return -1;
     }
 
+    return listenfd;
+}
+
+int accept_socket(int listenfd, bool cerrar_fd) {
     int nfd = accept(listenfd,(struct sockaddr*) NULL,NULL);
 
     if (nfd == -1) {
-        close(listenfd);
         perror("Error al hacer accept\n");
         return -1;
     }
 
-    close(listenfd);
+    if (cerrar_fd) {
+        close(listenfd);
+    }
+
     return nfd;
 }
 

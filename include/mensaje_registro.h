@@ -16,6 +16,18 @@ Mensaje_registro crearMensajeRegistro(int id) {
     return msg;
 }
 
+void serializeMsgRegistro(Mensaje_registro* msg, char* buffer){
+    sprintf(buffer,"%ld %d",msg->mtype,msg->id);
+}
+
+void deserializeMsgRegistro(Mensaje_registro* msg, char* buffer) {
+    char aux[128];
+    strcpy(aux,buffer);
+
+    msg->mtype = atol(strtok(aux,SEPARATOR));
+    msg->id = atoi(strtok(NULL,SEPARATOR));
+}
+
 bool esMsgCerrar(Mensaje_registro msg) {
     return (msg.id == -1);
 }

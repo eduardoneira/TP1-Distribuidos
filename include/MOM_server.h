@@ -61,7 +61,8 @@ int abrirSocket(char* ip, int puerto, char* socket) {
 	if (strcmp(socket,SOCKET_ACTIVO) == 0) {
 		return abrir_socket_activo(ip,puerto);
 	} else if (strcmp(socket,SOCKET_PASIVO) == 0) {
-		return abrir_socket_pasivo(ip,puerto);
+		int fd = abrir_socket_pasivo(ip,puerto);
+        return accept_socket(fd,true);
 	} else {
 		return -1;
 	}

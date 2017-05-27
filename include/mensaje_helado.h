@@ -13,4 +13,16 @@ void crearMensajeHelado(Mensaje_helado* msg, long id, char* helado){
 	strcpy(msg->helado,helado);
 }
 
+void serializeMsgHelado(Mensaje_helado* msg, char* buffer){
+	sprintf(buffer,"%ld %s",msg->mtype,msg->helado);
+}
+
+void deserializeMsgHelado(Mensaje_helado* msg, char* buffer) {
+	char aux[128];
+	strcpy(aux,buffer);
+
+	msg->mtype = atol(strtok(aux,SEPARATOR));
+	strcpy(msg->helado,aux);
+}
+
 #endif

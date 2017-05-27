@@ -17,6 +17,29 @@ typedef struct Mensaje_gustos {
 } Mensaje_gustos;
 
 
+void serializeMsgGusto(Mensaje_gustos* msg, char* buffer){
+	char aux_buffer[10];
+	sprintf(buffer,"%ld %d",msg->mtype,msg->id);
+
+	for (int i = 0; i < GUSTOS_POR_PERSONA; i++) {
+		sprintf(aux_buffer," %d",msg->gustos_helado[i]);
+		strcat(buffer,aux_buffer);
+	}
+}
+
+void deserializeMsgGusto(Mensaje_gustos* msg, char* buffer) {
+	char aux[128];
+	strcpy(aux,buffer);
+
+	msg->mtype = atol(strtok(aux,SEPARATOR));
+	msg->id = atoi(strtok(NULL,SEPARATOR));
+
+	for (int i = 0; i < GUSTOS_POR_PERSONA; i++) {
+		msg->gustos_helado[i] = atoi(strtok(NULL,SEPARATOR));
+	}
+
+}
+
 int esMsgDeIrse(Mensaje_gustos* msg){
 	if (msg->id == MENSAJE_IRSE) {
 		return 1;

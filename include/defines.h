@@ -96,7 +96,8 @@
 /**
  * HOSTS
  * */
-#define LOCALHOST "127.0.0.1"
+#define LOCALHOST   "127.0.0.1"
+#define PORT_BROKER 30000
 
 
 /**
@@ -105,4 +106,18 @@
 #define MAX_READ_SOCKET     1024
 #define SOCKET_ACTIVO       "activo"
 #define SOCKET_PASIVO       "pasivo"
+
+/**
+ * MSGS COSAS
+ * */
+#define SEPARATOR " "
+#define MSG_BROKER_REGISTER             1
+#define MSG_BROKER_TICKET               2
+#define MSG_BROKER_HELADO               3
+#define MSG_BROKER_PEDIDO               4
+#define MSG_BROKER_OCUPAR_HELADO        5
+#define MSG_BROKER_DESOCUPAR_HELADO     6
+#define MSG_BROKER_DESREGISTRARSE       7
+#define MSG_BROKER_CLIENTE_DECIDIR      8
+
 #endif
