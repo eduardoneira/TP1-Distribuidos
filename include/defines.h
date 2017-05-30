@@ -119,5 +119,7 @@
 #define MSG_BROKER_DESOCUPAR_HELADO     6
 #define MSG_BROKER_DESREGISTRARSE       7
 #define MSG_BROKER_CLIENTE_DECIDIR      8
+#define SIZE_TYPE_MSG       5
+#define SIZE_PAYLOAD_MSG    128
 
 #endif

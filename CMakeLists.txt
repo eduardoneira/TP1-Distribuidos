@@ -67,7 +67,7 @@ set(MOM_REGISTER
 
 #BROKER
 set(BROKER
-		src/broker.c)
+		src/broker.c include/message_wrapper.h)
 
 #WORKER BROKER
 set(WORKER_BROKER
