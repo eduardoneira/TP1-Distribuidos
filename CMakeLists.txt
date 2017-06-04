@@ -69,9 +69,20 @@ set(MOM_REGISTER
 set(BROKER
 		src/broker.c include/message_wrapper.h)
 
-#WORKER BROKER
-set(WORKER_BROKER
-		src/workerBroker.c)
+#BROKER OUT
+set(BROKER_OUT
+		src/broker_out.c
+		include/broker_out.h)
+
+#BROKER OUT
+set(BROKER_IN
+		src/broker_in.c
+		include/broker_in.h)
+
+#BROKER OUT
+set(BROKER_ROUTER
+		src/broker_router.c
+		include/broker_router.h)
 
 add_executable(constructor ${HEADER_FILES} src/constructor_heladeria.c)
 add_executable(destructor ${HEADER_FILES} src/destructor_heladeria.c)
@@ -82,5 +93,7 @@ add_executable(cajero ${HEADER_FILES} ${CAJERO_FILES} ${RPC_FILES})
 add_executable(MOM_server ${HEADER_FILES} ${SOURCE_FILES} ${MOM_SERVER})
 add_executable(MOM_register ${HEADER_FILES} ${SOURCE_FILES} ${RPC_FILES} ${MOM_REGISTER})
 add_executable(broker ${HEADER_FILES} ${SOURCE_FILES} ${BROKER})
-add_executable(workerBroker ${HEADER_FILES} ${SOURCE_FILES} ${WORKER_BROKER})
+add_executable(brokerIn ${HEADER_FILES} ${SOURCE_FILES} ${BROKER_IN})
+add_executable(brokerOut ${HEADER_FILES} ${SOURCE_FILES} ${BROKER_OUT})
+add_executable(brokerRouter ${HEADER_FILES} ${SOURCE_FILES} ${BROKER_ROUTER})
 add_executable(signalHandlerTest ${HEADER_FILES} ${SOURCE_FILES} tests/SignalHandlerTestMain.c)
