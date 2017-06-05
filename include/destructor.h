@@ -132,20 +132,23 @@ int destruirIPC(char* modo) {
 	
 	Logger log = crearLogger();
 	
-	if ((strcmp(modo,CLIENTE) == 0 || strcmp(modo,ALL) == 0) && destruirEstadoHeladeria() != 0) {
+	/*if ((strcmp(modo,CLIENTE) == 0 || strcmp(modo,ALL) == 0) && destruirEstadoHeladeria() != 0) {
 		escribirLog(&log,ERROR,pid,DESTRUCTOR,"La tienda tiene que estar cerrada y no debe haber clientes");
 		cerrarLogger(&log);
 		return 1;
 	}
 	escribirLog(&log,DEBUG,pid,DESTRUCTOR,"Se destruyo el estado de heladeria");
-	
+	*/
+
 	destruirMsgQueues(modo);
 	escribirLog(&log,DEBUG,pid,DESTRUCTOR,"Se destruyo las colas de msgs para comunicación");
-
+	
+	/*
 	if (strcmp(modo,HELADERO) == 0 || strcmp(modo,ALL) == 0) {
 		destruirGustosHelados();
 		escribirLog(&log,DEBUG,pid,DESTRUCTOR,"Se destruyo los gustos de helado");
 	}
+	*/
 
 	cerrarLogger(&log);
 

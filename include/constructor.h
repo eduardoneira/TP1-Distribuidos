@@ -111,19 +111,19 @@ void crearIPC(char* modo) {
 	
 	Logger log = crearLogger();
 	initLogger(&log);
-
+	/*
 	if (strcmp(modo,ALL) == 0 || strcmp(modo,CLIENTE) == 0) {
 		crearEstadoHeladeria();
 		escribirLog(&log,DEBUG,pid,CONSTRUCTOR,"Se creo el estado de heladeria");
-	}
+	}*/
 
 	crearColasDeMsgs(modo);
 	escribirLog(&log,DEBUG,pid,CONSTRUCTOR,"Se crearon las colas de msgs para comunicación");
-
+	/*
 	if (strcmp(modo,ALL) == 0 || strcmp(modo,HELADERO) == 0) {
 		crearHelados();
 		escribirLog(&log,DEBUG,pid,CONSTRUCTOR,"Se crearon los gustos de helado");
-	}
+	}*/
 
 	cerrarLogger(&log);
 }
