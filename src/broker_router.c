@@ -25,12 +25,14 @@ bool route(Router_handler* handler,MessageQ* msg,Logger* log) {
         case MSG_BROKER_ABRIR_HELADERIA:
             return cambiarEstadoHeladeria(handler,ABIERTO);
         case MSG_BROKER_PUEDO_ENTRAR:
-            return true;
-        case MSG_HAY_LUGAR_COLA:
-            return true;
-        case MSG_SALIR_COLA:
-            return true;
-        case MSG_HAY_LUGAR_SENTARSE:
+            return clientePuedeEntrar(handler,msg);
+        case MSG_BROKER_HAY_LUGAR_COLA:
+            return hay_lugar_cola(handler,msg);
+        case MSG_BROKER_SALIR_COLA:
+            return salir_cola(handler);
+        case MSG_BROKER_HAY_LUGAR_SENTARSE:
+            return hay_lugar_heladeria(handler,msg);
+        case MSG_BROKER_CERRAR:
             return true;
         default:
             return false;

@@ -44,7 +44,7 @@ int main(int argc, char** argv){
 
             enviarmsgq(msqid,(void*) &msgq,sizeof(MessageQ));
 
-            if (esMsgDesregistrarse(msg)) {
+            if (esMsgCerrar(msg)) {
                 termine = true;
             }
         }

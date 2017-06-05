@@ -33,8 +33,8 @@ bool esMsgRegistrarse(Message msg){
     return (atoi(msg.type) == MSG_BROKER_REGISTER);
 }
 
-bool esMsgDesregistrarse(Message msg){
-    return (atoi(msg.type) == MSG_BROKER_DESREGISTRARSE);
+bool esMsgCerrar(Message msg){
+    return (atoi(msg.type) == MSG_BROKER_CERRAR);
 }
 
 #endif //TPS_DISTRIBUIDOS_MESSAGE_WRAPPER_H

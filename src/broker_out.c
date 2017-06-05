@@ -44,7 +44,7 @@ int main(int argc, char** argv){
             escribirLog(&log,DEBUG,pid,BROKER_OUT_NAME,"Me llego un msg del router, lo mando por el socket");
             escribir_socket(socket,(void*) &msg,sizeof(Message));
 
-            if (esMsgDesregistrarse(msg)) {
+            if (esMsgCerrar(msg)) {
                 termine = true;
             }
         }

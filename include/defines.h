@@ -132,9 +132,10 @@
 #define MSG_BROKER_CERRAR_HELADERIA     8
 #define MSG_BROKER_ABRIR_HELADERIA      9
 #define MSG_BROKER_PUEDO_ENTRAR         10
-#define MSG_HAY_LUGAR_COLA              11
-#define MSG_SALIR_COLA                  12
-#define MSG_HAY_LUGAR_SENTARSE          13
+#define MSG_BROKER_HAY_LUGAR_COLA       11
+#define MSG_BROKER_SALIR_COLA           12
+#define MSG_BROKER_HAY_LUGAR_SENTARSE   13
+#define MSG_BROKER_CERRAR               14
 #define SIZE_TYPE_MSG                   5
 #define SIZE_PAYLOAD_MSG                64
 

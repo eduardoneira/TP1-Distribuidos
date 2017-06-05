@@ -11,6 +11,7 @@
 #include "mensaje_helado.h"
 #include "mensaje_gustos.h"
 #include "mensaje_semaforo.h"
+#include "mensaje_bool.h"
 #include <vector>
 
 typedef struct Entry_router{
@@ -198,6 +199,46 @@ bool desregistrarse(Router_handler* handler, MessageQ* msg) {
         handler->estado.tamanio_heladeria--;
     }
 
+    return false;
+}
+
+bool clientePuedeEntrar(Router_handler* handler, MessageQ* msg){
+    Mensaje_bool msg_bool;
+    deserializeMsgBool(&msg_bool,msg->payload);
+
+    msg_bool.estado = (handler->estado.abierto == ABIERTO);
+
+    serializeMsgBool(&msg_bool,msg->payload);
+
+    return true;
+}
+
+bool hay_lugar_cola(Router_handler* handler, MessageQ* msg){
+    Mensaje_bool msg_bool;
+    deserializeMsgBool(&msg_bool,msg->payload);
+
+    msg_bool.estado = (handler->estado.tamanio_cola > 0);
+    handler->estado.tamanio_cola--;
+
+    serializeMsgBool(&msg_bool,msg->payload);
+
+    return true;
+}
+
+bool hay_lugar_heladeria(Router_handler* handler, MessageQ* msg){
+    Mensaje_bool msg_bool;
+    deserializeMsgBool(&msg_bool,msg->payload);
+
+    msg_bool.estado = (handler->estado.tamanio_heladeria > 0);
+    handler->estado.tamanio_heladeria--;
+
+    serializeMsgBool(&msg_bool,msg->payload);
+
+    return true;
+}
+
+bool salir_cola(Router_handler* handler){
+    handler->estado.tamanio_cola--;
     return false;
 }
 
