@@ -1,8 +1,40 @@
 #include <stdio.h>
 #include "../include/broker_router.h"
 
-bool route(Router_handler* handler,MessageQ* msg,Logger* log){
-    return true;
+bool route(Router_handler* handler,MessageQ* msg,Logger* log) {
+
+    int type = atoi(msg->type);
+
+    switch (type) {
+        case MSG_BROKER_REGISTER:
+            return registrarMOM(handler,msg);
+        case MSG_BROKER_TICKET:
+            return enviarTicket(handler,msg);
+        case MSG_BROKER_HELADO:
+            return enviarHelado(handler,msg);
+        case MSG_BROKER_PEDIDO:
+            return enviarPedido(handler,msg);
+        case MSG_BROKER_OCUPAR_HELADO:
+            return ocuparHelado(handler,msg);
+        case MSG_BROKER_DESOCUPAR_HELADO:
+            return desocuparHelado(handler,msg);
+        case MSG_BROKER_DESREGISTRARSE:
+            return desregistrarse(handler,msg);
+        case MSG_BROKER_CERRAR_HELADERIA:
+            return cambiarEstadoHeladeria(handler,CERRADO);
+        case MSG_BROKER_ABRIR_HELADERIA:
+            return cambiarEstadoHeladeria(handler,ABIERTO);
+        case MSG_BROKER_PUEDO_ENTRAR:
+            return true;
+        case MSG_HAY_LUGAR_COLA:
+            return true;
+        case MSG_SALIR_COLA:
+            return true;
+        case MSG_HAY_LUGAR_SENTARSE:
+            return true;
+        default:
+            return false;
+    }
 }
 
 int main(int argc, char** argv){
@@ -25,8 +57,10 @@ int main(int argc, char** argv){
         }
     }
 
+    destruirRouterHandler(&handler);
     escribirLog(&log,DEBUG,pid,BROKER_ROUTER_NAME,"Cerraron la cola, me fui");
     cerrarLogger(&log);
+
 
     return 0;
 }

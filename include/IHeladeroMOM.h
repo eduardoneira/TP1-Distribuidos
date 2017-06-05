@@ -36,7 +36,7 @@ void liberarHelado(Heladero_handler* handler, int gusto) {
 }
 
 void recibirPedidoDeCajero(Heladero_handler* handler, Mensaje_gustos* msg) {
-    recibirmsgq(handler->_msgq_id_recibir_pedido,msg,sizeof(Mensaje_gustos),MENSAJE_A_HELADERO);
+    recibirmsgq(handler->_msgq_id_recibir_pedido,msg,sizeof(Mensaje_gustos),0);
 }
 
 void enviarAManagerQueMeVoy() {

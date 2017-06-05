@@ -7,6 +7,7 @@
 typedef struct Mensaje_registro {
     long mtype;
     int id;
+    char* tipo;
 } Mensaje_registro;
 
 Mensaje_registro crearMensajeRegistro(int id) {
@@ -17,7 +18,7 @@ Mensaje_registro crearMensajeRegistro(int id) {
 }
 
 void serializeMsgRegistro(Mensaje_registro* msg, char* buffer){
-    sprintf(buffer,"%ld %d",msg->mtype,msg->id);
+    sprintf(buffer,"%ld-%d-%s",msg->mtype,msg->id,msg->tipo);
 }
 
 void deserializeMsgRegistro(Mensaje_registro* msg, char* buffer) {
@@ -26,6 +27,7 @@ void deserializeMsgRegistro(Mensaje_registro* msg, char* buffer) {
 
     msg->mtype = atol(strtok(aux,SEPARATOR));
     msg->id = atoi(strtok(NULL,SEPARATOR));
+    msg->tipo = strtok(NULL,SEPARATOR);
 }
 
 bool esMsgCerrar(Mensaje_registro msg) {

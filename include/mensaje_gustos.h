@@ -7,19 +7,20 @@
 
 #define GUSTOS_POR_PERSONA 	3
 #define MENSAJE_A_CAJERO	1
-#define MENSAJE_A_HELADERO	1
+#define MENSAJE_A_HELADERO  -1
 #define MENSAJE_IRSE		-1
 
 typedef struct Mensaje_gustos {
 	long mtype;
 	int id;
+	int momId;
 	int gustos_helado[GUSTOS_POR_PERSONA];
 } Mensaje_gustos;
 
 
 void serializeMsgGusto(Mensaje_gustos* msg, char* buffer){
 	char aux_buffer[10];
-	sprintf(buffer,"%ld %d",msg->mtype,msg->id);
+	sprintf(buffer,"%ld-%d-%d",msg->mtype,msg->id,msg->momId);
 
 	for (int i = 0; i < GUSTOS_POR_PERSONA; i++) {
 		sprintf(aux_buffer," %d",msg->gustos_helado[i]);
@@ -33,6 +34,7 @@ void deserializeMsgGusto(Mensaje_gustos* msg, char* buffer) {
 
 	msg->mtype = atol(strtok(aux,SEPARATOR));
 	msg->id = atoi(strtok(NULL,SEPARATOR));
+	msg->momId = atoi(strtok(NULL,SEPARATOR));
 
 	for (int i = 0; i < GUSTOS_POR_PERSONA; i++) {
 		msg->gustos_helado[i] = atoi(strtok(NULL,SEPARATOR));
@@ -59,6 +61,7 @@ void crearMsgIrse(Mensaje_gustos* msg){
 void crearMsgGustos(Mensaje_gustos* msg, long id, int pid, int gusto1, int gusto2, int gusto3) {
 	msg->mtype = id;
 	msg->id = pid;
+    msg->momId = pid;
 	msg->gustos_helado[0] = gusto1;
 	msg->gustos_helado[1] = gusto2;
 	msg->gustos_helado[2] = gusto3;

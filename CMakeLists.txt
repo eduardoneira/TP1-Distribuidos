@@ -26,7 +26,7 @@ set(HEADER_FILES
         include/util.h
 		include/mensaje_registro.h
 		include/socket.h
-		include/message_wrapper.h)
+		include/message_wrapper.h include/mensaje_semaforo.h include/mensaje_bool.h)
 
 #COMMON SOURCE FILES
 set(SOURCE_FILES

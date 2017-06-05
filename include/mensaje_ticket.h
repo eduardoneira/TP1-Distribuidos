@@ -12,7 +12,7 @@ void crearMsgTicket(Mensaje_ticket* msg, long id, int ticket) {
 }
 
 void serializeMsgTicket(Mensaje_ticket* msg, char* buffer){
-	sprintf(buffer,"%ld %d",msg->mtype,msg->ticket);
+	sprintf(buffer,"%ld-%d",msg->mtype,msg->ticket);
 }
 
 void deserializeMsgTicket(Mensaje_ticket* msg, char* buffer) {
