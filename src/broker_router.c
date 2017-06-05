@@ -2,6 +2,7 @@
 #include "../include/logger.h"
 #include "../include/msg_queue.h"
 #include "../include/message_wrapper.h"
+#include <vector>
 
 int main(int argc, char** argv){
     //Log inicial
@@ -10,7 +11,7 @@ int main(int argc, char** argv){
     char buffer[64];
 
     sprintf(buffer,"Soy un router broker");
-    escribirLog(&log,DEBUG,pid,BROKER_ROUTER,buffer);
+    escribirLog(&log,DEBUG,pid,BROKER_ROUTER_NAME,buffer);
 
     int msqid_in = getmsgq(MSGQ_BROKER_IN_ROUTER);
     int msqid_out = getmsgq(MSGQ_ROUTER_BROKER_OUT);

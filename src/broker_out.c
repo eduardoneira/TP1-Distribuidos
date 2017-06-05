@@ -5,9 +5,16 @@
 #include "../include/logger.h"
 #include "../include/socket.h"
 
+
+/**
+ * Args
+ * char*    nombre
+ * int      fd del socket
+ * int      mtype para recibir del msq
+ * */
 int main(int argc, char** argv){
-    if (argc != 2) {
-        printf("Deberían venir 2 argumentos");
+    if (argc != 3) {
+        printf("Deberían venir 3 argumentos");
         return 1;
     }
 
@@ -16,8 +23,8 @@ int main(int argc, char** argv){
     pid_t pid = getpid();
     char buffer[64];
 
-    sprintf(buffer,"Soy el broker out para el socket %s",argv[1]);
-    escribirLog(&log,DEBUG,pid,BROKER_OUT,buffer);
+    sprintf(buffer,"Soy el broker out para el socket %s leyendo con mype %s",argv[1],argv[2]);
+    escribirLog(&log,DEBUG,pid,BROKER_OUT_NAME,buffer);
 
     //IPC
     int msqid = getmsgq(MSGQ_ROUTER_BROKER_OUT);
@@ -27,13 +34,14 @@ int main(int argc, char** argv){
     bool termine = false;
     Message msg;
     MessageQ msgq;
+    int mtype = atoi(argv[2]);
 
     while (!termine) {
-        if (recibirmsgqSinCheckeo(msqid,&msgq,sizeof(MessageQ),pid) == -1) {
+        if (recibirmsgqSinCheckeo(msqid,&msgq,sizeof(MessageQ),mtype) == -1) {
             termine = true;
         } else {
             crearMessage(&msg,&msgq);
-            escribirLog(&log,DEBUG,pid,BROKER_OUT,"Me llego un msg del router, lo mando por el socket");
+            escribirLog(&log,DEBUG,pid,BROKER_OUT_NAME,"Me llego un msg del router, lo mando por el socket");
             escribir_socket(socket,(void*) &msg,sizeof(Message));
 
             if (esMsgDesregistrarse(msg)) {
@@ -42,7 +50,7 @@ int main(int argc, char** argv){
         }
     }
 
-    escribirLog(&log,DEBUG,pid,BROKER_OUT,"Cerrando broker out");
+    escribirLog(&log,DEBUG,pid,BROKER_OUT_NAME,"Cerrando broker out");
 
     cerrarLogger(&log);
     cerrar_socket(socket);

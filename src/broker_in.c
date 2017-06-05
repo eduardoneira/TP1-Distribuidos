@@ -5,6 +5,12 @@
 #include "../include/logger.h"
 #include "../include/socket.h"
 
+/**
+ * Args
+ * char*    nombre
+ * int      fd del socket
+ * */
+
 int main(int argc, char** argv){
     if (argc != 2) {
         printf("Deberían venir 2 argumentos");
@@ -17,7 +23,7 @@ int main(int argc, char** argv){
     char buffer[64];
 
     sprintf(buffer,"Soy el broker in de el socket %s",argv[1]);
-    escribirLog(&log,DEBUG,pid,BROKER_IN,buffer);
+    escribirLog(&log,DEBUG,pid,BROKER_IN_NAME,buffer);
 
     //IPC
     int msqid = getmsgq(MSGQ_BROKER_IN_ROUTER);
@@ -32,8 +38,10 @@ int main(int argc, char** argv){
         if (leer_socket(socket,&msg,sizeof(Message)) == -1) {
             termine = true;
         } else {
-            escribirLog(&log,DEBUG,pid,BROKER_IN,"Me llego un msg del socket, lo mando al router");
+            escribirLog(&log,DEBUG,pid,BROKER_IN_NAME,"Me llego un msg del socket, lo mando al router");
+
             crearMessageQ(&msg,&msgq,pid);
+
             enviarmsgq(msqid,(void*) &msgq,sizeof(MessageQ));
 
             if (esMsgDesregistrarse(msg)) {
@@ -42,7 +50,7 @@ int main(int argc, char** argv){
         }
     }
 
-    escribirLog(&log,DEBUG,pid,BROKER_IN,"Cerrando broker in");
+    escribirLog(&log,DEBUG,pid,BROKER_IN_NAME,"Cerrando broker in");
 
     cerrarLogger(&log);
     cerrar_socket(socket);

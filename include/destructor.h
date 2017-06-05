@@ -97,9 +97,13 @@ void destruirMsgQueues(char* modo) {
 		destruirCola(MSGQ_PASAMANOS_MOM_CLIENTE_HELADO,error,0);
 	}
 
-	destruirCola(MSGQ_REGISTER_MOM,error,0);
-	destruirCola(MSGQ_DESTRUCTOR,error,0);
-
+	if (strcmp(modo,BROKER) == 0){
+		destruirCola(MSGQ_ROUTER_BROKER_OUT,error,0);
+		destruirCola(MSGQ_BROKER_IN_ROUTER,error,0);
+	}else {
+		destruirCola(MSGQ_REGISTER_MOM,error,0);
+		destruirCola(MSGQ_DESTRUCTOR,error,0);
+	}
 
 }
 

@@ -68,7 +68,7 @@ set(MOM_REGISTER
 
 #BROKER
 set(BROKER
-		src/broker.c)
+		src/broker.c include/broker_router.h)
 
 #BROKER OUT
 set(BROKER_OUT
@@ -83,7 +83,7 @@ set(BROKER_IN
 #BROKER OUT
 set(BROKER_ROUTER
 		src/broker_router.c
-		)
+		include/broker_router.h)
 
 add_executable(constructor ${HEADER_FILES} src/constructor_heladeria.c)
 add_executable(destructor ${HEADER_FILES} src/destructor_heladeria.c)

@@ -67,15 +67,21 @@ void crearColasDeMsgs(char* modo) {
 		}
 	}
 
-	//TODO: Despues cambiar constructor para que tome mas de un parametro, esto es para cuando quiero lanzar 2 mom en la misma compu
-	if (crearmsgq(MSGQ_REGISTER_MOM) == -1 && errno != EEXIST) {
-		perror("Error al crear colas de mensajes para registro");
-		exit(ERROR_CREAR_IPC);
-	}
+	if (strcmp(modo,BROKER) != 0) {
+		if (crearmsgq(MSGQ_REGISTER_MOM) == -1 && errno != EEXIST) {
+			perror("Error al crear colas de mensajes para registro");
+			exit(ERROR_CREAR_IPC);
+		}
 
-	if (crearmsgq(MSGQ_DESTRUCTOR) == -1 && errno != EEXIST) {
-		perror("Error al crear colas de mensajes para destruir");
-		exit(ERROR_CREAR_IPC);
+		if (crearmsgq(MSGQ_DESTRUCTOR) == -1 && errno != EEXIST) {
+			perror("Error al crear colas de mensajes para destruir");
+			exit(ERROR_CREAR_IPC);
+		}
+	} else {
+		if (crearmsgq(MSGQ_BROKER_IN_ROUTER) == -1 || crearmsgq(MSGQ_ROUTER_BROKER_OUT) == -1) {
+			perror("Error al crear colas de mensajes de broker");
+			exit(ERROR_CREAR_IPC);
+		}
 	}
 }
 

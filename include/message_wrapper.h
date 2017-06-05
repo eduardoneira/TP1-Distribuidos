@@ -3,6 +3,8 @@
 #define TPS_DISTRIBUIDOS_MESSAGE_WRAPPER_H
 
 #include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 #include "defines.h"
 
 typedef struct Message {

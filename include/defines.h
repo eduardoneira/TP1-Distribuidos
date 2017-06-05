@@ -63,26 +63,27 @@
  * NOMBRES PARA LOGGEAR
  * */
 
-#define MOM             "MOM\t\t"
-#define CLIENTE_NAME 	"CLIENTE\t"
-#define CAJERO_NAME	    "CAJERO\t\t"
-#define MANAGER_NAME    "MANAGER\t"
-#define HELADERO_NAME   "HELADERO\t"
-#define CONSTRUCTOR     "CONSTRUCTOR"
-#define DESTRUCTOR      "DESTRUCTOR"
-#define MOM_REGISTER    "MOM_REGISTER"
-#define BROKER 			"BROKER\t\t"
-#define BROKER_ROUTER	"BROKER_ROUTER"
-#define BROKER_IN 		"BROKER_IN\t"
-#define BROKER_OUT 		"BROKER_OUT\t"
+#define MOM                 "MOM\t\t"
+#define CLIENTE_NAME 	    "CLIENTE\t"
+#define CAJERO_NAME	        "CAJERO\t\t"
+#define MANAGER_NAME        "MANAGER\t"
+#define HELADERO_NAME       "HELADERO\t"
+#define CONSTRUCTOR         "CONSTRUCTOR"
+#define DESTRUCTOR          "DESTRUCTOR"
+#define MOM_REGISTER        "MOM_REGISTER"
+#define BROKER_NAME		    "BROKER\t\t"
+#define BROKER_ROUTER_NAME	"BROKER_ROUTER"
+#define BROKER_IN_NAME	    "BROKER_IN\t"
+#define BROKER_OUT_NAME	    "BROKER_OUT\t"
 
 /**
- * NOMBRES
+ * NOMBRES DE MODOS
  * */
 
 #define CAJERO 		"cajero"
 #define HELADERO	"heladero"
 #define CLIENTE		"cliente"
+#define BROKER      "broker"
 #define RPC         "rpc"
 #define ALL			"all"
 
@@ -128,6 +129,7 @@
 #define MSG_BROKER_DESREGISTRARSE       7
 #define MSG_BROKER_CLIENTE_DECIDIR      8
 #define SIZE_TYPE_MSG       5
+#define SIZE_EXTRA          10
 #define SIZE_PAYLOAD_MSG    64
 
 #endif
