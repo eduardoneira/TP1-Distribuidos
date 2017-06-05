@@ -16,6 +16,7 @@
 
 typedef struct Entry_router{
     int momId;
+    int ticket;
     long mtype;
 } Entry_router;
 
@@ -43,9 +44,20 @@ Router_handler crearRouterHandler() {
     return handler;
 }
 
-long _routeClient(Router_handler* handler, long momId){
+long _routeClientWithMomId(Router_handler* handler, long momId, int ticket){
     for (std::vector<Entry_router>::iterator it = handler->clientes.begin(); it != handler->clientes.end(); it++) {
         if ((*it).momId == (int)momId) {
+            if (ticket > 0) {
+                (*it).ticket = ticket;
+            }
+            return (*it).mtype;
+        }
+    }
+}
+
+long _routeClientWithTicket(Router_handler* handler,long ticket){
+    for (std::vector<Entry_router>::iterator it = handler->clientes.begin(); it != handler->clientes.end(); it++) {
+        if ((*it).ticket == (int)ticket) {
             return (*it).mtype;
         }
     }
@@ -69,6 +81,7 @@ bool registrarMOM(Router_handler* handler, MessageQ* msgq){
     Entry_router entry;
     entry.mtype = msgq->mtype;
     entry.momId = msg_reg.id;
+    entry.ticket = -1;
 
     if (strcmp(msg_reg.tipo,HELADERO) == 0) {
         handler->heladeros.push_back(entry);
@@ -86,11 +99,11 @@ bool enviarTicket(Router_handler* handler, MessageQ* msg){
     Mensaje_ticket msg_ticket;
     deserializeMsgTicket(&msg_ticket,msg->payload);
 
-
-    msg->mtype = _routeClient(handler,msg_ticket.mtype);
-
     msg_ticket.ticket = handler->ticket;
     handler->ticket++;
+
+    msg->mtype = _routeClientWithMomId(handler,msg_ticket.mtype,msg_ticket.ticket);
+
     serializeMsgTicket(&msg_ticket,msg->payload);
 
     return true;
@@ -100,7 +113,7 @@ bool enviarHelado(Router_handler* handler, MessageQ* msg){
     Mensaje_helado msg_helado;
     deserializeMsgHelado(&msg_helado,msg->payload);
 
-    msg->mtype = _routeClient(handler,msg_helado.momId);
+    msg->mtype = _routeClientWithTicket(handler,msg_helado.mtype);
 
     return true;
 }

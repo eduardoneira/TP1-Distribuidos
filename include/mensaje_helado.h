@@ -5,7 +5,6 @@
 
 typedef struct Mensaje_helado {
 	long mtype;
-	int momId;
 	char helado[HELADO_SIZE];
 }	Mensaje_helado;
 
@@ -15,7 +14,7 @@ void crearMensajeHelado(Mensaje_helado* msg, long id, char* helado){
 }
 
 void serializeMsgHelado(Mensaje_helado* msg, char* buffer){
-	sprintf(buffer,"%ld-%d-%s",msg->mtype,msg->momId,msg->helado);
+	sprintf(buffer,"%ld-%s",msg->mtype,msg->helado);
 }
 
 void deserializeMsgHelado(Mensaje_helado* msg, char* buffer) {
@@ -23,7 +22,6 @@ void deserializeMsgHelado(Mensaje_helado* msg, char* buffer) {
 	strcpy(aux,buffer);
 
 	msg->mtype = atol(strtok(aux,SEPARATOR));
-	msg->momId = atoi(strtok(NULL,SEPARATOR));
 	strcpy(msg->helado,strtok(NULL,SEPARATOR));
 }
 
