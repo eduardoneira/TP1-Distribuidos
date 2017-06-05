@@ -25,7 +25,8 @@ set(HEADER_FILES
         include/semaforo.h
         include/util.h
 		include/mensaje_registro.h
-		include/socket.h)
+		include/socket.h
+		include/message_wrapper.h)
 
 #COMMON SOURCE FILES
 set(SOURCE_FILES
@@ -67,22 +68,22 @@ set(MOM_REGISTER
 
 #BROKER
 set(BROKER
-		src/broker.c include/message_wrapper.h)
+		src/broker.c)
 
 #BROKER OUT
 set(BROKER_OUT
 		src/broker_out.c
-		include/broker_out.h)
+		)
 
 #BROKER OUT
 set(BROKER_IN
 		src/broker_in.c
-		include/broker_in.h)
+		)
 
 #BROKER OUT
 set(BROKER_ROUTER
 		src/broker_router.c
-		include/broker_router.h)
+		)
 
 add_executable(constructor ${HEADER_FILES} src/constructor_heladeria.c)
 add_executable(destructor ${HEADER_FILES} src/destructor_heladeria.c)

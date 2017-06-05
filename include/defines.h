@@ -33,6 +33,10 @@
 #define MSGQ_REGISTER_MOM                   9
 #define MSGQ_DESTRUCTOR                     10
 
+//BROKER
+#define MSGQ_BROKER_IN_ROUTER               11
+#define MSGQ_ROUTER_BROKER_OUT              12
+
 
 /**
 * SEMAFOROS HELADERIA
@@ -124,6 +128,6 @@
 #define MSG_BROKER_DESREGISTRARSE       7
 #define MSG_BROKER_CLIENTE_DECIDIR      8
 #define SIZE_TYPE_MSG       5
-#define SIZE_PAYLOAD_MSG    128
+#define SIZE_PAYLOAD_MSG    64
 
 #endif
