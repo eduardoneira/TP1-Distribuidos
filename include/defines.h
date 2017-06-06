@@ -37,6 +37,15 @@
 #define MSGQ_BROKER_IN_ROUTER               11
 #define MSGQ_ROUTER_BROKER_OUT              12
 
+//NUEVAS COLAS
+#define MSGQ_RECIBIR_CLIENTE                13
+#define MSGQ_RECIBIR_CAJERO                 14
+#define MSGQ_RECIBIR_HELADERO               15
+#define MSGQ_POR_PID                        16
+#define MSGQ_POR_MOMID                      17
+#define MSGQ_POR_TICKET                     18
+
+
 
 /**
 * SEMAFOROS HELADERIA

@@ -3,42 +3,39 @@
 
 /**
  * Argumentos esperados:
- * char* 	quien_envia
- * char* 	quien_recibe
- * size_t	tamanio_mensaje
  * char*    quien_soy
- * char*    si soy socket activo o pasivo
- * int      puerto
  * */
 
 int main(int argc, char** argv){
 	Logger log = crearLogger();
-	pid_t pid = getpid();
 	char buffer[64];
 
-	sprintf(buffer,"Hola soy el MOM %s-%s con size %s siendo %s con un socket %s con puerto %s", argv[1],argv[2],argv[3],argv[4],argv[5],argv[6]);
+	MOM_handler handler;
+	bool termine = abrirMOM(&handler,argv[1]);
+
+	pid_t pid = getpid();
+	if (handler.socket_leer){
+		sprintf(buffer,"Hola soy el MOM para %s que lee del socket", argv[1]);
+	} else {
+		sprintf(buffer,"Hola soy el MOM para %s que escribe al socket", argv[1]);
+	}
 	escribirLog(&log,TRACE,pid,MOM,buffer);
 
-	MOM_handler handler;
-	bool termine = abrirMOM(&handler, argv[1],argv[2],argv[4],argv[5],atoi(argv[6]));
-
-	size_t size = atoi(argv[3]);
-	void* msg = malloc(size);
+	Message msg;
 
 	while(!termine){
-		if (recibirMsg(&handler,msg,size) == -1) {
+		if (recibirMsg(&handler,&msg) == -1) {
 			termine = true;
 		} else {
 			escribirLog(&log,TRACE,pid,MOM,"Recibi un msg :p");
-			enviarMsg(&handler,msg,size);
+			enviarMsg(&handler,&msg);
 			escribirLog(&log,TRACE,pid,MOM,"Envie un msg :p");
 		}
 	}
 
-	free(msg);
 	cerrarMOM(&handler);
 
-    sprintf(buffer,"Cerrando MOM de %s-%s de %s", argv[1],argv[2],argv[4]);
+    sprintf(buffer,"Cerrando MOM para %s", argv[1]);
     escribirLog(&log,TRACE,pid,MOM,buffer);
 	cerrarLogger(&log);
 

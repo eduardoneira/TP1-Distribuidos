@@ -6,133 +6,83 @@
 #include "mensaje_helado.h"
 #include "mensaje_ticket.h"
 #include "socket.h"
+#include "message_wrapper.h"
+#include "mensaje_registro.h"
 #include <stdbool.h>
 
 typedef struct MOM_handler {
-	int _id_recibir_mensaje;
-	int _id_enviar_mensaje;
-	char hosts[CANT_TIPOS_PROCESOS][20];
-	bool _socket_leer; 				// true si leo de un socket, sino soy escritor
+	int _socket;
+	int _id_cola_recibir;
+	int _id_cola_pid;
+	int _id_cola_ticket;
+	int _id_cola_momId;
+	bool socket_leer; 		// true si leo de un socket, sino soy escritor
 } MOM_handler;
 
-int _get_id_receptor(char* emisor, char* receptor) {
-	if (strcmp(emisor,CLIENTE) == 0 && strcmp(receptor,CAJERO) == 0) {
-		return MSGQ_PASAMANOS_CLIENTE_MOM_PEDIDO;
-	} else if (strcmp(emisor,CAJERO) == 0 && strcmp(receptor,HELADERO) == 0) {
-		return MSGQ_PASAMANOS_CAJERO_MOM_PEDIDO;
-	} else if (strcmp(emisor,CAJERO) == 0 && strcmp(receptor,CLIENTE) == 0) {
-		return MSGQ_PASAMANOS_CAJERO_MOM_TICKET;
-	} else if (strcmp(emisor,HELADERO) == 0 && strcmp(receptor,CLIENTE) == 0) {
-		return MSGQ_PASAMANOS_HELADERO_MOM_HELADO;
-	} else  {
-		return -1;
+bool abrirMOM(MOM_handler* handler,char* quien_soy) {
+
+	int fd = abrir_socket_activo(IP_BROKER,PORT_BROKER);
+
+	if (fd == -1) {
+		perror("Acordarse que hay lanzar al broker primero\n");
+		return true;
 	}
-}
 
-int _get_id_emisor(char* emisor, char* receptor) {
-	if (strcmp(emisor,CLIENTE) == 0 && strcmp(receptor,CAJERO) == 0) {
-		return MSGQ_PASAMANOS_MOM_CAJERO_PEDIDO;
-	} else if (strcmp(emisor,CAJERO) == 0 && strcmp(receptor,HELADERO) == 0) {
-		return MSGQ_PASAMANOS_MOM_HELADERO_PEDIDO;
-	} else if (strcmp(emisor,CAJERO) == 0 && strcmp(receptor,CLIENTE) == 0) {
-		return MSGQ_PASAMANOS_MOM_CLIENTE_TICKET;
-	} else if (strcmp(emisor,HELADERO) == 0 && strcmp(receptor,CLIENTE) == 0) {
-		return MSGQ_PASAMANOS_MOM_CLIENTE_HELADO;
-	} else  {
-		return -1;
+	if (strcmp(quien_soy,CLIENTE) == 0) {
+		handler->_id_cola_recibir = getmsgq(MSGQ_RECIBIR_CLIENTE);
+	} else if (strcmp(quien_soy,CAJERO) == 0){
+		handler->_id_cola_recibir = getmsgq(MSGQ_RECIBIR_CAJERO);
+	} else if (strcmp(quien_soy,HELADERO) == 0){
+		handler->_id_cola_recibir = getmsgq(MSGQ_RECIBIR_HELADERO);
 	}
-}
 
-int _getNumHost(char* host){
-	if (strcmp(host,CAJERO) == 0) {
-		return 0;
-	} else if (strcmp(host,HELADERO) == 0) {
-		return 1;
-	} else if (strcmp(host,CLIENTE) == 0) {
-		return 2;
-	} else if (strcmp(host,RPC) == 0) {
-		return 3;
-	} else {
-		return -1;
+	handler->_socket = fd;
+	handler->_id_cola_momId = getmsgq(MSGQ_POR_MOMID);
+	handler->_id_cola_pid = getmsgq(MSGQ_POR_PID);
+	handler->_id_cola_ticket = getmsgq(MSGQ_POR_TICKET);
+
+	if (fork() == 0){ 						//hijo lee del socket
+		handler->socket_leer = true;
+	} else { 								//padre escribe el socket
+		handler->socket_leer = false;
 	}
-}
-
-int abrirSocket(char* ip, int puerto, char* socket) {
-	if (strcmp(socket,SOCKET_ACTIVO) == 0) {
-		return abrir_socket_activo(ip,puerto);
-	} else if (strcmp(socket,SOCKET_PASIVO) == 0) {
-		int fd = abrir_socket_pasivo(ip,puerto);
-        return accept_socket(fd,true);
-	} else {
-		return -1;
-	}
-}
-
-bool abrirMOM(MOM_handler* handler,char* emisor, char* receptor,char* quien_soy,char* socket, int puerto) {
-    //TODO:DESPUES SACAR ESTO TAL VEZ
-    FILE* fd = fopen(IPS,"r");
-    char nombre[20];
-    char ip[20];
-
-    for(int i = 0; i < CANT_TIPOS_PROCESOS; i++){
-        fscanf(fd,"%s %s\n",nombre,ip);
-        strcpy(handler->hosts[_getNumHost(nombre)],ip);
-    }
-    fclose(fd);
-
-	if (strcmp(quien_soy,emisor) == 0) {
-		handler->_socket_leer = false;
-		handler->_id_recibir_mensaje = getmsgq(_get_id_receptor(emisor,receptor));
-		handler->_id_enviar_mensaje = abrirSocket(handler->hosts[_getNumHost(receptor)],puerto,socket);
-		if (handler->_id_enviar_mensaje == -1) {
-			perror("Acordarse que hay que abrir primero el cajero, despues el heladero y por ultimo el cliente\n");
-            return true;
-		}
-	} else {
-		handler->_socket_leer = true;
-		handler->_id_recibir_mensaje = abrirSocket(handler->hosts[_getNumHost(emisor)],puerto,socket);
-		if (handler->_id_recibir_mensaje == -1) {
-			perror("Acordarse que hay que abrir primero el cajero, despues el heladero y por ultimo el cliente\n");
-			return true;
-		}
-		handler->_id_enviar_mensaje = getmsgq(_get_id_emisor(emisor,receptor));
-	};
 
 	return false;
 }
 
-int recibirMsg(MOM_handler* handler, void* msg,size_t size) {
-	if (handler->_socket_leer){
-		return leer_socket(handler->_id_recibir_mensaje,msg,size);
+int recibirMsg(MOM_handler* handler,Message* msg) {
+	if (handler->socket_leer){
+		return leer_socket(handler->_socket,msg,sizeof(Message));
 	} else {
-		return recibirmsgqSinCheckeo(handler->_id_recibir_mensaje,msg,size,0);
+		MessageQ msgq;
+		int ret = recibirmsgqSinCheckeo(handler->_id_cola_recibir,&msgq,sizeof(MessageQ),0);
+		crearMessage(msg,&msgq);
+		return ret;
 	}
 
 }
 
-void enviarMsg(MOM_handler* handler,void* msg, size_t size) {
-	if (handler->_socket_leer){
-		enviarmsgq(handler->_id_enviar_mensaje,msg,size);
+void enviarMsg(MOM_handler* handler,Message* msg) {
+	if (handler->socket_leer){
+		MessageQ msgq;
+		crearMessageQ(msg,&msgq,getMtype(*msg));
+		int type = atoi(msg->type);
+
+		if (type == MSG_BROKER_REGISTER){
+			enviarmsgq(handler->_id_cola_pid,&msgq,sizeof(MessageQ));
+		} else if (type == MSG_BROKER_HELADO){
+			enviarmsgq(handler->_id_cola_ticket,&msgq,sizeof(MessageQ));
+		} else {
+			enviarmsgq(handler->_id_cola_momId,&msgq,sizeof(MessageQ));
+		}
 	} else {
-		escribir_socket(handler->_id_enviar_mensaje,msg,size);
+		escribir_socket(handler->_socket,msg,sizeof(Message));
 	}
 
 }
-
 
 void cerrarMOM(MOM_handler* handler) {
-	if (handler->_socket_leer){
-		cerrar_socket(handler->_id_enviar_mensaje);
-	} else {
-		cerrar_socket(handler->_id_recibir_mensaje);
-	}
-
-	handler->_id_recibir_mensaje = -1;
-	handler->_id_enviar_mensaje = -1;
+	cerrar_socket(handler->_socket);
 }
-
-
-
-
 
 #endif

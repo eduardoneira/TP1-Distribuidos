@@ -13,7 +13,7 @@
 #include <limits.h>
 #include <stdbool.h>
 
-int abrir_socket_activo(char* ip, int port){
+int abrir_socket_activo(const char* ip, int port){
     struct sockaddr_in serv_addr;
 
     int fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -34,7 +34,7 @@ int abrir_socket_activo(char* ip, int port){
     return fd;
 }
 
-int abrir_socket_pasivo(char* ip, int port){
+int abrir_socket_pasivo(const char* ip, int port){
     struct sockaddr_in serv_addr;
     int listenfd = socket(AF_INET, SOCK_STREAM, 0);
 

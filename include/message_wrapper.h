@@ -29,8 +29,8 @@ void crearMessage(Message* msg, MessageQ* msgq){
     strcpy(msg->payload,msgq->payload);
 }
 
-bool esMsgRegistrarse(Message msg){
-    return (atoi(msg.type) == MSG_BROKER_REGISTER);
+long getMtype(Message msg){
+    return atol(strtok(msg.payload,SEPARATOR));
 }
 
 bool esMsgCerrar(Message msg){
