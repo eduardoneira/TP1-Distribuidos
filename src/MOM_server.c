@@ -27,7 +27,8 @@ int main(int argc, char** argv){
 		if (recibirMsg(&handler,&msg) == -1) {
 			termine = true;
 		} else {
-			escribirLog(&log,TRACE,pid,MOM,"Recibi un msg :p");
+			sprintf(buffer,"Recibi un msg. TYPE:%s, PAYLOAD: %s",msg.type,msg.payload);
+			escribirLog(&log,TRACE,pid,MOM,buffer);
 			enviarMsg(&handler,&msg);
 			escribirLog(&log,TRACE,pid,MOM,"Envie un msg :p");
 		}

@@ -3,12 +3,10 @@
 
 #include "defines.h"
 
-
 typedef struct EstadoHeladeria {
 	int tamanio_cola;
 	int tamanio_heladeria;
 	int abierto;
 } EstadoHeladeria;
-
 
 #endif
