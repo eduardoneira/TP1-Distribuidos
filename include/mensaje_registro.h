@@ -2,6 +2,8 @@
 #define TPS_DISTRIBUIDOS_MENSAJE_REGISTRO_H
 
 #include "msg_queue.h"
+#include "message_wrapper.h"
+
 #define MENSAJE_A_REGISTRO 1
 
 typedef struct Mensaje_registro {
@@ -10,10 +12,11 @@ typedef struct Mensaje_registro {
     char* tipo;
 } Mensaje_registro;
 
-Mensaje_registro crearMensajeRegistro(int id) {
+Mensaje_registro crearMensajeRegistro(int id,const char* tipo) {
     Mensaje_registro msg;
     msg.mtype = MENSAJE_A_REGISTRO;
     msg.id = id;
+    strcpy(msg.tipo,tipo);
     return msg;
 }
 
@@ -30,17 +33,31 @@ void deserializeMsgRegistro(Mensaje_registro* msg, char* buffer) {
     msg->tipo = strtok(NULL,SEPARATOR);
 }
 
-bool esMsgCerrar(Mensaje_registro msg) {
-    return (msg.id == -1);
+int registrarse(const char* tipo) {
+    int pid = getpid();
+    Mensaje_registro msg_reg = crearMensajeRegistro(pid,tipo);
+    int reg_id = getmsgq(MSGQ_POR_PID);
+    MessageQ msg;
+
+    sprintf(msg.type,"%d",MSG_BROKER_REGISTER);
+    msg.mtype = 1;
+    serializeMsgRegistro(&msg_reg,msg.payload);
+
+    enviarmsgq(reg_id,&msg,sizeof(MessageQ));
+    recibirmsgq(reg_id,&msg,sizeof(MessageQ),pid);
+    deserializeMsgRegistro(&msg_reg,msg.payload);
+
+    return msg_reg.id;
 }
 
-int registrarse() {
-    int pid = getpid();
-    Mensaje_registro msg = crearMensajeRegistro(pid);
-    int reg_id = getmsgq(MSGQ_REGISTER_MOM);
-    enviarmsgq(reg_id,&msg,sizeof(Mensaje_registro));
-    recibirmsgq(reg_id,&msg,sizeof(Mensaje_registro),pid);
-    return msg.id;
+void desregistrarse(int msgq, int momId,const char* tipo) {
+    Mensaje_registro msg_reg = crearMensajeRegistro(momId,tipo);
+    MessageQ msg;
+
+    sprintf(msg.type,"%d",MSG_BROKER_DESREGISTRARSE);
+    msg.mtype = 1;
+    serializeMsgRegistro(&msg_reg,msg.payload);
+    enviarmsgq(msgq,&msg,sizeof(MessageQ));
 }
 
 #endif //TPS_DISTRIBUIDOS_MENSAJE_REGISTRO_H

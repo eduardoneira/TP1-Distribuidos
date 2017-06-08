@@ -4,12 +4,9 @@
 #include "estado_heladeria.h"
 
 typedef struct Cliente_handler {
-    EstadoHeladeria* _estadoHeladeria;
-    int _semidEstadoHeladeria;
-
-	int _msgq_id_enviar_pedido;
+	int _msgq_id_enviar;
 	int _msgq_id_recibir_ticket;
-	int _msgq_id_recibir_helado;
+	int _msgq_id_recibir_momId;
 	int id;
 } Cliente_handler;
 

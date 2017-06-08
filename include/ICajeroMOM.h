@@ -10,29 +10,40 @@
 
 Cajero_handler registrarCajero() {
     Cajero_handler handler;
-    handler._msgq_id_enviar_ticket = getmsgq(MSGQ_PASAMANOS_CAJERO_MOM_TICKET);
-    handler._msgq_id_pasar_pedido_heladero = getmsgq(MSGQ_PASAMANOS_CAJERO_MOM_PEDIDO);
-    handler._msgq_id_recibir_pedido = getmsgq(MSGQ_PASAMANOS_MOM_CAJERO_PEDIDO);
-    handler.id = registrarse();
-    handler._rpc_ticket = initRPC(LOCALHOST);
+    handler._msgq_id_enviar = getmsgq(MSGQ_RECIBIR_CAJERO);
+    handler._msgq_id_recibir = getmsgq(MSGQ_POR_MOMID);
+    handler.id = registrarse(CAJERO);
     return handler;
 }
 
 int generarTicket(Cajero_handler* handler) {
-    return getTicketRPC(handler->_rpc_ticket);
+    return 0; //Ahora no hace nada
 }
 
-void recibirPedido(Cajero_handler* handler, Mensaje_gustos* msg) {
-    recibirmsgq(handler->_msgq_id_recibir_pedido,msg,sizeof(Mensaje_gustos),MENSAJE_A_CAJERO);
+void recibirPedido(Cajero_handler* handler, Mensaje_gustos* msg_gustos) {
+    MessageQ msg;
+    recibirmsgq(handler->_msgq_id_recibir,&msg,sizeof(MessageQ),handler->id);
+    deserializeMsgGusto(msg_gustos,msg.payload);
 }
 
 void enviarTicketACliente(Cajero_handler* handler, Mensaje_ticket* msg) {
-    enviarmsgq(handler->_msgq_id_enviar_ticket,msg,sizeof(Mensaje_ticket));
+    MessageQ msgq;
+    sprintf(msgq.type,"%d",MSG_BROKER_TICKET);
+    msgq.mtype = 1;
+    serializeMsgTicket(msg,msgq.payload);
+
+    enviarmsgq(handler->_msgq_id_enviar,&msgq,sizeof(MessageQ));
 }
 
 void enviarPedidoAHeladero(Cajero_handler* handler, Mensaje_gustos* msg, int ticket) {
     msg->id = ticket;
-    enviarmsgq(handler->_msgq_id_pasar_pedido_heladero,msg,sizeof(Mensaje_gustos));
+    msg->momId = MENSAJE_A_HELADERO;
+    MessageQ msgq;
+    sprintf(msgq.type,"%d",MSG_BROKER_PEDIDO);
+    msgq.mtype = 1;
+    serializeMsgGusto(msg,msgq.payload);
+
+    enviarmsgq(handler->_msgq_id_enviar,&msgq,sizeof(MessageQ));
 }
 
 void enviarMsgQueMeVoy() {
@@ -42,10 +53,7 @@ void enviarMsgQueMeVoy() {
 }
 
 void cerrarCajero(Cajero_handler* handler) {
-    handler->_msgq_id_recibir_pedido = -1;
-    handler->_msgq_id_enviar_ticket = -1;
-    handler->_msgq_id_pasar_pedido_heladero = -1;
-    destruirRPC(handler->_rpc_ticket);
+    desregistrarse(handler->_msgq_id_enviar,handler->id,CAJERO);
 }
 
 #endif //TPS_DISTRIBUIDOS_ICAJEROCONCLIENTEMON_H

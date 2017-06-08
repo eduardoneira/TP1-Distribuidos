@@ -7,36 +7,42 @@
 #include "mensaje_helado.h"
 #include "msg_queue.h"
 #include "mensaje_registro.h"
-
-std::vector<int> _crearAccesoGustosHelado() {
-    std::vector<int> semids;
-
-    for (int i = PRIMER_ID_GUSTO_HELADO; i < PRIMER_ID_GUSTO_HELADO + CANTIDAD_GUSTOS;i++) {
-        semids.push_back(getsem(i,1));
-    }
-
-    return semids;
-}
+#include "mensaje_semaforo.h"
 
 Heladero_handler registrarHeladero() {
     Heladero_handler handler;
-    handler._helados = _crearAccesoGustosHelado();
-    handler._msgq_id_recibir_pedido = getmsgq(MSGQ_PASAMANOS_MOM_HELADERO_PEDIDO);
-    handler._msgq_id_enviar_pedido = getmsgq(MSGQ_PASAMANOS_HELADERO_MOM_HELADO);
-    handler.id = registrarse();
+    handler._msgq_id_recibir = getmsgq(MSGQ_POR_MOMID);
+    handler._msgq_id_enviar = getmsgq(MSGQ_RECIBIR_HELADERO);
+    handler.id = registrarse(HELADERO);
     return handler;
 }
 
+void enviarMensajeHelado(Heladero_handler* handler, int gusto,int tipo){
+    Mensaje_semaforo msg_sem;
+    msg_sem.mtype = handler->id;
+    msg_sem.index = gusto;
+
+    MessageQ msg;
+    msg.mtype = 1;
+    sprintf(msg.type,"%d",tipo);
+    serializeMsgSemaforo(&msg_sem,msg.payload);
+
+    enviarmsgq(handler->_msgq_id_enviar,&msg,sizeof(MessageQ));
+    recibirmsgqSinCheckeo(handler->_msgq_id_recibir,&msg,sizeof(MessageQ),handler->id);
+}
+
 void ocuparHelado(Heladero_handler* handler, int gusto) {
-    p(handler->_helados.at(gusto),0);
+    enviarMensajeHelado(handler,gusto,MSG_BROKER_OCUPAR_HELADO);
 }
 
 void liberarHelado(Heladero_handler* handler, int gusto) {
-    v(handler->_helados.at(gusto),0);
+    enviarMensajeHelado(handler,gusto,MSG_BROKER_DESOCUPAR_HELADO);
 }
 
 void recibirPedidoDeCajero(Heladero_handler* handler, Mensaje_gustos* msg) {
-    recibirmsgq(handler->_msgq_id_recibir_pedido,msg,sizeof(Mensaje_gustos),0);
+    MessageQ msgq;
+    recibirmsgq(handler->_msgq_id_recibir,&msgq,sizeof(MessageQ),handler->id);
+    deserializeMsgGusto(msg,msgq.payload);
 }
 
 void enviarAManagerQueMeVoy() {
@@ -46,13 +52,15 @@ void enviarAManagerQueMeVoy() {
 }
 
 void enviarPedidoACliente(Heladero_handler* handler, Mensaje_helado* msg) {
-    enviarmsgq(handler->_msgq_id_enviar_pedido,msg,sizeof(Mensaje_helado));
+    MessageQ msgq;
+    sprintf(msgq.type,"%d",MSG_BROKER_HELADO);
+    msgq.mtype = 1;
+    serializeMsgHelado(msg,msgq.payload);
+    enviarmsgq(handler->_msgq_id_enviar,&msgq,sizeof(MessageQ));
 }
 
 void cerrarHeladero(Heladero_handler* handler){
-    handler->_helados.clear();
-    handler->_msgq_id_recibir_pedido = -1;
-    handler->_msgq_id_enviar_pedido = -1;
+    desregistrarse(handler->_msgq_id_enviar,handler->id,HELADERO);
 }
 
 #endif //TPS_DISTRIBUIDOS_IHELADEROMOM_H

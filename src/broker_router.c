@@ -19,7 +19,7 @@ bool route(Router_handler* handler,MessageQ* msg,Logger* log) {
         case MSG_BROKER_DESOCUPAR_HELADO:
             return desocuparHelado(handler,msg);
         case MSG_BROKER_DESREGISTRARSE:
-            return desregistrarse(handler,msg);
+            return desregistrarseMOM(handler,msg);
         case MSG_BROKER_CERRAR_HELADERIA:
             return cambiarEstadoHeladeria(handler,CERRADO);
         case MSG_BROKER_ABRIR_HELADERIA:

@@ -175,7 +175,7 @@ bool desocuparHelado(Router_handler* handler, MessageQ* msg) {
 
 }
 
-bool desregistrarse(Router_handler* handler, MessageQ* msg) {
+bool desregistrarseMOM(Router_handler* handler, MessageQ* msg) {
     Mensaje_registro msg_reg;
     deserializeMsgRegistro(&msg_reg,msg->payload);
     int momId = msg_reg.id;
