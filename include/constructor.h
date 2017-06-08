@@ -48,36 +48,26 @@ void crearEstadoHeladeria() {
 void crearColasDeMsgs(char* modo) {
 
 	if (strcmp(modo,ALL) == 0 || strcmp(modo,CLIENTE) == 0){
-		if (crearmsgq(MSGQ_PASAMANOS_CLIENTE_MOM_PEDIDO) == -1 || crearmsgq(MSGQ_PASAMANOS_MOM_CLIENTE_TICKET) == -1 || crearmsgq(MSGQ_PASAMANOS_MOM_CLIENTE_HELADO) == -1) {
+		if (crearmsgq(MSGQ_RECIBIR_CLIENTE ) == -1 || crearmsgq(MSGQ_POR_MOMID_CLIENTE) == -1 || crearmsgq(MSGQ_POR_TICKET) == -1 || crearmsgq(MSGQ_POR_PID_CLIENTE) == -1) {
 			perror("Error al crear colas de mensajes de cliente");
 			exit(ERROR_CREAR_IPC);
 		}
 	}
 	if (strcmp(modo,ALL) == 0 || strcmp(modo,HELADERO) == 0){
-		if (crearmsgq(MSGQ_PASAMANOS_MOM_HELADERO_PEDIDO) == -1 || crearmsgq(MSGQ_PASAMANOS_HELADERO_MOM_HELADO) == -1) {
+		if (crearmsgq(MSGQ_RECIBIR_HELADERO) == -1 || crearmsgq(MSGQ_POR_MOMID_HELADERO) == -1 || crearmsgq(MSGQ_POR_PID_HELADERO) == -1) {
 			perror("Error al crear colas de mensajes de heladero");
 			exit(ERROR_CREAR_IPC);
 		}
 	}
 
 	if (strcmp(modo,ALL) == 0 || strcmp(modo,CAJERO) == 0) {
-		if (crearmsgq(MSGQ_PASAMANOS_CAJERO_MOM_PEDIDO) == -1 || crearmsgq(MSGQ_PASAMANOS_MOM_CAJERO_PEDIDO) == -1 || crearmsgq(MSGQ_PASAMANOS_CAJERO_MOM_TICKET) == -1) {
+		if (crearmsgq(MSGQ_RECIBIR_CAJERO) == -1 || crearmsgq(MSGQ_POR_MOMID_CAJERO) == -1 || crearmsgq(MSGQ_POR_PID_CAJERO) == -1) {
 			perror("Error al crear colas de mensajes de cliente");
 			exit(ERROR_CREAR_IPC);
 		}
 	}
 
-	if (strcmp(modo,BROKER) != 0) {
-		if (crearmsgq(MSGQ_REGISTER_MOM) == -1 && errno != EEXIST) {
-			perror("Error al crear colas de mensajes para registro");
-			exit(ERROR_CREAR_IPC);
-		}
-
-		if (crearmsgq(MSGQ_DESTRUCTOR) == -1 && errno != EEXIST) {
-			perror("Error al crear colas de mensajes para destruir");
-			exit(ERROR_CREAR_IPC);
-		}
-	} else {
+	if (strcmp(modo,BROKER) == 0) {
 		if (crearmsgq(MSGQ_BROKER_IN_ROUTER) == -1 || crearmsgq(MSGQ_ROUTER_BROKER_OUT) == -1) {
 			perror("Error al crear colas de mensajes de broker");
 			exit(ERROR_CREAR_IPC);

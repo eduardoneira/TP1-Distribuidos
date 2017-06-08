@@ -33,17 +33,29 @@ void deserializeMsgRegistro(Mensaje_registro* msg, char* buffer) {
     msg->tipo = strtok(NULL,SEPARATOR);
 }
 
-int registrarse(const char* tipo) {
+int getMsgqSegunTipo(const char* tipo){
+    if (strcmp(tipo,CLIENTE) == 0) {
+        return getmsgq(MSGQ_POR_PID_CLIENTE);
+    } else if (strcmp(tipo,CAJERO) == 0) {
+        return getmsgq(MSGQ_POR_PID_CAJERO);
+    } else if (strcmp(tipo,HELADERO) == 0) {
+        return getmsgq(MSGQ_POR_PID_HELADERO);
+    } 
+
+    return -1;
+}
+
+int registrarse(int msgq, const char* tipo) {
     int pid = getpid();
     Mensaje_registro msg_reg = crearMensajeRegistro(pid,tipo);
-    int reg_id = getmsgq(MSGQ_POR_PID);
+    int reg_id = getMsgqSegunTipo(tipo);
     MessageQ msg;
 
     sprintf(msg.type,"%d",MSG_BROKER_REGISTER);
     msg.mtype = 1;
     serializeMsgRegistro(&msg_reg,msg.payload);
 
-    enviarmsgq(reg_id,&msg,sizeof(MessageQ));
+    enviarmsgq(msgq,&msg,sizeof(MessageQ));
     recibirmsgq(reg_id,&msg,sizeof(MessageQ),pid);
     deserializeMsgRegistro(&msg_reg,msg.payload);
 

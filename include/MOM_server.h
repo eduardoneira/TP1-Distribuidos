@@ -30,15 +30,19 @@ bool abrirMOM(MOM_handler* handler,char* quien_soy) {
 
 	if (strcmp(quien_soy,CLIENTE) == 0) {
 		handler->_id_cola_recibir = getmsgq(MSGQ_RECIBIR_CLIENTE);
+		handler->_id_cola_momId = getmsgq(MSGQ_POR_MOMID_CLIENTE);
+		handler->_id_cola_pid = getmsgq(MSGQ_POR_PID_CLIENTE);
 	} else if (strcmp(quien_soy,CAJERO) == 0){
 		handler->_id_cola_recibir = getmsgq(MSGQ_RECIBIR_CAJERO);
+		handler->_id_cola_momId = getmsgq(MSGQ_POR_MOMID_CAJERO);
+		handler->_id_cola_pid = getmsgq(MSGQ_POR_PID_CAJERO);
 	} else if (strcmp(quien_soy,HELADERO) == 0){
 		handler->_id_cola_recibir = getmsgq(MSGQ_RECIBIR_HELADERO);
+		handler->_id_cola_momId = getmsgq(MSGQ_POR_MOMID_HELADERO);
+		handler->_id_cola_pid = getmsgq(MSGQ_POR_PID_HELADERO);
 	}
 
 	handler->_socket = fd;
-	handler->_id_cola_momId = getmsgq(MSGQ_POR_MOMID);
-	handler->_id_cola_pid = getmsgq(MSGQ_POR_PID);
 	handler->_id_cola_ticket = getmsgq(MSGQ_POR_TICKET);
 
 	if (fork() == 0){ 						//hijo lee del socket

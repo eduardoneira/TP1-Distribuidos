@@ -31,7 +31,7 @@
 
 //TODOS
 #define MSGQ_REGISTER_MOM                   9
-#define MSGQ_DESTRUCTOR                     10
+#define MSGQ_DESTRUCTOR_CLIENTE             10
 
 //BROKER
 #define MSGQ_BROKER_IN_ROUTER               11
@@ -41,11 +41,15 @@
 #define MSGQ_RECIBIR_CLIENTE                13
 #define MSGQ_RECIBIR_CAJERO                 14
 #define MSGQ_RECIBIR_HELADERO               15
-#define MSGQ_POR_PID                        16
-#define MSGQ_POR_MOMID                      17
-#define MSGQ_POR_TICKET                     18
-
-
+#define MSGQ_POR_PID_CLIENTE                16
+#define MSGQ_POR_TICKET                     17
+#define MSGQ_POR_MOMID_CAJERO               18
+#define MSGQ_POR_MOMID_CLIENTE              19
+#define MSGQ_POR_MOMID_HELADERO             20
+#define MSGQ_POR_PID_CAJERO	                21
+#define MSGQ_POR_PID_HELADERO               22
+#define MSGQ_DESTRUCTOR_CAJERO	            23
+#define MSGQ_DESTRUCTOR_HELADERO            24
 
 /**
 * SEMAFOROS HELADERIA
@@ -80,7 +84,7 @@
 #define CONSTRUCTOR         "CONSTRUCTOR"
 #define DESTRUCTOR          "DESTRUCTOR"
 #define MOM_REGISTER        "MOM_REGISTER"
-#define BROKER_NAME		    "BROKER\t\t"
+#define BROKER_NAME		    "BROKER\t"
 #define BROKER_ROUTER_NAME	"BROKER_ROUTER"
 #define BROKER_IN_NAME	    "BROKER_IN\t"
 #define BROKER_OUT_NAME	    "BROKER_OUT\t"

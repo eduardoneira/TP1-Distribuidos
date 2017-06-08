@@ -46,7 +46,7 @@ int main (int argc, char ** argv){
 	crearIPC(argv[1]);
 
 	execMOM(argv[1]);
-
+/*
 	if (strcmp(argv[1],ALL) == 0 || strcmp(argv[1],CAJERO) == 0) {
 		//Lanzo a un cajero
 		if (fork() == 0) {
@@ -74,6 +74,6 @@ int main (int argc, char ** argv){
 		}
 	}
 
-
+*/
 	return 0;
 } 	

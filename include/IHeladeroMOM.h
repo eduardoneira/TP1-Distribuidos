@@ -11,9 +11,9 @@
 
 Heladero_handler registrarHeladero() {
     Heladero_handler handler;
-    handler._msgq_id_recibir = getmsgq(MSGQ_POR_MOMID);
+    handler._msgq_id_recibir = getmsgq(MSGQ_POR_MOMID_HELADERO);
     handler._msgq_id_enviar = getmsgq(MSGQ_RECIBIR_HELADERO);
-    handler.id = registrarse(HELADERO);
+    handler.id = registrarse(handler._msgq_id_enviar,HELADERO);
     return handler;
 }
 
@@ -41,14 +41,16 @@ void liberarHelado(Heladero_handler* handler, int gusto) {
 
 void recibirPedidoDeCajero(Heladero_handler* handler, Mensaje_gustos* msg) {
     MessageQ msgq;
-    recibirmsgq(handler->_msgq_id_recibir,&msgq,sizeof(MessageQ),handler->id);
-    deserializeMsgGusto(msg,msgq.payload);
+    if (recibirmsgqSinCheckeo(handler->_msgq_id_recibir,&msgq,sizeof(MessageQ),handler->id) == -1){
+        crearMsgIrse(msg);
+    } else {
+        deserializeMsgGusto(msg,msgq.payload);    
+    }
+    
 }
 
 void enviarAManagerQueMeVoy() {
-    Mensaje_gustos msg;
-    crearMsgIrse(&msg);
-    enviarmsgq(getmsgq(MSGQ_DESTRUCTOR),&msg,sizeof(Mensaje_gustos));
+    //Ahora no hace nada
 }
 
 void enviarPedidoACliente(Heladero_handler* handler, Mensaje_helado* msg) {

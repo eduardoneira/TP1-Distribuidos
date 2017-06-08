@@ -17,11 +17,11 @@ Cliente_handler registrarCliente() {
 	
 	Cliente_handler handler;
 
-	handler._msgq_id_recibir_momId = getmsgq(MSGQ_POR_MOMID);
+	handler._msgq_id_recibir_momId = getmsgq(MSGQ_POR_MOMID_CLIENTE);
 	handler._msgq_id_enviar= getmsgq(MSGQ_RECIBIR_CLIENTE);
 	handler._msgq_id_recibir_ticket = getmsgq(MSGQ_POR_TICKET);
 
-	handler.id = registrarse(CLIENTE);
+	handler.id = registrarse(handler._msgq_id_enviar,CLIENTE);
 
 	return handler;
 }

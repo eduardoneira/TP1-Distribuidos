@@ -11,8 +11,8 @@
 Cajero_handler registrarCajero() {
     Cajero_handler handler;
     handler._msgq_id_enviar = getmsgq(MSGQ_RECIBIR_CAJERO);
-    handler._msgq_id_recibir = getmsgq(MSGQ_POR_MOMID);
-    handler.id = registrarse(CAJERO);
+    handler._msgq_id_recibir = getmsgq(MSGQ_POR_MOMID_CAJERO);
+    handler.id = registrarse(handler._msgq_id_enviar,CAJERO);
     return handler;
 }
 
@@ -22,8 +22,12 @@ int generarTicket(Cajero_handler* handler) {
 
 void recibirPedido(Cajero_handler* handler, Mensaje_gustos* msg_gustos) {
     MessageQ msg;
-    recibirmsgq(handler->_msgq_id_recibir,&msg,sizeof(MessageQ),handler->id);
-    deserializeMsgGusto(msg_gustos,msg.payload);
+    if (recibirmsgqSinCheckeo(handler->_msgq_id_recibir,&msg,sizeof(MessageQ),handler->id) == -1) {
+        crearMsgIrse(msg_gustos);
+    } else{
+        deserializeMsgGusto(msg_gustos,msg.payload);    
+    } 
+    
 }
 
 void enviarTicketACliente(Cajero_handler* handler, Mensaje_ticket* msg) {
@@ -47,9 +51,7 @@ void enviarPedidoAHeladero(Cajero_handler* handler, Mensaje_gustos* msg, int tic
 }
 
 void enviarMsgQueMeVoy() {
-    Mensaje_gustos msg;
-    crearMsgIrse(&msg);
-    enviarmsgq(getmsgq(MSGQ_DESTRUCTOR),&msg,sizeof(Mensaje_gustos));
+    //Ahora no hago nada 
 }
 
 void cerrarCajero(Cajero_handler* handler) {

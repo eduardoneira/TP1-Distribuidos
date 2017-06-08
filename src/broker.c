@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    while ((nfd == accept_socket(listenfd,false)) != -1) {
+    while ((nfd = accept_socket(listenfd,false)) != -1) {
 
         escribirLog(&log,DEBUG,pid,BROKER_NAME,"Alguien se conectó");
 

@@ -50,23 +50,8 @@ int destruirEstadoHeladeria() {
 
 }
 
-void avisarQueSeCierra(int idmsq) {
-	//Time to TCP
-	Mensaje_gustos msg;
-	crearMsgIrse(&msg);
-	enviarmsgq(idmsq,&msg,sizeof(Mensaje_gustos));
-
-	int elim_id = getmsgq(MSGQ_DESTRUCTOR);
-	recibirmsgq(elim_id,&msg,sizeof(Mensaje_gustos),0);
-
-}
-
 void destruirCola(int id, char* error, int cant_avisar) {
 	int idmsq = getmsgq(id);
-
-	for (int i = 0; i < cant_avisar; i++) {
-		avisarQueSeCierra(idmsq);
-	}
 
 	if (elimsgq(idmsq) == -1) {
 		sprintf(error,"Error al destruir cola con id %d",id);
@@ -81,28 +66,27 @@ void destruirMsgQueues(char* modo) {
 	char error[64];
 
 	if (strcmp(modo,ALL) == 0 || strcmp(modo,CAJERO) == 0) {
-		destruirCola(MSGQ_PASAMANOS_CAJERO_MOM_PEDIDO,error,0);
-		destruirCola(MSGQ_PASAMANOS_MOM_CAJERO_PEDIDO,error,CANT_CAJEROS);
-		destruirCola(MSGQ_PASAMANOS_CAJERO_MOM_TICKET,error,0);
+		destruirCola(MSGQ_RECIBIR_CAJERO,error,0);
+		destruirCola(MSGQ_POR_MOMID_CAJERO,error,0);
+		destruirCola(MSGQ_POR_PID_CAJERO,error,0);
 	}
 
 	if (strcmp(modo,ALL) == 0 || strcmp(modo,HELADERO) == 0) {
-		destruirCola(MSGQ_PASAMANOS_MOM_HELADERO_PEDIDO,error,CANT_HELADEROS);
-		destruirCola(MSGQ_PASAMANOS_HELADERO_MOM_HELADO,error,0);
+		destruirCola(MSGQ_RECIBIR_HELADERO,error,0);
+		destruirCola(MSGQ_POR_MOMID_HELADERO,error,0);
+		destruirCola(MSGQ_POR_PID_HELADERO,error,0);
 	}
 
 	if (strcmp(modo,ALL) == 0 || strcmp(modo,CLIENTE) == 0) {
-		destruirCola(MSGQ_PASAMANOS_CLIENTE_MOM_PEDIDO,error,0);
-		destruirCola(MSGQ_PASAMANOS_MOM_CLIENTE_TICKET,error,0);
-		destruirCola(MSGQ_PASAMANOS_MOM_CLIENTE_HELADO,error,0);
+		destruirCola(MSGQ_RECIBIR_CLIENTE,error,0);
+		destruirCola(MSGQ_POR_PID_CLIENTE,error,0);
+		destruirCola(MSGQ_POR_MOMID_CLIENTE,error,0);
+		destruirCola(MSGQ_POR_TICKET,error,0);
 	}
 
 	if (strcmp(modo,BROKER) == 0){
 		destruirCola(MSGQ_ROUTER_BROKER_OUT,error,0);
 		destruirCola(MSGQ_BROKER_IN_ROUTER,error,0);
-	}else {
-		destruirCola(MSGQ_REGISTER_MOM,error,0);
-		destruirCola(MSGQ_DESTRUCTOR,error,0);
 	}
 
 }
