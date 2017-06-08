@@ -30,8 +30,6 @@
 #define MSGQ_POR_MOMID_HELADERO             20
 #define MSGQ_POR_PID_CAJERO	                21
 #define MSGQ_POR_PID_HELADERO               22
-#define MSGQ_DESTRUCTOR_CAJERO	            23
-#define MSGQ_DESTRUCTOR_HELADERO            24
 
 /**
 * SEMAFOROS HELADERIA

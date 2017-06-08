@@ -9,7 +9,7 @@
 typedef struct Mensaje_registro {
     long mtype;
     int id;
-    char* tipo;
+    char tipo[16];
 } Mensaje_registro;
 
 Mensaje_registro crearMensajeRegistro(int id,const char* tipo) {
@@ -30,7 +30,7 @@ void deserializeMsgRegistro(Mensaje_registro* msg, char* buffer) {
 
     msg->mtype = atol(strtok(aux,SEPARATOR));
     msg->id = atoi(strtok(NULL,SEPARATOR));
-    msg->tipo = strtok(NULL,SEPARATOR);
+    strcpy(msg->tipo,strtok(NULL,SEPARATOR));
 }
 
 int getMsgqSegunTipo(const char* tipo){
