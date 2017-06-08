@@ -6,7 +6,6 @@
 #include "mensaje_ticket.h"
 #include "mensaje_registro.h"
 #include "msg_queue.h"
-#include "rpc_wrapper.h"
 
 Cajero_handler registrarCajero() {
     Cajero_handler handler;
