@@ -1,35 +1,50 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
-#include <stdbool.h>
 #include <unistd.h>
 
 #include "../include/logger.h"
-#include "../include/semaforo.h"
-#include "../include/memoria_compartida.h"
-#include "../include/estado_heladeria.h"
+#include "../include/msg_queue.h"
+#include "../include/message_wrapper.h"
+
 
 int main(int argc, char** argv) {
 	pid_t pid = getpid();
 
 	Logger log = crearLogger();
 
-	if (argc == 1) {
-		int shmid = getshm(ID_SHM_ESTADO_HELADERIA);
-		int semid = getsem(SEMID_ESTADO_HELADERIA,1);
+	if (argc != 2){
+		printf("Deberia recibir por parametro abrir, cerrar o un numero especificando cuantos clientes lanzar\n");
+	}
 
-		p(semid,0);
-		EstadoHeladeria* estado = (EstadoHeladeria*) map(shmid);
-		if(estado->abierto == CERRADO){
-			estado->abierto = ABIERTO;
+	if (strcmp(argv[1],"abrir") == 0 || strcmp(argv[1],"cerrar") == 0) {
+		int id = getmsgq(MSGQ_RECIBIR_HELADERO);
+
+		if (id == -1){
+			id = getmsgq(MSGQ_RECIBIR_CAJERO);
+		}
+
+		if (id == -1){
+			id = getmsgq(MSGQ_RECIBIR_CLIENTE);
+		}
+
+		if (id == -1){
+			perror("No hay ningun mom abierto, no se puede mandar mensaje de abrir o cerrar heladeria\n");
+			return -1;
+		}
+
+		MessageQ msg;
+		msg.mtype = 1;
+
+		if(strcmp(argv[1],"abrir") == 0){
+			sprintf(msg.type,"%d",MSG_BROKER_ABRIR_HELADERIA);
+			enviarmsgq(id,&msg,sizeof(MessageQ));
 			escribirLog(&log,DEBUG,pid,MANAGER_NAME,"Se vuelve a abrir la heladeria");
 		} else {
-			estado->abierto = CERRADO;
+			sprintf(msg.type,"%d",MSG_BROKER_CERRAR_HELADERIA);
+			enviarmsgq(id,&msg,sizeof(MessageQ));
 			escribirLog(&log,DEBUG,pid,MANAGER_NAME,"Se cierra la heladeria");
 		}
-		unmap(estado);
-		v(semid,0);
-		
+
 	} else {
 		char buffer[BUFFER_SIZE];
 		
