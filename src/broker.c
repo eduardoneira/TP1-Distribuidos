@@ -38,8 +38,6 @@ int main(int argc, char** argv) {
             execl("./broker_in","./broker_in",buffer,(char*) NULL);
             perror("Exec fallo");
             return -1;
-        } else {
-            close(nfd);
         }
 
         //Lanzo al que manda msgs
@@ -52,9 +50,9 @@ int main(int argc, char** argv) {
             execl("./broker_out","./broker_out",buffer,inC,(char*) NULL);
             perror("Exec fallo");
             return -1;
-        } else {
-            close(nfd);
         }
+
+        close(nfd);
     }
 
     escribirLog(&log,DEBUG,pid,BROKER_NAME,"Cerrando el broker principal");

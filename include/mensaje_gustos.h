@@ -23,7 +23,7 @@ void serializeMsgGusto(Mensaje_gustos* msg, char* buffer){
 	sprintf(buffer,"%ld-%d-%d",msg->mtype,msg->id,msg->momId);
 
 	for (int i = 0; i < GUSTOS_POR_PERSONA; i++) {
-		sprintf(aux_buffer," %d",msg->gustos_helado[i]);
+		sprintf(aux_buffer,"-%d",msg->gustos_helado[i]);
 		strcat(buffer,aux_buffer);
 	}
 }

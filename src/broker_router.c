@@ -43,7 +43,7 @@ int main(int argc, char** argv){
     //Log inicial
     Logger log = crearLogger();
     pid_t pid = getpid();
-    char buffer[64];
+    char buffer[128];
 
     escribirLog(&log,DEBUG,pid,BROKER_ROUTER_NAME,"Soy un router broker");
 
@@ -54,10 +54,10 @@ int main(int argc, char** argv){
     Router_handler handler = crearRouterHandler();
 
     while (recibirmsgqSinCheckeo(msqid_in,&msg,sizeof(MessageQ),0) != -1){
-        sprintf(buffer,"Recibi un msg por in, hora de router. TYPE:%s, PAYLOAD: %s",msg.type,msg.payload);
+        sprintf(buffer,"Recibi un msg por %ld, hora de router. TYPE:%s, PAYLOAD: %s",msg.mtype,msg.type,msg.payload);
         escribirLog(&log,DEBUG,pid,BROKER_ROUTER_NAME,buffer);
         if (route(&handler,&msg,&log)) {
-            sprintf(buffer,"Voy a enviar lo siguiente. TYPE:%s, PAYLOAD: %s",msg.type,msg.payload);
+            sprintf(buffer,"Voy a enviar por  %ld lo siguiente. TYPE:%s, PAYLOAD: %s",msg.mtype,msg.type,msg.payload);
             escribirLog(&log,DEBUG,pid,BROKER_ROUTER_NAME,buffer);
             enviarmsgq(msqid_out,&msg,sizeof(MessageQ));
         }
