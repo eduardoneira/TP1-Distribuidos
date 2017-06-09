@@ -124,9 +124,13 @@ bool enviarPedido(Router_handler* handler, MessageQ* msg) {
 
     if (msg_gustos.momId == MENSAJE_A_HELADERO) {
         msg->mtype = handler->heladeros.at(handler->heladerosTurno).mtype;
+        msg_gustos.mtype = handler->heladeros.at(handler->heladerosTurno).momId;
+        serializeMsgGusto(&msg_gustos,msg->payload);
         handler->heladerosTurno = (handler->heladerosTurno + 1) % handler->heladeros.size();
     } else {
         msg->mtype = handler->cajeros.at(handler->cajerosTurno).mtype;
+        msg_gustos.mtype = handler->heladeros.at(handler->cajerosTurno).momId;
+        serializeMsgGusto(&msg_gustos,msg->payload);
         handler->cajerosTurno = (handler->cajerosTurno + 1) % handler->cajeros.size();
     }
 

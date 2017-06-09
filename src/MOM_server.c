@@ -8,7 +8,7 @@
 
 int main(int argc, char** argv){
 	Logger log = crearLogger();
-	char buffer[64];
+	char buffer[128];
 
 	MOM_handler handler;
 	bool termine = abrirMOM(&handler,argv[1]);
