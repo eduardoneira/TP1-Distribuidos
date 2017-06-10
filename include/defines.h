@@ -99,7 +99,7 @@
  * HOSTS
  * */
 #define LOCALHOST   "127.0.0.1"
-#define IP_BROKER   "127.0.0.1"
+#define IP_BROKER   "192.168.1.13"
 #define IP_RPC      "127.0.0.1"
 #define PORT_BROKER 30000
 
