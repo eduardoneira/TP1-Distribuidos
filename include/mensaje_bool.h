@@ -24,4 +24,11 @@ void deserializeMsgBool(Mensaje_bool* msg, char* buffer){
     msg->mtype = atol(strtok(buffer,SEPARATOR));
     msg->estado = atoi(strtok(NULL,SEPARATOR));
 }
+
+Mensaje_bool crearMensajeBool(long mtype,bool estado) {
+    Mensaje_bool msg;
+    msg.mtype = mtype;
+    msg.estado = estado;
+    return msg;
+}
 #endif //TPS_DISTRIBUIDOS_MENSAJE_BOOL_H

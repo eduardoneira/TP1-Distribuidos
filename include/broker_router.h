@@ -87,7 +87,7 @@ bool registrarMOM(Router_handler* handler, MessageQ* msgq){
         handler->heladeros.push_back(entry);
     } else if (strcmp(msg_reg.tipo,CAJERO) == 0) {
         handler->cajeros.push_back(entry);
-    } else if (strcmp(msg_reg.tipo,HELADERO) == 0){
+    } else if (strcmp(msg_reg.tipo,CLIENTE) == 0){
         handler->clientes.push_back(entry);
     }
 

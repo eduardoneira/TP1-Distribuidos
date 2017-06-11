@@ -31,8 +31,7 @@ void desregistrarCliente(Cliente_handler* handler) {
 }
 
 bool checkearEstado(Cliente_handler* handler, int tipo_msg) {
-	Mensaje_bool msg_bool;
-	msg_bool.mtype = handler->id;
+	Mensaje_bool msg_bool = crearMensajeBool(handler->id,false);
 
 	MessageQ msg;
 	msg.mtype = 1;
