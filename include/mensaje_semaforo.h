@@ -20,7 +20,7 @@ Mensaje_semaforo crearMsgSemaforo(long mtype, int index) {
 }
 
 void serializeMsgSemaforo(Mensaje_semaforo* msg, char* buffer){
-    sprintf(buffer,"%ld-%d",msg->mtype,msg->index);
+    sprintf(buffer,"%ld%s%d",msg->mtype,SEPARATOR,msg->index);
 }
 
 void deserializeMsgSemaforo(Mensaje_semaforo* msg, char* buffer){

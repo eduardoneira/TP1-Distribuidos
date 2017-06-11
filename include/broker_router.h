@@ -145,7 +145,7 @@ bool ocuparHelado(Router_handler* handler, MessageQ* msg){
     char buffer[10];
 
     if (strlen(handler->helados.at(msg_sem.index)) > 0) {
-        sprintf(buffer,"-%ld",msg_sem.mtype);
+        sprintf(buffer,"%s%ld",SEPARATOR,msg_sem.mtype);
         strcat(handler->helados.at(msg_sem.index),buffer);
         return false;
     } else {
@@ -239,7 +239,9 @@ bool hay_lugar_cola(Router_handler* handler, MessageQ* msg){
     deserializeMsgBool(&msg_bool,msg->payload);
 
     msg_bool.estado = (handler->estado.tamanio_cola > 0);
-    handler->estado.tamanio_cola--;
+    if (msg_bool.estado){
+        handler->estado.tamanio_cola--;
+    }
 
     serializeMsgBool(&msg_bool,msg->payload);
 
@@ -251,7 +253,9 @@ bool hay_lugar_heladeria(Router_handler* handler, MessageQ* msg){
     deserializeMsgBool(&msg_bool,msg->payload);
 
     msg_bool.estado = (handler->estado.tamanio_heladeria > 0);
-    handler->estado.tamanio_heladeria--;
+    if (msg_bool.estado){
+        handler->estado.tamanio_heladeria--;
+    }
 
     serializeMsgBool(&msg_bool,msg->payload);
 

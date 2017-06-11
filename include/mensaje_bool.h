@@ -14,7 +14,7 @@ typedef struct Mensaje_bool {
 } Mensaje_bool;
 
 void serializeMsgBool(Mensaje_bool* msg, char* buffer){
-    sprintf(buffer,"%ld-%d",msg->mtype,msg->estado);
+    sprintf(buffer,"%ld%s%d",msg->mtype,SEPARATOR,msg->estado);
 }
 
 void deserializeMsgBool(Mensaje_bool* msg, char* buffer){

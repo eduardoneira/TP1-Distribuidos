@@ -21,7 +21,7 @@ Mensaje_registro crearMensajeRegistro(int id,const char* tipo) {
 }
 
 void serializeMsgRegistro(Mensaje_registro* msg, char* buffer){
-    sprintf(buffer,"%ld-%d-%s",msg->mtype,msg->id,msg->tipo);
+    sprintf(buffer,"%ld%s%d%s%s",msg->mtype,SEPARATOR,msg->id,SEPARATOR,msg->tipo);
 }
 
 void deserializeMsgRegistro(Mensaje_registro* msg, char* buffer) {

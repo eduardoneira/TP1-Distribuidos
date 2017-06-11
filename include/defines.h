@@ -114,7 +114,7 @@
 /**
  * MSGS COSAS
  * */
-#define SEPARATOR                       "-"
+#define SEPARATOR                       "/"
 #define MSG_BROKER_REGISTER             1
 #define MSG_BROKER_TICKET               2
 #define MSG_BROKER_HELADO               3

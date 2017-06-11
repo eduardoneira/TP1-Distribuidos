@@ -14,7 +14,7 @@ void crearMensajeHelado(Mensaje_helado* msg, long id, char* helado){
 }
 
 void serializeMsgHelado(Mensaje_helado* msg, char* buffer){
-	sprintf(buffer,"%ld-%s",msg->mtype,msg->helado);
+	sprintf(buffer,"%ld%s%s",msg->mtype,SEPARATOR,msg->helado);
 }
 
 void deserializeMsgHelado(Mensaje_helado* msg, char* buffer) {
