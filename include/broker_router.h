@@ -76,13 +76,14 @@ bool registrarMOM(Router_handler* handler, MessageQ* msgq){
     deserializeMsgRegistro(&msg_reg,msgq->payload);
     msg_reg.mtype = msg_reg.id;
     msg_reg.id = handler->momId;
-    handler->momId++;
+
 
     Entry_router entry;
     entry.mtype = msgq->mtype;
-    entry.momId = msg_reg.id;
+    entry.momId = handler->momId;
     entry.ticket = -1;
 
+    handler->momId++;
     if (strcmp(msg_reg.tipo,HELADERO) == 0) {
         handler->heladeros.push_back(entry);
     } else if (strcmp(msg_reg.tipo,CAJERO) == 0) {
@@ -129,7 +130,7 @@ bool enviarPedido(Router_handler* handler, MessageQ* msg) {
         handler->heladerosTurno = (handler->heladerosTurno + 1) % handler->heladeros.size();
     } else {
         msg->mtype = handler->cajeros.at(handler->cajerosTurno).mtype;
-        msg_gustos.mtype = handler->heladeros.at(handler->cajerosTurno).momId;
+        msg_gustos.mtype = handler->cajeros.at(handler->cajerosTurno).momId;
         serializeMsgGusto(&msg_gustos,msg->payload);
         handler->cajerosTurno = (handler->cajerosTurno + 1) % handler->cajeros.size();
     }
@@ -189,6 +190,7 @@ bool desregistrarseMOM(Router_handler* handler, MessageQ* msg) {
         for (std::vector<Entry_router>::iterator it = handler->heladeros.begin(); it != handler->heladeros.end(); it++) {
             if ((*it).momId == momId) {
                  handler->heladeros.erase(it);
+                break;
             }
             index++;
         }
@@ -200,6 +202,7 @@ bool desregistrarseMOM(Router_handler* handler, MessageQ* msg) {
         for (std::vector<Entry_router>::iterator it = handler->cajeros.begin(); it != handler->cajeros.end(); it++) {
             if ((*it).momId == momId) {
                 handler->cajeros.erase(it);
+                break;
             }
             index++;
         }
@@ -211,6 +214,7 @@ bool desregistrarseMOM(Router_handler* handler, MessageQ* msg) {
         for (std::vector<Entry_router>::iterator it = handler->clientes.begin(); it != handler->clientes.end(); it++) {
             if ((*it).momId == momId) {
                 handler->clientes.erase(it);
+                break;
             }
         }
         handler->estado.tamanio_heladeria--;

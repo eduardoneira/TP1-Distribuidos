@@ -17,7 +17,7 @@ Heladero_handler registrarHeladero() {
     return handler;
 }
 
-void enviarMensajeHelado(Heladero_handler* handler, int gusto,int tipo){
+void enviarMensajeHelado(Heladero_handler* handler, int gusto,int tipo,bool respuesta){
     Mensaje_semaforo msg_sem;
     msg_sem.mtype = handler->id;
     msg_sem.index = gusto;
@@ -28,15 +28,17 @@ void enviarMensajeHelado(Heladero_handler* handler, int gusto,int tipo){
     serializeMsgSemaforo(&msg_sem,msg.payload);
 
     enviarmsgq(handler->_msgq_id_enviar,&msg,sizeof(MessageQ));
-    recibirmsgqSinCheckeo(handler->_msgq_id_recibir,&msg,sizeof(MessageQ),handler->id);
+    if (respuesta){
+        recibirmsgqSinCheckeo(handler->_msgq_id_recibir,&msg,sizeof(MessageQ),handler->id);
+    }
 }
 
 void ocuparHelado(Heladero_handler* handler, int gusto) {
-    enviarMensajeHelado(handler,gusto,MSG_BROKER_OCUPAR_HELADO);
+    enviarMensajeHelado(handler,gusto,MSG_BROKER_OCUPAR_HELADO,true);
 }
 
 void liberarHelado(Heladero_handler* handler, int gusto) {
-    enviarMensajeHelado(handler,gusto,MSG_BROKER_DESOCUPAR_HELADO);
+    enviarMensajeHelado(handler,gusto,MSG_BROKER_DESOCUPAR_HELADO,false);
 }
 
 void recibirPedidoDeCajero(Heladero_handler* handler, Mensaje_gustos* msg) {
