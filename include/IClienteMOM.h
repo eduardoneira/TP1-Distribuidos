@@ -30,7 +30,7 @@ void desregistrarCliente(Cliente_handler* handler) {
 	desregistrarse(handler->_msgq_id_enviar,handler->id,CLIENTE);
 }
 
-bool checkearEstado(Cliente_handler* handler, int tipo_msg) {
+bool checkearEstado(Cliente_handler* handler, int tipo_msg,bool recibir) {
 	Mensaje_bool msg_bool = crearMensajeBool(handler->id,false);
 
 	MessageQ msg;
@@ -39,27 +39,29 @@ bool checkearEstado(Cliente_handler* handler, int tipo_msg) {
 	serializeMsgBool(&msg_bool,msg.payload);
 
 	enviarmsgq(handler->_msgq_id_enviar,&msg,sizeof(MessageQ));
-	recibirmsgqSinCheckeo(handler->_msgq_id_recibir_momId,&msg,sizeof(MessageQ),handler->id);
+	if (recibir) {
+		recibirmsgqSinCheckeo(handler->_msgq_id_recibir_momId, &msg, sizeof(MessageQ), handler->id);
+		deserializeMsgBool(&msg_bool, msg.payload);
+		return msg_bool.estado;
+	}
 
-	deserializeMsgBool(&msg_bool,msg.payload);
-
-	return msg_bool.estado;
+	return false;
 }
 
 bool clienteEntrarEnLaHeladeria(Cliente_handler* handler) {
-	return checkearEstado(handler,MSG_BROKER_PUEDO_ENTRAR);
+	return checkearEstado(handler,MSG_BROKER_PUEDO_ENTRAR,true);
 }
 
 bool clienteEntrarEnLaCola(Cliente_handler* handler) {
-	return checkearEstado(handler,MSG_BROKER_HAY_LUGAR_COLA);
+	return checkearEstado(handler,MSG_BROKER_HAY_LUGAR_COLA,true);
 }
 
 void clienteSalirDeLaCola(Cliente_handler* handler) {
-	checkearEstado(handler,MSG_BROKER_SALIR_COLA);
+	checkearEstado(handler,MSG_BROKER_SALIR_COLA,false);
 }
 
 bool clienteReservarLugarParaSentarse(Cliente_handler* handler) {
-	return checkearEstado(handler,MSG_BROKER_HAY_LUGAR_SENTARSE);
+	return checkearEstado(handler,MSG_BROKER_HAY_LUGAR_SENTARSE,true);
 }
 
 void clienteLiberarLugarParaSentarse(Cliente_handler* handler) {

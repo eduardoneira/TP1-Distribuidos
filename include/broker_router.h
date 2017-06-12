@@ -29,7 +29,7 @@ typedef struct Router_handler {
     int momId;
     int ticket;
     EstadoHeladeria estado;
-    std::vector<char[128]> helados;
+    std::vector<long> helados[CANTIDAD_GUSTOS];
 } Router_handler;
 
 Router_handler crearRouterHandler() {
@@ -142,32 +142,18 @@ bool ocuparHelado(Router_handler* handler, MessageQ* msg){
     Mensaje_semaforo msg_sem;
     deserializeMsgSemaforo(&msg_sem,msg->payload);
 
-    char buffer[10];
-
-    if (strlen(handler->helados.at(msg_sem.index)) > 0) {
-        sprintf(buffer,"%s%ld",SEPARATOR,msg_sem.mtype);
-        strcat(handler->helados.at(msg_sem.index),buffer);
-        return false;
-    } else {
-        sprintf(buffer,"%ld",msg_sem.mtype);
-        strcat(handler->helados.at(msg_sem.index),buffer);
-        return true;
-    }
-
+    handler->helados[msg_sem.index].push_back(msg_sem.mtype);
+    return (handler->helados[msg_sem.index].size() > 0);
 }
 
 bool desocuparHelado(Router_handler* handler, MessageQ* msg) {
     Mensaje_semaforo msg_sem;
     deserializeMsgSemaforo(&msg_sem,msg->payload);
 
-    char aux[128];
-    strcpy(aux,handler->helados.at(msg_sem.index));
+    handler->helados[msg_sem.index].erase( handler->helados[msg_sem.index].begin());
 
-    strtok(aux,SEPARATOR);
-    strcpy(handler->helados.at(msg_sem.index),strtok(NULL," "));
-    if (strlen(handler->helados.at(msg_sem.index)) > 0) {
-        strcpy(aux,handler->helados.at(msg_sem.index));
-        long momId = atol(strtok(aux,SEPARATOR));
+    if (handler->helados[msg_sem.index].size() > 0) {
+        long momId = handler->helados[msg_sem.index].at(0);
 
         msg_sem.mtype = momId;
         msg->mtype = _routeHeladero(handler,momId);
