@@ -23,6 +23,8 @@ int main(int argc, char** argv) {
 
     //Cajero Handler
     Cajero_handler handler = registrarCajero();
+    sprintf(buffer,"Me identifican con %d",handler.id);
+    escribirLog(&log,DEBUG,pid,CAJERO_NAME,buffer);
 	Mensaje_gustos msg_gustos;
 	Mensaje_ticket msg_ticket;
 

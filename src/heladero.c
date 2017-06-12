@@ -22,7 +22,11 @@ int main(int argc, char** argv) {
 	Mensaje_gustos msg_gustos;
 	Mensaje_helado msg_helado;
 
-	// Para saber si tengo que eliminar todo
+    sprintf(buffer,"Me identifican con %d",handler.id);
+    escribirLog(&log,DEBUG,pid,HELADERO_NAME,buffer);
+
+
+    // Para saber si tengo que eliminar todo
 	bool meVoy = false;
 
 	//init de random

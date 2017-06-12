@@ -19,6 +19,9 @@ int main(int argc, char** argv) {
 	escribirLog(&log,DEBUG,pid,CLIENTE_NAME,"Hola soy un cliente, quiero helado");
 
 	Cliente_handler handler = registrarCliente();
+	char buffer[BUFFER_SIZE];
+	sprintf(buffer,"Me identifican con %d",handler.id);
+	escribirLog(&log,DEBUG,pid,CLIENTE_NAME,buffer);
 
 	if (clienteEntrarEnLaHeladeria(&handler)) {
 		if (clienteEntrarEnLaCola(&handler)) {

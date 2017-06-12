@@ -17,25 +17,16 @@ Suposiciones:
 
 # Comandos
 
-IMPORTANTE
-
-Antes de correr hay que levantar el server RPC. Para hacer esto:
-
-```
-cd rpc
-make                    // compila el server rpc
-rpcbind	                // En caso de no tener levantado rpc
-sudo ./Server_RPC       // Importante que sea con permisos de root
-```
-
-Antes de usar los constructores, configurar el archivo ips.txt con las ips y moverlo a donde esten los binarios. Acordarse que hay levantar los mom en orden. Por lo tanto primero se debe correr el constructor cajero, luego el constructor heladero y finalmente el constructor cliente. 
+Acordarse que hay levantar primero al broker.
 
 
 ```
-cmake .	                        // Crea el make a partir del CMakeLists.txt
-make                      	    // compila el codigo y genera los ejecutables
-./constructor_heladeria [modo]	// lanza un proceso cajero y dos procesos heladeros con forks, tambien lanza los MOMS. El modo puede ser "cliente", "cajero", "heladero" o "all"
-./control 5               	    // lanza 5 (o el numero ingresado) procesos cliente que actuan segun la consigna
-./control                 	    // si no recibe un numero de clientes como argumento, control cambia el estado de la heladeria a cerrada (pero no destruye ningun mecanismo de IPC)
-./destructor_heladeria [modo]  	// envia mensajes a los procesos que se bloquean escuchando mensajes para que se cierren, y tambien destruye las estructuras de IPC creadas. No hace nada si la heladeria no esta cerrada o todavia hay clientes comiendo. El modo puede ser "cliente", "cajero", "heladero" o "all"
+cmake .	                            // Crea el make a partir del CMakeLists.txt
+make                      	        // Compila el codigo y genera los ejecutables
+./constructor [modo]	            // Crea estructuras de IPC y lanza los mom dependiendo del modo. Pueder ser : 'broker', 'cajero', 'heladero', 'cliente' o 'all' (all contiene a helad., cajero y cliente)
+./control [num_clientes]  	        // Lanza clientes segun el numero que se especifique
+./control [estado_heladeria]        // Abre o cierre la heladeria dependiendo del estado_heladeria. Algun constructor se tuvo que haber creado. [estado_heladeria] puede ser 'abrir' o 'cerrar'.
+./control destruir [modo] [momId]   // Envia msg de destruccion a un cajero o heladero. [modo] puede ser 'heladero' o 'cajero'. [momId] debe ser el momId que utiliza. Fijarse el log
+./broker                            // Lanza el broker luego de haber corrido el constructor
+./destructor [modo]  	            // Destruye todas las estructuras de IPC. El modo puede ser "cliente", "cajero", "heladero", "all" o "broker"
 ```
