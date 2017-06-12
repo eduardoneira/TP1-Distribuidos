@@ -26,6 +26,11 @@ int main(int argc, char** argv){
 	while(!termine){
 		if (recibirMsg(&handler,&msg) == -1) {
 			termine = true;
+            if (!handler.socket_leer) {
+                sprintf(msg.type,"%d",MSG_BROKER_CERRAR);
+                sprintf(msg.payload,"%d",MSG_BROKER_CERRAR);
+                enviarMsg(&handler,&msg);
+            }
 		} else {
 			sprintf(buffer,"Recibi un msg. TYPE:%s, PAYLOAD: %s",msg.type,msg.payload);
 			escribirLog(&log,TRACE,pid,MOM,buffer);

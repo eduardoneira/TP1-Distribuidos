@@ -56,7 +56,11 @@ bool abrirMOM(MOM_handler* handler,char* quien_soy) {
 
 int recibirMsg(MOM_handler* handler,Message* msg) {
 	if (handler->socket_leer){
-		return leer_socket(handler->_socket,msg,sizeof(Message));
+		int ret = leer_socket(handler->_socket,msg,sizeof(Message));
+		if (atoi(msg->type) == MSG_BROKER_CERRAR) {
+			return -1;
+		}
+		return ret;
 	} else {
 		MessageQ msgq;
 		int ret = recibirmsgqSinCheckeo(handler->_id_cola_recibir,&msgq,sizeof(MessageQ),0);

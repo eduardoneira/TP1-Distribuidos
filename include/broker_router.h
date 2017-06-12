@@ -212,7 +212,7 @@ bool desregistrarseMOM(Router_handler* handler, MessageQ* msg) {
                 break;
             }
         }
-        handler->estado.tamanio_heladeria--;
+        handler->estado.tamanio_heladeria++;
     }
 
     return false;
@@ -258,7 +258,7 @@ bool hay_lugar_heladeria(Router_handler* handler, MessageQ* msg){
 }
 
 bool salir_cola(Router_handler* handler){
-    handler->estado.tamanio_cola--;
+    handler->estado.tamanio_cola++;
     return false;
 }
 
