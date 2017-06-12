@@ -34,6 +34,8 @@ bool route(Router_handler* handler,MessageQ* msg,Logger* log) {
             return hay_lugar_heladeria(handler,msg);
         case MSG_BROKER_CERRAR:
             return true;
+        case MSG_BROKER_GENERAR_TICKET:
+            return generarTicket(handler,msg);
         default:
             return false;
     }

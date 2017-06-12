@@ -96,12 +96,21 @@ bool registrarMOM(Router_handler* handler, MessageQ* msgq){
     return true;
 }
 
-bool enviarTicket(Router_handler* handler, MessageQ* msg){
+bool generarTicket(Router_handler* handler, MessageQ* msg) {
     Mensaje_ticket msg_ticket;
     deserializeMsgTicket(&msg_ticket,msg->payload);
 
     msg_ticket.ticket = handler->ticket;
     handler->ticket++;
+
+    serializeMsgTicket(&msg_ticket,msg->payload);
+
+    return true;
+}
+
+bool enviarTicket(Router_handler* handler, MessageQ* msg){
+    Mensaje_ticket msg_ticket;
+    deserializeMsgTicket(&msg_ticket,msg->payload);
 
     msg->mtype = _routeClientWithMomId(handler,msg_ticket.mtype,msg_ticket.ticket);
 

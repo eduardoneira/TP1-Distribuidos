@@ -16,7 +16,21 @@ Cajero_handler registrarCajero() {
 }
 
 int generarTicket(Cajero_handler* handler) {
-    return 0; //Ahora no hace nada
+    MessageQ msgq;
+    sprintf(msgq.type,"%d",MSG_BROKER_GENERAR_TICKET);
+    msgq.mtype = 1;
+
+    Mensaje_ticket msg;
+    msg.mtype = handler->id;
+    msg.ticket = -1;
+    serializeMsgTicket(&msg,msgq.payload);
+
+    enviarmsgq(handler->_msgq_id_enviar,&msgq,sizeof(MessageQ));
+    recibirmsgqSinCheckeo(handler->_msgq_id_enviar,&msgq,sizeof(MessageQ),handler->id);
+
+    deserializeMsgTicket(&msg,msgq.payload);
+
+    return msg.ticket;
 }
 
 void recibirPedido(Cajero_handler* handler, Mensaje_gustos* msg_gustos) {

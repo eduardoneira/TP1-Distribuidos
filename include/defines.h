@@ -129,6 +129,7 @@
 #define MSG_BROKER_SALIR_COLA           12
 #define MSG_BROKER_HAY_LUGAR_SENTARSE   13
 #define MSG_BROKER_CERRAR               14
+#define MSG_BROKER_GENERAR_TICKET       15
 #define SIZE_TYPE_MSG                   5
 #define SIZE_PAYLOAD_MSG                64
 
