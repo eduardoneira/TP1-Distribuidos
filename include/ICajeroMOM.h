@@ -26,7 +26,7 @@ int generarTicket(Cajero_handler* handler) {
     serializeMsgTicket(&msg,msgq.payload);
 
     enviarmsgq(handler->_msgq_id_enviar,&msgq,sizeof(MessageQ));
-    recibirmsgqSinCheckeo(handler->_msgq_id_enviar,&msgq,sizeof(MessageQ),handler->id);
+    recibirmsgqSinCheckeo(handler->_msgq_id_recibir,&msgq,sizeof(MessageQ),handler->id);
 
     deserializeMsgTicket(&msg,msgq.payload);
 
