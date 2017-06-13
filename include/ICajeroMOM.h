@@ -14,7 +14,10 @@ Cajero_handler registrarCajero() {
     handler._msgq_id_pasar_pedido_heladero = getmsgq(MSGQ_PASAMANOS_CAJERO_MOM_PEDIDO);
     handler._msgq_id_recibir_pedido = getmsgq(MSGQ_PASAMANOS_MOM_CAJERO_PEDIDO);
     handler.id = registrarse();
-    handler._rpc_ticket = initRPC(LOCALHOST);
+    
+    char host[20];
+    getHostRPC(host,CAJERO);
+    handler._rpc_ticket = initRPC(host);
     return handler;
 }
 
