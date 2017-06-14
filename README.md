@@ -18,7 +18,7 @@ Suposiciones:
 # Comandos
 
 Acordarse que hay levantar primero al broker. Siempre hay que correr primero el constructor con el parametro adecuado y después el proceso.
-Si se quiere modificar el host del BROKER, cambiar en defines.h la constante 'IP_BROKER'.
+Si se quiere modificar el host del BROKER, cambiar en defines.h la constante 'IP_BROKER'.  El trabajo se encuentra bajo el supuesta de que si lanzo un cliente (proceso, no MOM), debe haber al menos un heladero y un cajero. Sino se quedará esperando indefinidamente.
 
 
 ```

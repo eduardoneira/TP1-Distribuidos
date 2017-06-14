@@ -65,7 +65,7 @@ bool clienteReservarLugarParaSentarse(Cliente_handler* handler) {
 }
 
 void clienteLiberarLugarParaSentarse(Cliente_handler* handler) {
-	//No hace nada en si, lo hace al desregistrarse
+	checkearEstado(handler,MSG_BROKER_SALIR_HELADERIA,false);
 }
 
 void clienteHacerPedido(Cliente_handler* handler, Mensaje_gustos* mensaje) {

@@ -11,7 +11,8 @@
 
 Heladero_handler registrarHeladero() {
     Heladero_handler handler;
-    handler._msgq_id_recibir = getmsgq(MSGQ_POR_MOMID_HELADERO);
+    handler._msgq_id_recibir_pedido = getmsgq(MSGQ_POR_MOMID_HELADERO_PEDIDO);
+    handler._msgq_id_recibir_bocha = getmsgq(MSGQ_POR_MOMID_HELADERO_BOCHA);
     handler._msgq_id_enviar = getmsgq(MSGQ_RECIBIR_HELADERO);
     handler.id = registrarse(handler._msgq_id_enviar,HELADERO);
     return handler;
@@ -29,7 +30,7 @@ void enviarMensajeHelado(Heladero_handler* handler, int gusto,int tipo,bool resp
 
     enviarmsgq(handler->_msgq_id_enviar,&msg,sizeof(MessageQ));
     if (respuesta){
-        recibirmsgqSinCheckeo(handler->_msgq_id_recibir,&msg,sizeof(MessageQ),handler->id);
+        recibirmsgqSinCheckeo(handler->_msgq_id_recibir_bocha,&msg,sizeof(MessageQ),handler->id);
     }
 }
 
@@ -43,7 +44,7 @@ void liberarHelado(Heladero_handler* handler, int gusto) {
 
 void recibirPedidoDeCajero(Heladero_handler* handler, Mensaje_gustos* msg) {
     MessageQ msgq;
-    if (recibirmsgqSinCheckeo(handler->_msgq_id_recibir,&msgq,sizeof(MessageQ),handler->id) == -1){
+    if (recibirmsgqSinCheckeo(handler->_msgq_id_recibir_pedido,&msgq,sizeof(MessageQ),handler->id) == -1){
         crearMsgIrse(msg);
     } else {
         deserializeMsgGusto(msg,msgq.payload);    

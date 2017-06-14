@@ -36,6 +36,8 @@ bool route(Router_handler* handler,MessageQ* msg,Logger* log) {
             return true;
         case MSG_BROKER_GENERAR_TICKET:
             return generarTicket(handler,msg);
+        case MSG_BROKER_SALIR_HELADERIA:
+            return salir_heladeria(handler);
         default:
             return false;
     }

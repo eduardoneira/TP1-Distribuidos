@@ -25,11 +25,13 @@
 #define MSGQ_RECIBIR_HELADERO               15
 #define MSGQ_POR_PID_CLIENTE                16
 #define MSGQ_POR_TICKET                     17
-#define MSGQ_POR_MOMID_CAJERO               18
 #define MSGQ_POR_MOMID_CLIENTE              19
-#define MSGQ_POR_MOMID_HELADERO             20
 #define MSGQ_POR_PID_CAJERO	                21
 #define MSGQ_POR_PID_HELADERO               22
+#define MSGQ_POR_MOMID_CAJERO_TICKET        18
+#define MSGQ_POR_MOMID_CAJERO_PEDIDO        23
+#define MSGQ_POR_MOMID_HELADERO_PEDIDO      20
+#define MSGQ_POR_MOMID_HELADERO_BOCHA       24
 
 /**
 * SEMAFOROS HELADERIA
@@ -99,7 +101,7 @@
  * HOSTS
  * */
 #define LOCALHOST   "127.0.0.1"
-#define IP_BROKER   "192.168.1.13"
+#define IP_BROKER   "127.0.0.1"
 #define IP_RPC      "127.0.0.1"
 #define PORT_BROKER 30000
 
@@ -130,6 +132,7 @@
 #define MSG_BROKER_HAY_LUGAR_SENTARSE   13
 #define MSG_BROKER_CERRAR               14
 #define MSG_BROKER_GENERAR_TICKET       15
+#define MSG_BROKER_SALIR_HELADERIA      16
 #define SIZE_TYPE_MSG                   5
 #define SIZE_PAYLOAD_MSG                64
 

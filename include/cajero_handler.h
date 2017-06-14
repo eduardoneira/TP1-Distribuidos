@@ -4,7 +4,8 @@
 #include "../rpc/rpc.h"
 
 typedef struct Cajero_handler {
-    int _msgq_id_recibir;
+    int _msgq_id_recibir_ticket;
+    int _msgq_id_recibir_pedido;
     int _msgq_id_enviar;
     int id;
 } Cajero_handler;

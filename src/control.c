@@ -62,9 +62,9 @@ int main(int argc, char** argv) {
 		int msgq =  -1;
 
 		if (strcmp(argv[2],HELADERO) == 0){
-			msgq = getmsgq(MSGQ_POR_MOMID_HELADERO);
+			msgq = getmsgq(MSGQ_POR_MOMID_HELADERO_PEDIDO);
 		} else if (strcmp(argv[2],CAJERO) == 0){
-			msgq = getmsgq(MSGQ_POR_MOMID_CAJERO);
+			msgq = getmsgq(MSGQ_POR_MOMID_CAJERO_PEDIDO);
 		}
 
 		if (msgq != -1 ){

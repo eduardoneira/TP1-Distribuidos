@@ -67,13 +67,15 @@ void destruirMsgQueues(char* modo) {
 
 	if (strcmp(modo,ALL) == 0 || strcmp(modo,CAJERO) == 0) {
 		destruirCola(MSGQ_RECIBIR_CAJERO,error,0);
-		destruirCola(MSGQ_POR_MOMID_CAJERO,error,0);
+		destruirCola(MSGQ_POR_MOMID_CAJERO_TICKET,error,0);
+		destruirCola(MSGQ_POR_MOMID_CAJERO_PEDIDO,error,0);
 		destruirCola(MSGQ_POR_PID_CAJERO,error,0);
 	}
 
 	if (strcmp(modo,ALL) == 0 || strcmp(modo,HELADERO) == 0) {
 		destruirCola(MSGQ_RECIBIR_HELADERO,error,0);
-		destruirCola(MSGQ_POR_MOMID_HELADERO,error,0);
+		destruirCola(MSGQ_POR_MOMID_HELADERO_BOCHA,error,0);
+		destruirCola(MSGQ_POR_MOMID_HELADERO_PEDIDO,error,0);
 		destruirCola(MSGQ_POR_PID_HELADERO,error,0);
 	}
 

@@ -54,14 +54,14 @@ void crearColasDeMsgs(char* modo) {
 		}
 	}
 	if (strcmp(modo,ALL) == 0 || strcmp(modo,HELADERO) == 0){
-		if (crearmsgq(MSGQ_RECIBIR_HELADERO) == -1 || crearmsgq(MSGQ_POR_MOMID_HELADERO) == -1 || crearmsgq(MSGQ_POR_PID_HELADERO) == -1) {
+		if (crearmsgq(MSGQ_RECIBIR_HELADERO) == -1 || crearmsgq(MSGQ_POR_MOMID_HELADERO_PEDIDO) == -1 || crearmsgq(MSGQ_POR_PID_HELADERO) == -1 || crearmsgq(MSGQ_POR_MOMID_HELADERO_BOCHA) == -1) {
 			perror("Error al crear colas de mensajes de heladero");
 			exit(ERROR_CREAR_IPC);
 		}
 	}
 
 	if (strcmp(modo,ALL) == 0 || strcmp(modo,CAJERO) == 0) {
-		if (crearmsgq(MSGQ_RECIBIR_CAJERO) == -1 || crearmsgq(MSGQ_POR_MOMID_CAJERO) == -1 || crearmsgq(MSGQ_POR_PID_CAJERO) == -1) {
+		if (crearmsgq(MSGQ_RECIBIR_CAJERO) == -1 || crearmsgq(MSGQ_POR_MOMID_CAJERO_TICKET) == -1 || crearmsgq(MSGQ_POR_PID_CAJERO) == -1 || crearmsgq(MSGQ_POR_MOMID_CAJERO_PEDIDO) == -1) {
 			perror("Error al crear colas de mensajes de cliente");
 			exit(ERROR_CREAR_IPC);
 		}

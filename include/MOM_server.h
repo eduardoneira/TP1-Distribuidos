@@ -16,6 +16,9 @@ typedef struct MOM_handler {
 	int _id_cola_pid;
 	int _id_cola_ticket;
 	int _id_cola_momId;
+	int _id_cola_momId_pedido;
+	int _id_cola_momId_heladero_bocha;
+	int _id_cola_momId_cajero_ticket;
 	bool socket_leer; 		// true si leo de un socket, sino soy escritor
 } MOM_handler;
 
@@ -34,16 +37,19 @@ bool abrirMOM(MOM_handler* handler,char* quien_soy) {
 		handler->_id_cola_pid = getmsgq(MSGQ_POR_PID_CLIENTE);
 	} else if (strcmp(quien_soy,CAJERO) == 0){
 		handler->_id_cola_recibir = getmsgq(MSGQ_RECIBIR_CAJERO);
-		handler->_id_cola_momId = getmsgq(MSGQ_POR_MOMID_CAJERO);
+		handler->_id_cola_momId_pedido = getmsgq(MSGQ_POR_MOMID_CAJERO_PEDIDO);
 		handler->_id_cola_pid = getmsgq(MSGQ_POR_PID_CAJERO);
 	} else if (strcmp(quien_soy,HELADERO) == 0){
 		handler->_id_cola_recibir = getmsgq(MSGQ_RECIBIR_HELADERO);
-		handler->_id_cola_momId = getmsgq(MSGQ_POR_MOMID_HELADERO);
+		handler->_id_cola_momId_pedido  = getmsgq(MSGQ_POR_MOMID_HELADERO_PEDIDO);
 		handler->_id_cola_pid = getmsgq(MSGQ_POR_PID_HELADERO);
 	}
 
 	handler->_socket = fd;
 	handler->_id_cola_ticket = getmsgq(MSGQ_POR_TICKET);
+
+	handler->_id_cola_momId_cajero_ticket = getmsgq(MSGQ_POR_MOMID_CAJERO_TICKET);
+	handler->_id_cola_momId_heladero_bocha = getmsgq(MSGQ_POR_MOMID_HELADERO_BOCHA);
 
 	if (fork() == 0){ 						//hijo lee del socket
 		handler->socket_leer = true;
@@ -80,6 +86,12 @@ void enviarMsg(MOM_handler* handler,Message* msg) {
 			enviarmsgq(handler->_id_cola_pid,&msgq,sizeof(MessageQ));
 		} else if (type == MSG_BROKER_HELADO){
 			enviarmsgq(handler->_id_cola_ticket,&msgq,sizeof(MessageQ));
+		} else if (type == MSG_BROKER_GENERAR_TICKET){
+			enviarmsgq(handler->_id_cola_momId_cajero_ticket,&msgq,sizeof(MessageQ));
+		} else if (type == MSG_BROKER_PEDIDO){
+			enviarmsgq(handler->_id_cola_momId_pedido,&msgq,sizeof(MessageQ));
+		} else if (type == MSG_BROKER_OCUPAR_HELADO){
+			enviarmsgq(handler->_id_cola_momId_heladero_bocha,&msgq,sizeof(MessageQ));
 		} else {
 			enviarmsgq(handler->_id_cola_momId,&msgq,sizeof(MessageQ));
 		}

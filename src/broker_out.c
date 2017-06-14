@@ -10,7 +10,7 @@
  * Args
  * char*    nombre
  * int      fd del socket
- * int      mtype para recibir del msq
+ * int      mtype para recibir del msq de router
  * */
 int main(int argc, char** argv){
     if (argc != 3) {
@@ -23,7 +23,7 @@ int main(int argc, char** argv){
     pid_t pid = getpid();
     char buffer[64];
 
-    sprintf(buffer,"Soy el broker out para el socket %s leyendo con mype %s",argv[1],argv[2]);
+    sprintf(buffer,"Soy el broker out para el socket %s leyendo con mtype %s",argv[1],argv[2]);
     escribirLog(&log,DEBUG,pid,BROKER_OUT_NAME,buffer);
 
     //IPC

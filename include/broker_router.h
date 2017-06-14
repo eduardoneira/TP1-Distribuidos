@@ -152,7 +152,7 @@ bool ocuparHelado(Router_handler* handler, MessageQ* msg){
     deserializeMsgSemaforo(&msg_sem,msg->payload);
 
     handler->helados[msg_sem.index].push_back(msg_sem.mtype);
-    return (handler->helados[msg_sem.index].size() > 0);
+    return (handler->helados[msg_sem.index].size() < 2);
 }
 
 bool desocuparHelado(Router_handler* handler, MessageQ* msg) {
@@ -212,7 +212,6 @@ bool desregistrarseMOM(Router_handler* handler, MessageQ* msg) {
                 break;
             }
         }
-        handler->estado.tamanio_heladeria++;
     }
 
     return false;
@@ -255,6 +254,11 @@ bool hay_lugar_heladeria(Router_handler* handler, MessageQ* msg){
     serializeMsgBool(&msg_bool,msg->payload);
 
     return true;
+}
+
+bool salir_heladeria(Router_handler* handler){
+    handler->estado.tamanio_heladeria++;
+    return false;
 }
 
 bool salir_cola(Router_handler* handler){
