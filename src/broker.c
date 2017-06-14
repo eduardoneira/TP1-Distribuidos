@@ -4,6 +4,8 @@
 #include "../include/socket.h"
 #include "../include/defines.h"
 #include "../include/logger.h"
+#include "../include/SIG_Trap.h"
+#include "../include/SignalHandler.h"
 
 int main(int argc, char** argv) {
     pid_t pid = getpid();
@@ -25,34 +27,42 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    while ((nfd = accept_socket(listenfd,false)) != -1) {
+    SIG_Trap SIGINT_trap;
+    SIG_TrapInit(&SIGINT_trap, SIGINT);
 
-        escribirLog(&log,DEBUG,pid,BROKER_NAME,"Alguien se conectó");
+    SignalHandlerRegisterHandler(SIGINT, &SIGINT_trap);
+    while(SIG_TrapSignalWasReceived(&SIGINT_trap) == 0) {
+        nfd = accept_socket(listenfd,false);
 
-        //Lanzo al que recibe msgs
-        in = fork();
+        if (nfd != -1) {
+            escribirLog(&log,DEBUG,pid,BROKER_NAME,"Alguien se conectó");
 
-        if (in == 0) {
-            close(listenfd);
-            sprintf(buffer,"%d",nfd);
-            execl("./broker_in","./broker_in",buffer,(char*) NULL);
-            perror("Exec fallo");
-            return -1;
+            //Lanzo al que recibe msgs
+            in = fork();
+
+            if (in == 0) {
+                close(listenfd);
+                sprintf(buffer,"%d",nfd);
+                execl("./broker_in","./broker_in",buffer,(char*) NULL);
+                perror("Exec fallo");
+                return -1;
+            }
+
+            //Lanzo al que manda msgs
+            out = fork();
+
+            if (out == 0) {
+                close(listenfd);
+                sprintf(inC,"%d",in);
+                sprintf(buffer,"%d",nfd);
+                execl("./broker_out","./broker_out",buffer,inC,(char*) NULL);
+                perror("Exec fallo");
+                return -1;
+            }
+
+            close(nfd);
         }
 
-        //Lanzo al que manda msgs
-        out = fork();
-
-        if (out == 0) {
-            close(listenfd);
-            sprintf(inC,"%d",in);
-            sprintf(buffer,"%d",nfd);
-            execl("./broker_out","./broker_out",buffer,inC,(char*) NULL);
-            perror("Exec fallo");
-            return -1;
-        }
-
-        close(nfd);
     }
 
     escribirLog(&log,DEBUG,pid,BROKER_NAME,"Cerrando el broker principal");

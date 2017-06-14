@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
 	Logger log = crearLogger();
 
 	if (argc < 2){
-		printf("Deberia recibir por parametro abrir, cerrar, lanzar [cant_cliente] o destruir [tipo] [momId de cajero o heladero] \n");
+		printf("Deberia recibir por parametro abrir, cerrar, lanzar [cant_cliente] o destruir [tipo] [momId de cajero o heladero]\n");
 		cerrarLogger(&log);
 		return 1;
 	}
@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
 		}
 		char buffer[BUFFER_SIZE];
 		
-		sprintf(buffer,"Voy a lanzar %s clientes",argv[1]);
+		sprintf(buffer,"Voy a lanzar %s clientes",argv[2]);
 		escribirLog(&log,DEBUG,pid,MANAGER_NAME,buffer);
 
 		int clientes = atoi(argv[2]);
@@ -101,8 +101,13 @@ int main(int argc, char** argv) {
 				return -1;
 			}
 		}
+	} else {
+		printf("Comando mal invocado. Deberia recibir por parametro 'abrir', 'cerrar', 'lanzar' [cant_cliente] o 'destruir' [tipo] [momId de cajero o heladero]\n");
+		cerrarLogger(&log);
+		return 1;
 	}
 
 	cerrarLogger(&log);
+	return 0;
 }
 

@@ -64,7 +64,7 @@
 #define CONSTRUCTOR         "CONSTRUCTOR"
 #define DESTRUCTOR          "DESTRUCTOR"
 #define MOM_REGISTER        "MOM_REGISTER"
-#define BROKER_NAME		    "BROKER\t"
+#define BROKER_NAME		    "BROKER\t\t"
 #define BROKER_ROUTER_NAME	"BROKER_ROUTER"
 #define BROKER_IN_NAME	    "BROKER_IN\t"
 #define BROKER_OUT_NAME	    "BROKER_OUT\t"

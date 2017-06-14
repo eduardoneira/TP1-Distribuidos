@@ -65,6 +65,11 @@ int abrir_socket_pasivo(const char* ip, int port){
 int accept_socket(int listenfd, bool cerrar_fd) {
     int nfd = accept(listenfd,(struct sockaddr*) NULL,NULL);
 
+    if (errno == EINTR){
+        perror("Recibi señal\n");
+        return -1;
+    }
+
     if (nfd == -1) {
         perror("Error al hacer accept\n");
         return -1;

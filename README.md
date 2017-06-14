@@ -17,16 +17,20 @@ Suposiciones:
 
 # Comandos
 
-Acordarse que hay levantar primero al broker.
+Acordarse que hay levantar primero al broker. Siempre hay que correr primero el constructor con el parametro adecuado y después el proceso.
+Si se quiere modificar el host del BROKER, cambiar en defines.h la constante 'IP_BROKER'.
 
 
 ```
 cmake .	                            // Crea el make a partir del CMakeLists.txt
 make                      	        // Compila el codigo y genera los ejecutables
-./constructor [modo]	            // Crea estructuras de IPC y lanza los mom dependiendo del modo. Pueder ser : 'broker', 'cajero', 'heladero', 'cliente' o 'all' (all contiene a helad., cajero y cliente)
-./control [num_clientes]  	        // Lanza clientes segun el numero que se especifique
+./constructor [modo]	            // Crea estructuras de IPC y lanza los mom dependiendo del modo. Pueder ser : 'broker', 'cajero', 'heladero' o 'cliente'.
 ./control [estado_heladeria]        // Abre o cierre la heladeria dependiendo del estado_heladeria. Algun constructor se tuvo que haber creado. [estado_heladeria] puede ser 'abrir' o 'cerrar'.
+./broker                            // Lanza el broker luego de haber corrido el ./constructor broker. Para pararlo mandar SIGINT.
+./cajero                            // Lanza el cajero luego de haber corrido el ./constructor cajero
+./heladero                          // Lanza el heladero luego de haber corrido el ./constructor heladero
+./cliente                           // Lanza el cliente luego de haber corrido el ./constructor cliente
+./control lanzar [num_clientes]     // Lanza clientes segun el numero que se especifique
 ./control destruir [modo] [momId]   // Envia msg de destruccion a un cajero o heladero. [modo] puede ser 'heladero' o 'cajero'. [momId] debe ser el momId que utiliza. Fijarse el log
-./broker                            // Lanza el broker luego de haber corrido el constructor
-./destructor [modo]  	            // Destruye todas las estructuras de IPC. El modo puede ser "cliente", "cajero", "heladero", "all" o "broker"
+./destructor [modo]  	            // Destruye todas las estructuras de IPC. El modo puede ser "cliente", "cajero", "heladero" o "broker"
 ```
