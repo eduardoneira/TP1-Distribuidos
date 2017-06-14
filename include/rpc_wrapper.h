@@ -48,6 +48,10 @@ void getHostRPC(char* ipRPC,const char* pname){
 
     FILE* fd = fopen(IPS,"r");
 
+    if (fd == NULL) {
+        perror("No se encontro el archivo de ips.txt. Asegurarse que este en la misma carpeta");
+    }
+
     while (!feof(fd)) {
         fscanf(fd,"%s %s\n",nombre,ip);
         if (strcmp(pname,nombre) == 0){
