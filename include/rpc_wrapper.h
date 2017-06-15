@@ -41,6 +41,35 @@ int getTicketRPC(CLIENT* client) {
     return *result_2;
 }
 
+void getHostRPC(char* ipRPC,const char* pname){
+    char nombre[20];
+    char ip[20];
+    char ipHost[20];
+
+    FILE* fd = fopen(IPS,"r");
+
+    if (fd == NULL) {
+        perror("No se encontro el archivo de ips.txt. Asegurarse que este en la misma carpeta");
+    }
+
+    while (!feof(fd)) {
+        fscanf(fd,"%s %s\n",nombre,ip);
+        if (strcmp(pname,nombre) == 0){
+            strcpy(ipHost,ip);
+        }
+
+        if(strcmp(nombre,RPC) == 0){
+            strcpy(ipRPC,ip);
+        }
+    }
+
+    fclose(fd);
+    if (strcmp(ipRPC,ipHost) == 0){
+        strcpy(ipRPC,LOCALHOST);
+    }
+
+}
+
 void destruirRPC(CLIENT* client) {
     clnt_destroy(client);
 }

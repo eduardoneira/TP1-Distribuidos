@@ -4,30 +4,6 @@
 #include "../include/mensaje_registro.h"
 #include "../include/rpc_wrapper.h"
 
-void getHostRPC(char* ipRPC, char* pname){
-    char nombre[20];
-    char ip[20];
-    char ipHost[20];
-
-    FILE* fd = fopen(IPS,"r");
-
-    while (!feof(fd)) {
-        fscanf(fd,"%s %s\n",nombre,ip);
-        if (strcmp(pname,nombre) == 0){
-            strcpy(ipHost,ip);
-        }
-
-        if(strcmp(nombre,RPC) == 0){
-            strcpy(ipRPC,ip);
-        }
-    }
-
-    fclose(fd);
-    if (strcmp(ipRPC,ipHost) == 0){
-        strcpy(ipRPC,LOCALHOST);
-    }
-
-}
 
 int main(int argc, char** argv){
     Logger log = crearLogger();

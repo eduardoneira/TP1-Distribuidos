@@ -70,6 +70,9 @@ int abrirSocket(char* ip, int puerto, char* socket) {
 bool abrirMOM(MOM_handler* handler,char* emisor, char* receptor,char* quien_soy,char* socket, int puerto) {
     //TODO:DESPUES SACAR ESTO TAL VEZ
     FILE* fd = fopen(IPS,"r");
+    if (fd == NULL) {
+        perror("No se encontro el archivo de ips.txt. Asegurarse que este en la misma carpeta");
+    }
     char nombre[20];
     char ip[20];
 
