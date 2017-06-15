@@ -35,6 +35,33 @@ make                      	        // Compila el codigo y genera los ejecutables
 ./destructor [modo]  	            // Destruye todas las estructuras de IPC. El modo puede ser "cliente", "cajero", "heladero" o "broker"
 ```
 
+# Ejemplo de ejecucion
+
+```
+cmake .
+make
+./constructor broker
+./broker
+./constructor cajero
+./constructor heladero
+./constructor cliente
+./control abrir
+
+// levato los cajeros que quiera
+./cajero
+
+// levanto los heladeros que quiera
+./heladero
+./heladero
+./heladero
+
+// levanto 5 clientes
+./control lanzar 5
+
+// cierro la heladeria
+./control cerrar
+```
+
 # Notas
 
 En la carpeta actual se encuentra una ilustración de como funciona el broker. Cuando un nuevo MOM se conecta en la computado del broker se forkean un proceso IN y otro OUT que van a interacturas con dicho MOM y pasar por broker router.
