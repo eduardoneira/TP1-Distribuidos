@@ -39,3 +39,8 @@ make                      	// compila el codigo y genera los ejecutables
 ./control                 	// si no recibe un numero de clientes como argumento, control cambia el estado de la heladeria a cerrada (pero no destruye ningun mecanismo de IPC)
 ./destructor_heladeria [modo]  	// envia mensajes a los procesos que se bloquean escuchando mensajes para que se cierren, y tambien destruye las estructuras de IPC creadas. No hace nada si la heladeria no esta cerrada o todavia hay clientes comiendo. El modo puede ser "cliente", "cajero", "heladero" o "all"
 ```
+
+# Notas
+
+Se adjunta una foto con la interacción de las distintas computadores con su rol. Todos los sockets que se usan en cajero son pasivos, los de heladero son uno activo el que conecta con cajero) y uno pasivo. Finalmente los 3 sockets de cliente son activos(2 hacia cajero y uno hacia heladero). Los sockets están usados como half-duplex, es decir, solo hay comunicación hacia un lado. De un lado se escribe y del otro se lee.
+Un posible problema que no ocurrió fue que no se serializaron los mensajes al pasarse al socket, lo que podría traer problemas de padding. Esto se arreglo para el TP4.
