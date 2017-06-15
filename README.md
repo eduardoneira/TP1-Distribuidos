@@ -34,3 +34,11 @@ make                      	        // Compila el codigo y genera los ejecutables
 ./control destruir [modo] [momId]   // Envia msg de destruccion a un cajero o heladero. [modo] puede ser 'heladero' o 'cajero'. [momId] debe ser el momId que utiliza. Fijarse el log
 ./destructor [modo]  	            // Destruye todas las estructuras de IPC. El modo puede ser "cliente", "cajero", "heladero" o "broker"
 ```
+
+# Notas
+
+En la carpeta actual se encuentra una ilustración de como funciona el broker. Cuando un nuevo MOM se conecta en la computado del broker se forkean un proceso IN y otro OUT que van a interacturas con dicho MOM y pasar por broker router.
+A su vez en la computadora donde se uso el constructor se forkea de ese MOM un proceso que va a escribir el socket, y el padre se va a escucha a leer. Los mensajes se encuentran serializados y se utilizan los primeros 5 bytes para marcan el tipo de mensaje. En base a esto, el router decide como handlear el msg.
+En cuanto al balanceo de carga, esta hecho como round-robin, es decir, se reparten los pedidos de manera equitativa tanto para heladeros como cajeros.
+Al ser un broker centralizado, ya no se usan ni semaforos ni una shared memory, todas son variables del broker router. Para resolver el problema de ocupar helados y no bloquearse, se siguió el esquema explicado en clase. Se guarda un recordatorio de que momId pidió el helado y una vez que se libera se lo notifica routeandolo.
+La tabla de routeo consta de momId - ticket - mtype. El mtype indica con que mtype hay q mandar en la cola de OUT para que se lo envie a la compu de dicho momId. A su vez, cuando se quiere pasar el helado al cliente, el routeo esta hecho por ticket en vez de momId por que quedo de las primeras entregas. Esto no es problema ya que el ticket es único como el momId e identifica a un cliente, sola hace falta saber en que computadora se encuentra.
